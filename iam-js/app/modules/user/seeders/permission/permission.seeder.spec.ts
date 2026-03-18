@@ -5,9 +5,9 @@ import { getRepositoryToken } from "@nestjs/typeorm";
 import { Logger } from "@nestjs/common";
 import { SinonStub, stub } from 'sinon';
 import { PERMISSIONS } from "@user/consts/permission.const";
-import { Action } from "../../enums/action.enum";
-import { Resource } from "../../enums/resource.enum";
-import { Scope } from "../../enums/scope.enum";
+import { Action } from "@user/enums/action.enum";
+import { Resource } from "@user/enums/resource.enum";
+import { Scope } from "@user/enums/scope.enum";
 
 describe('PermissionSeeder', () => {
     let seeder: PermissionSeeder;
