@@ -59,8 +59,7 @@ export class PermissionSeeder implements OnApplicationBootstrap {
         { 
             const isFound = mappedPermissions.has(permission.name);
 
-            if (isFound)
-            {
+            if (isFound) {
                 const foundPermission = mappedPermissions.get(permission.name);
                 
                 // if there is a difference in the description, update the permission
@@ -119,6 +118,7 @@ export class PermissionSeeder implements OnApplicationBootstrap {
 
         this.logger.log("Update completed");
 
+        this.logger.log(`Permissions skipped: ${seedingReport.skippedPermissions}`);
         this.logger.log(`Permissions created: ${seedingReport.createdPermissions}`);
         this.logger.log(`Permissions updated: ${seedingReport.updatedPermissions}`);
         this.logger.log(`Permissions deleted: ${seedingReport.deletedPermissions}`);
