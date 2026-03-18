@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Role } from '@user/entities/role.entity';
 
 @Entity()
 export class User {
@@ -30,4 +31,8 @@ export class User {
      * o - other
      */
     gender: string;
+
+    @ManyToMany(() => Role, { eager: true })
+    @JoinTable()
+    roles: Role[];
 }
