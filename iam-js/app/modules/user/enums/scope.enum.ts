@@ -1,4 +1,4 @@
-export enum KScope {
+export enum Scope {
     None = 'none',
     Own = 'own',
     Team = 'team',

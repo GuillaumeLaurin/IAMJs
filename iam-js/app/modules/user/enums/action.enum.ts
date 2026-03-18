@@ -1,4 +1,4 @@
-export enum KAction {
+export enum Action {
     Read = 'read',
     List = 'list',
     Create = 'create',

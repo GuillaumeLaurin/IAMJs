@@ -1,4 +1,4 @@
-export enum KResource {
+export enum Resource {
     User = 'user',
     Role = 'role',
     Permission = 'permission',
