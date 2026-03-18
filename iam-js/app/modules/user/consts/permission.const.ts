@@ -1,8 +1,9 @@
 import { Action } from '@user/enums/action.enum';
 import { Resource } from "@user/enums/resource.enum";
 import { Scope } from "@user/enums/scope.enum";
+import { IPermission } from '@user/interfaces/permission.interface';
 
-export const PERMISSIONS = [
+export const PERMISSIONS: IPermission[] = [
     // Users
     { name: `${Action.Read}:${Resource.User}:${Scope.All}`, description: 'See any users' },
     { name: `${Action.List}:${Resource.User}`, description: 'List users' },
