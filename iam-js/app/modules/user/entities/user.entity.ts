@@ -10,11 +10,12 @@ export class User {
     id: number;
 
     @Column({ type: 'varchar', length: 30 })
-    name: string;
+    firstName: string;
 
-    @Column({ type: 'varchar', length: 15 })
-    username: string;
+    @Column({ type: 'varchar', length: 30 })
+    lastName: string;
 
+    // Unique
     @Column({ type: 'varchar', length: 40 })
     email: string;
 

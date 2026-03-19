@@ -15,17 +15,14 @@ const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*d)(?=.*[@$!%*?&])[A-Za-zd@$!
 
 export class CreateUserDto {
     @IsString()
-    @MinLength(2, { message: 'Name must have at least 2 characters.' })
+    @MinLength(2, { message: 'First name must have at least 2 characters.' })
     @IsNotEmpty()
-    name: string;
+    firstName: string;
 
     @IsString()
-    @MinLength(3, { message: 'Username must have at least 3 characters.' })
-    @IsAlphanumeric(null, {
-        message: 'Username does not allow other than alpha numeric chars.',
-    })
+    @MinLength(2, { message: 'Last name must have at least 2 characters.' })
     @IsNotEmpty()
-    username: string;
+    lastName: string;
 
     @IsString()
     @IsEmail(null, { message: 'Please provide valid email.' })

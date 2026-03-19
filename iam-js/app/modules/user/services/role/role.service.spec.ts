@@ -6,7 +6,7 @@ import { SinonStub, stub } from "sinon";
 import { getRepositoryToken } from "@nestjs/typeorm";
 import { Permission } from "@user/entities/permission.entity";
 
-const PERMISSIONS = [
+export const PERMISSIONS = [
     {
         id: 1,
         name: 'perm-1',
@@ -26,7 +26,7 @@ const PERMISSIONS = [
 
 const ROLE_1 = 'role-1';
 
-const ROLES = [
+export const ROLES = [
     {
         id: 1,
         name: ROLE_1,
@@ -43,8 +43,6 @@ const ROLES = [
         permissions: [...PERMISSIONS]
     }
 ] as unknown as Role[];
-
-const RELATION_CALL = 'permissions';
 
 describe('RoleService', () => {
     let service: RoleService;
