@@ -65,7 +65,7 @@ describe('PermissionService', () => {
         expect(result).toEqual(PERMISSIONS[0]);
     });
 
-    it('should return null if not found', async () => {
+    it('should returned null if not found', async () => {
         permissionRepository.findOneBy.returns(null);
         const result = await service.findOne(PERMISSION_1);
         expect(permissionRepository.findOneBy.calledOnceWith({ name: PERMISSION_1 })).toBeTruthy();
