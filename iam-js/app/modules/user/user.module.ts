@@ -5,6 +5,9 @@ import { Role } from './entities/role.entity';
 import { Permission } from './entities/permission.entity';
 import { PermissionSeeder } from './seeders/permission/permission.seeder';
 import { RoleSeeder } from './seeders/role/role.seeder';
+import { PermissionService } from './services/permission/permission.service';
+import { RoleService } from './services/role/role.service';
+import { UserService } from './services/user/user.service';
 
 @Module({
     imports: [
@@ -14,7 +17,14 @@ import { RoleSeeder } from './seeders/role/role.seeder';
     providers: [
         PermissionSeeder,
         RoleSeeder,
+        PermissionService,
+        RoleService,
+        UserService
     ],
-    exports: [],
+    exports: [
+        PermissionService,
+        RoleService,
+        UserService,
+    ],
 })
 export class UserModule {}
