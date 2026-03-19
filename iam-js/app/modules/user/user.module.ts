@@ -10,21 +10,15 @@ import { RoleService } from './services/role/role.service';
 import { UserService } from './services/user/user.service';
 
 @Module({
-    imports: [
-        TypeOrmModule.forFeature([User, Role, Permission]),
-    ],
-    controllers: [],
-    providers: [
-        PermissionSeeder,
-        RoleSeeder,
-        PermissionService,
-        RoleService,
-        UserService
-    ],
-    exports: [
-        PermissionService,
-        RoleService,
-        UserService,
-    ],
+  imports: [TypeOrmModule.forFeature([User, Role, Permission])],
+  controllers: [],
+  providers: [
+    PermissionSeeder,
+    RoleSeeder,
+    PermissionService,
+    RoleService,
+    UserService,
+  ],
+  exports: [PermissionService, RoleService, UserService],
 })
 export class UserModule {}
