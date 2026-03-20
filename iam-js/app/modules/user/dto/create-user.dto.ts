@@ -6,24 +6,24 @@ export class CreateUserDto {
   @IsString()
   @MinLength(2, { message: 'First name must have at least 2 characters.' })
   @IsNotEmpty()
-  firstName: string;
+  firstName!: string;
 
   @IsString()
   @MinLength(2, { message: 'Last name must have at least 2 characters.' })
   @IsNotEmpty()
-  lastName: string;
+  lastName!: string;
 
   @IsString()
-  @IsEmail(null, { message: 'Please provide valid email.' })
+  @IsEmail(undefined, { message: 'Please provide valid email.' })
   @IsNotEmpty()
-  email: string;
+  email!: string;
 
   @IsInt()
-  age: number;
+  age!: number;
 
   @IsString()
   @IsEnum(['f', 'm', 'o'])
-  gender: string;
+  gender!: string;
 
   @IsString()
   @Matches(PASSWORD_REGEX, {
@@ -34,5 +34,5 @@ export class CreateUserDto {
         one special character.`,
   })
   @IsNotEmpty()
-  password: string;
+  password!: string;
 }
