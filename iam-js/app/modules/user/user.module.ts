@@ -8,6 +8,8 @@ import { RoleSeeder } from './seeders/role/role.seeder';
 import { PermissionService } from './services/permission/permission.service';
 import { RoleService } from './services/role/role.service';
 import { UserService } from './services/user/user.service';
+import { RoleGuard } from './guards/role/role.guard';
+import { PermissionGuard } from './guards/permission/permission.guard';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User, Role, Permission])],
@@ -18,7 +20,15 @@ import { UserService } from './services/user/user.service';
     PermissionService,
     RoleService,
     UserService,
+    RoleGuard,
+    PermissionGuard,
   ],
-  exports: [PermissionService, RoleService, UserService],
+  exports: [
+    PermissionService,
+    RoleService,
+    UserService,
+    RoleGuard,
+    PermissionGuard,
+  ],
 })
 export class UserModule {}
