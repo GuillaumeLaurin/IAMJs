@@ -10,6 +10,7 @@ import { RoleService } from './services/role/role.service';
 import { UserService } from './services/user/user.service';
 import { RoleGuard } from './guards/role/role.guard';
 import { PermissionGuard } from './guards/permission/permission.guard';
+import { UserMiddleware } from './middlewares/user/user.middleware';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User, Role, Permission])],
@@ -22,6 +23,7 @@ import { PermissionGuard } from './guards/permission/permission.guard';
     UserService,
     RoleGuard,
     PermissionGuard,
+    UserMiddleware,
   ],
   exports: [
     PermissionService,
@@ -29,6 +31,7 @@ import { PermissionGuard } from './guards/permission/permission.guard';
     UserService,
     RoleGuard,
     PermissionGuard,
+    UserMiddleware,
   ],
 })
 export class UserModule {}
