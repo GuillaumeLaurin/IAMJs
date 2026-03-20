@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "resolvePackageJsonExports": true,
+    "resolvePackageJsonExports": false,
     "esModuleInterop": true,
     "isolatedModules": true,
     "declaration": true,
@@ -11,7 +11,7 @@
     "allowSyntheticDefaultImports": true,
     "target": "es2017",
     "sourceMap": true,
-    "rootDir": "../",
+    "rootDir": "./",
     "outDir": "./out",
     "incremental": true,
     "skipLibCheck": true,
@@ -26,6 +26,7 @@
     ],
     "paths": {
       "@app/*": ["./app/*"],
+      "@user/*": ["./app/modules/user/*"],
     }
   }
 }
