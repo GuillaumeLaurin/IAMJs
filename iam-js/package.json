@@ -89,7 +89,8 @@
     "testEnvironment": "node",
     "moduleNameMapper": {
       "^@app(.*)$": "<rootDir>/app/$1",
-      "^@user(.*)$": "<rootDir>/app/modules/user/$1"
+      "^@user(.*)$": "<rootDir>/app/modules/user/$1",
+      "^@auth(.*)$": "<rootDir>/app/modules/auth/$1"
     }
   }
 }
