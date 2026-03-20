@@ -1,11 +1,13 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { PermissionGuard } from './permission.guard';
-import { SinonStubbedInstance, createStubInstance } from 'sinon';
+import { Test } from '@nestjs/testing';
+import type { TestingModule } from '@nestjs/testing';
+import { PermissionGuard } from '@user/guards/permission/permission.guard';
+import { createStubInstance } from 'sinon';
+import type { SinonStubbedInstance } from 'sinon';
 import { Reflector } from '@nestjs/core';
-import { ExecutionContext } from '@nestjs/common';
+import type { ExecutionContext } from '@nestjs/common';
 import { ROLES, PERMISSIONS } from '@user/services/role/role.service.spec';
 
-const mockExecutionContext = (user: any, handler = {}, controller = {}): ExecutionContext =>
+const mockExecutionContext = (user: unknown, handler = {}, controller = {}): ExecutionContext =>
   ({
     getHandler: () => handler,
     getClass: () => controller,

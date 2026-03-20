@@ -5,6 +5,7 @@ import { createStubInstance } from 'sinon';
 import type { SinonStubbedInstance } from 'sinon';
 import { UserService } from '@user/services/user/user.service';
 import { ROLES } from '@user/services/role/role.service.spec';
+import type { User } from '@user/entities/user.entity';
 
 const USER_ID = '1';
 
@@ -14,14 +15,14 @@ const USER = {
   lastName: 'Doe',
   email: 'john.doe@example.com',
   roles: [ROLES[0]],
-};
+} as unknown as User;
 
-const mockNext = () => {
+const mockNext = (): { (): void; wasCalled(): boolean } => {
   let called = false;
-  const fn = () => {
+  const fn = (): void => {
     called = true;
   };
-  fn.wasCalled = () => called;
+  fn.wasCalled = (): boolean => called;
   return fn;
 };
 
@@ -67,7 +68,7 @@ describe('UserMiddleware', () => {
   it('should attach the user to the request if payload is present', async () => {
     const req = mockRequest({ sub: USER_ID });
     const next = mockNext();
-    userService.findOne.resolves(USER as any);
+    userService.findOne.resolves(USER);
 
     await middleware.use(req, {} as Response, next);
 
@@ -78,7 +79,7 @@ describe('UserMiddleware', () => {
   it('should call next after attaching the user', async () => {
     const req = mockRequest({ sub: USER_ID });
     const next = mockNext();
-    userService.findOne.resolves(USER as any);
+    userService.findOne.resolves(USER);
 
     await middleware.use(req, {} as Response, next);
 

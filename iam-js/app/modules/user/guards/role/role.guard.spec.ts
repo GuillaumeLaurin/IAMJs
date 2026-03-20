@@ -4,10 +4,10 @@ import { RoleGuard } from '@user/guards/role/role.guard';
 import { createStubInstance } from 'sinon';
 import type { SinonStubbedInstance } from 'sinon';
 import { Reflector } from '@nestjs/core';
-import { ExecutionContext } from '@nestjs/common';
+import type { ExecutionContext } from '@nestjs/common';
 import { ROLES } from '@user/services/role/role.service.spec';
 
-const mockExecutionContext = (user: any, handler = {}, controller = {}): ExecutionContext =>
+const mockExecutionContext = (user: unknown, handler = {}, controller = {}): ExecutionContext =>
   ({
     getHandler: () => handler,
     getClass: () => controller,
