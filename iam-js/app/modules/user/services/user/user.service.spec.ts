@@ -1,12 +1,14 @@
-import { TestingModule, Test } from '@nestjs/testing';
+import { Test } from '@nestjs/testing';
+import type { TestingModule } from '@nestjs/testing';
 import { UserService } from '@user/services/user/user.service';
 import { ROLES } from '@user/services/role/role.service.spec';
-import { SinonStubbedInstance, createStubInstance, SinonStub, stub } from 'sinon';
+import { createStubInstance, stub } from 'sinon';
+import type { SinonStubbedInstance, SinonStub } from 'sinon';
 import { RoleService } from '@user/services/role/role.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { User } from '@user/entities/user.entity';
 import { ConflictException, InternalServerErrorException, NotFoundException } from '@nestjs/common';
-import { Role } from '@user/entities/role.entity';
+import type { Role } from '@user/entities/role.entity';
 
 const USER_ID = '1';
 const USER_EMAIL = 'john.doe@example.com';

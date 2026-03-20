@@ -17,7 +17,7 @@ export class RoleService {
       relations: ['permissions'],
     });
 
-    return role ? role : null;
+    return role;
   }
 
   async findMany(names: string[]): Promise<Role[]> {

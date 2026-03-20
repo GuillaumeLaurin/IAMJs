@@ -1,9 +1,11 @@
-import { TestingModule, Test } from '@nestjs/testing';
-import { RoleService } from './role.service';
+import { Test } from '@nestjs/testing';
+import type { TestingModule } from '@nestjs/testing';
+import { RoleService } from '@user/services/role/role.service';
 import { Role } from '@user/entities/role.entity';
-import { SinonStub, stub } from 'sinon';
+import { stub } from 'sinon';
+import type { SinonStub } from 'sinon';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Permission } from '@user/entities/permission.entity';
+import type { Permission } from '@user/entities/permission.entity';
 
 export const PERMISSIONS = [
   {

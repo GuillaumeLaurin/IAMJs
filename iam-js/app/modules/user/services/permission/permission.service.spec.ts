@@ -1,6 +1,8 @@
-import { TestingModule, Test } from '@nestjs/testing';
-import { SinonStub, stub } from 'sinon';
-import { PermissionService } from './permission.service';
+import { Test } from '@nestjs/testing';
+import type { TestingModule } from '@nestjs/testing';
+import { stub } from 'sinon';
+import type { SinonStub } from 'sinon';
+import { PermissionService } from '@user/services/permission/permission.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Permission } from '@user/entities/permission.entity';
 

@@ -17,6 +17,6 @@ export class PermissionService {
   async findOne(name: string): Promise<Permission | null> {
     const permission = await this.permissionRepository.findOneBy({ name });
 
-    return permission ? permission : null;
+    return permission;
   }
 }
