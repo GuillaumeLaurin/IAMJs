@@ -1,5 +1,5 @@
 import { TestingModule, Test } from '@nestjs/testing';
-import { UserService } from './user.service';
+import { UserService } from '@user/services/user/user.service';
 import { ROLES } from '@user/services/role/role.service.spec';
 import { SinonStubbedInstance, createStubInstance, SinonStub, stub } from 'sinon';
 import { RoleService } from '@user/services/role/role.service';
@@ -107,7 +107,7 @@ describe('UserService', () => {
 
       await service.create({ ...dto });
 
-      const createdWith = userRepository.create.getCall(0).args[0];
+      const createdWith = userRepository.create.getCall(0).args[0] as unknown as User;
       expect(createdWith.email).toEqual('john.doe@example.com');
     });
 
@@ -119,7 +119,7 @@ describe('UserService', () => {
 
       await service.create({ ...dto });
 
-      const createdWith = userRepository.create.getCall(0).args[0];
+      const createdWith = userRepository.create.getCall(0).args[0] as unknown as User;
       expect(createdWith.firstName).toEqual('John');
       expect(createdWith.lastName).toEqual('Doe');
     });
@@ -217,7 +217,7 @@ describe('UserService', () => {
 
       await service.update(USER_ID, { password: 'newpassword' });
 
-      const savedWith = userRepository.save.getCall(0).args[0];
+      const savedWith = userRepository.save.getCall(0).args[0] as unknown as User;
       expect(savedWith.password).not.toEqual('newpassword');
     });
 
