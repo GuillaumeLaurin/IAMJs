@@ -33,7 +33,7 @@ describe('RoleSeeder', () => {
   let rolesRepository: {
     find: SinonStub;
     update: SinonStub;
-    create: SinonStub;
+    save: SinonStub;
   };
 
   beforeEach(async () => {
@@ -44,7 +44,7 @@ describe('RoleSeeder', () => {
     rolesRepository = {
       find: stub(),
       update: stub(),
-      create: stub(),
+      save: stub(),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -70,14 +70,14 @@ describe('RoleSeeder', () => {
     expect(seeder).toBeDefined();
   });
 
-  it('should create roles if db is empty', async () => {
+  it('should save roles if db is empty', async () => {
     rolesRepository.find.returns([]);
 
     const expectedCallCount = ROLES.length;
 
     await seeder.onApplicationBootstrap();
 
-    expect(rolesRepository.create.callCount).toEqual(expectedCallCount);
+    expect(rolesRepository.save.callCount).toEqual(expectedCallCount);
   });
 
   it('should update roles if permissions do not match db permissions', async () => {
