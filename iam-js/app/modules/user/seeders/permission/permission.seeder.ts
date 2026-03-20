@@ -1,5 +1,4 @@
-import { Injectable } from '@nestjs/common';
-import { OnApplicationBootstrap, Logger } from '@nestjs/common';
+import { Injectable, Logger, OnApplicationBootstrap } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Permission } from '@user/entities/permission.entity';
@@ -29,14 +28,11 @@ export class PermissionSeeder implements OnApplicationBootstrap {
   ) {}
 
   async onApplicationBootstrap(): Promise<void> {
-    const mappedPermissions: Map<string, SeedingInterface> = new Map<
-      string,
-      SeedingInterface
-    >();
+    const mappedPermissions = new Map<string, SeedingInterface>();
 
     const permissions = await this.permissionsRepository.find();
 
-    for (const permission of permissions) {
+    permissions.forEach((permission) => {
       mappedPermissions.set(permission.name, {
         id: permission.id,
         isNew: false,
@@ -44,37 +40,33 @@ export class PermissionSeeder implements OnApplicationBootstrap {
         name: permission.name,
         description: permission.description,
       });
-    }
+    });
 
-    for (const permission of PERMISSIONS) {
-      const isFound = mappedPermissions.has(permission.name);
+    PERMISSIONS.forEach((permission) => {
+      const foundPermission = mappedPermissions.get(permission.name);
 
-      if (isFound) {
-        const foundPermission = mappedPermissions.get(permission.name);
-
+      if (foundPermission) {
         if (permission.description !== foundPermission.description) {
           foundPermission.needsUpdate = true;
           foundPermission.description = permission.description;
         }
-
-        continue;
+      } else {
+        mappedPermissions.set(permission.name, {
+          isNew: true,
+          needsUpdate: false,
+          name: permission.name,
+          description: permission.description,
+        });
       }
+    });
 
-      mappedPermissions.set(permission.name, {
-        isNew: true,
-        needsUpdate: false,
-        name: permission.name,
-        description: permission.description,
-      });
-    }
+    const permissionsToCreate = Array.from(mappedPermissions.values()).filter(
+      (val) => val.isNew === true,
+    );
 
-    const permissionsToCreate: SeedingInterface[] = Array.from(
-      mappedPermissions.values(),
-    ).filter((val) => val.isNew === true);
-
-    const permissionsToUpdate: SeedingInterface[] = Array.from(
-      mappedPermissions.values(),
-    ).filter((val) => val.needsUpdate === true);
+    const permissionsToUpdate = Array.from(mappedPermissions.values()).filter(
+      (val) => val.needsUpdate === true,
+    );
 
     const seedingReport: SeedingReport = {
       updatedPermissions: 0,
@@ -88,21 +80,25 @@ export class PermissionSeeder implements OnApplicationBootstrap {
 
     this.logger.log('Update Permission Repository');
 
-    for (const permission of permissionsToUpdate) {
-      await this.permissionsRepository.update(
-        { id: permission.id },
-        { description: permission.description },
-      );
-      seedingReport.updatedPermissions = seedingReport.updatedPermissions + 1;
-    }
+    await Promise.all(
+      permissionsToUpdate.map(async (permission) => {
+        await this.permissionsRepository.update(
+          { id: permission.id },
+          { description: permission.description },
+        );
+        seedingReport.updatedPermissions += 1;
+      }),
+    );
 
-    for (const permission of permissionsToCreate) {
-      await this.permissionsRepository.create({
-        name: permission.name,
-        description: permission.description,
-      });
-      seedingReport.createdPermissions = seedingReport.createdPermissions + 1;
-    }
+    await Promise.all(
+      permissionsToCreate.map(async (permission) => {
+        await this.permissionsRepository.save({
+          name: permission.name,
+          description: permission.description,
+        });
+        seedingReport.createdPermissions += 1;
+      }),
+    );
 
     this.logger.log('Update completed');
 

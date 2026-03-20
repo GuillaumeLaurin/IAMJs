@@ -11,12 +11,12 @@ export class PermissionService {
   ) {}
 
   async findAll(): Promise<Permission[]> {
-    return await this.permissionRepository.find();
+    return this.permissionRepository.find();
   }
 
   async findOne(name: string): Promise<Permission | null> {
     const permission = await this.permissionRepository.findOneBy({ name });
 
-    return permission ? permission : null;
+    return permission;
   }
 }

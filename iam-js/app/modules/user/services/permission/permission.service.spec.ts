@@ -1,6 +1,8 @@
-import { TestingModule, Test } from '@nestjs/testing';
-import { SinonStub, stub } from 'sinon';
-import { PermissionService } from './permission.service';
+import { Test } from '@nestjs/testing';
+import type { TestingModule } from '@nestjs/testing';
+import { stub } from 'sinon';
+import type { SinonStub } from 'sinon';
+import { PermissionService } from '@user/services/permission/permission.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Permission } from '@user/entities/permission.entity';
 
@@ -61,18 +63,14 @@ describe('PermissionService', () => {
   it('should returned the permission that has the same name', async () => {
     permissionRepository.findOneBy.returns(PERMISSIONS[0]);
     const result = await service.findOne(PERMISSION_1);
-    expect(
-      permissionRepository.findOneBy.calledOnceWith({ name: PERMISSION_1 }),
-    ).toBeTruthy();
+    expect(permissionRepository.findOneBy.calledOnceWith({ name: PERMISSION_1 })).toBeTruthy();
     expect(result).toEqual(PERMISSIONS[0]);
   });
 
   it('should returned null if not found', async () => {
     permissionRepository.findOneBy.returns(null);
     const result = await service.findOne(PERMISSION_1);
-    expect(
-      permissionRepository.findOneBy.calledOnceWith({ name: PERMISSION_1 }),
-    ).toBeTruthy();
+    expect(permissionRepository.findOneBy.calledOnceWith({ name: PERMISSION_1 })).toBeTruthy();
     expect(result).toBeNull();
   });
 });

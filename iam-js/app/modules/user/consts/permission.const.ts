@@ -1,7 +1,7 @@
 import { Action } from '@user/enums/action.enum';
 import { Resource } from '@user/enums/resource.enum';
 import { Scope } from '@user/enums/scope.enum';
-import { IPermission } from '@user/interfaces/permission.interface';
+import type { IPermission } from '@user/interfaces/permission.interface';
 
 export const PERMISSIONS: IPermission[] = [
   // Users

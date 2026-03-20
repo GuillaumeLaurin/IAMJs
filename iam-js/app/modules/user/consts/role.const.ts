@@ -2,7 +2,7 @@ import { Role } from '@user/enums/role.enum';
 import { Action } from '@user/enums/action.enum';
 import { Resource } from '@user/enums/resource.enum';
 import { Scope } from '@user/enums/scope.enum';
-import { IRole } from '@user/interfaces/role.interface';
+import type { IRole } from '@user/interfaces/role.interface';
 
 export const ROLES: IRole[] = [
   {

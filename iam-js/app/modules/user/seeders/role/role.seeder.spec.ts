@@ -1,8 +1,10 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { RoleSeeder } from './role.seeder';
+import { Test } from '@nestjs/testing';
+import type { TestingModule } from '@nestjs/testing';
+import { RoleSeeder } from '@user/seeders/role/role.seeder';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Logger } from '@nestjs/common';
-import { SinonStub, stub } from 'sinon';
+import { stub } from 'sinon';
+import type { SinonStub } from 'sinon';
 import { ROLES } from '@user/consts/role.const';
 import { Permission } from '@user/entities/permission.entity';
 import { PERMISSIONS } from '@user/consts/permission.const';
@@ -12,16 +14,13 @@ import { Role as ERole } from '@user/enums/role.enum';
 function createPermissions(): Permission[] {
   const permissions: Permission[] = [];
 
-  let idx = 0;
-  for (const permission of PERMISSIONS) {
+  PERMISSIONS.forEach((val, idx) => {
     permissions.push({
       id: idx,
-      name: permission.name,
-      description: permission.description,
-    } as unknown as Permission);
-
-    idx = idx + 1;
-  }
+      name: val.name,
+      description: val.description,
+    });
+  });
 
   return permissions;
 }
@@ -34,7 +33,7 @@ describe('RoleSeeder', () => {
   let rolesRepository: {
     find: SinonStub;
     update: SinonStub;
-    create: SinonStub;
+    save: SinonStub;
   };
 
   beforeEach(async () => {
@@ -45,7 +44,7 @@ describe('RoleSeeder', () => {
     rolesRepository = {
       find: stub(),
       update: stub(),
-      create: stub(),
+      save: stub(),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -71,14 +70,14 @@ describe('RoleSeeder', () => {
     expect(seeder).toBeDefined();
   });
 
-  it('should create roles if db is empty', async () => {
+  it('should save roles if db is empty', async () => {
     rolesRepository.find.returns([]);
 
     const expectedCallCount = ROLES.length;
 
     await seeder.onApplicationBootstrap();
 
-    expect(rolesRepository.create.callCount).toEqual(expectedCallCount);
+    expect(rolesRepository.save.callCount).toEqual(expectedCallCount);
   });
 
   it('should update roles if permissions do not match db permissions', async () => {

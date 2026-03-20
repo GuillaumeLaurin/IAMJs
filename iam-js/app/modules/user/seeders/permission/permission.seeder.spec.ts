@@ -1,9 +1,11 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { Test } from '@nestjs/testing';
+import type { TestingModule } from '@nestjs/testing';
 import { PermissionSeeder } from '@user/seeders/permission/permission.seeder';
 import { Permission } from '@user/entities/permission.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Logger } from '@nestjs/common';
-import { SinonStub, stub } from 'sinon';
+import { stub } from 'sinon';
+import type { SinonStub } from 'sinon';
 import { PERMISSIONS } from '@user/consts/permission.const';
 import { Action } from '@user/enums/action.enum';
 import { Resource } from '@user/enums/resource.enum';
@@ -14,7 +16,7 @@ describe('PermissionSeeder', () => {
   let permissionsRepository: {
     find: SinonStub;
     update: SinonStub;
-    create: SinonStub;
+    save: SinonStub;
   };
 
   beforeEach(async () => {
@@ -23,7 +25,7 @@ describe('PermissionSeeder', () => {
     permissionsRepository = {
       find: stub(),
       update: stub(),
-      create: stub(),
+      save: stub(),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -43,14 +45,14 @@ describe('PermissionSeeder', () => {
     expect(seeder).toBeDefined();
   });
 
-  it('should create permissions if db is empty', async () => {
+  it('should save permissions if db is empty', async () => {
     permissionsRepository.find.returns([]);
 
     const expectedCallCount = PERMISSIONS.length;
 
     await seeder.onApplicationBootstrap();
 
-    expect(permissionsRepository.create.callCount).toEqual(expectedCallCount);
+    expect(permissionsRepository.save.callCount).toEqual(expectedCallCount);
   });
 
   it('should update permissions if description does not match db description', async () => {

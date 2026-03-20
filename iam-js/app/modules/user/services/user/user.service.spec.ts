@@ -1,21 +1,14 @@
-import { TestingModule, Test } from '@nestjs/testing';
-import { UserService } from './user.service';
+import { Test } from '@nestjs/testing';
+import type { TestingModule } from '@nestjs/testing';
+import { UserService } from '@user/services/user/user.service';
 import { ROLES } from '@user/services/role/role.service.spec';
-import {
-  SinonStubbedInstance,
-  createStubInstance,
-  SinonStub,
-  stub,
-} from 'sinon';
+import { createStubInstance, stub } from 'sinon';
+import type { SinonStubbedInstance, SinonStub } from 'sinon';
 import { RoleService } from '@user/services/role/role.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { User } from '@user/entities/user.entity';
-import {
-  ConflictException,
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
-import { Role } from '@user/entities/role.entity';
+import { ConflictException, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import type { Role } from '@user/entities/role.entity';
 
 const USER_ID = '1';
 const USER_EMAIL = 'john.doe@example.com';
@@ -116,7 +109,7 @@ describe('UserService', () => {
 
       await service.create({ ...dto });
 
-      const createdWith = userRepository.create.getCall(0).args[0];
+      const createdWith = userRepository.create.getCall(0).args[0] as unknown as User;
       expect(createdWith.email).toEqual('john.doe@example.com');
     });
 
@@ -128,7 +121,7 @@ describe('UserService', () => {
 
       await service.create({ ...dto });
 
-      const createdWith = userRepository.create.getCall(0).args[0];
+      const createdWith = userRepository.create.getCall(0).args[0] as unknown as User;
       expect(createdWith.firstName).toEqual('John');
       expect(createdWith.lastName).toEqual('Doe');
     });
@@ -136,18 +129,14 @@ describe('UserService', () => {
     it('should throw ConflictException if email is already taken', async () => {
       userRepository.findOne.returns(USERS[0]);
 
-      await expect(service.create({ ...dto })).rejects.toThrow(
-        ConflictException,
-      );
+      await expect(service.create({ ...dto })).rejects.toThrow(ConflictException);
     });
 
     it('should throw InternalServerErrorException if no default roles are found', async () => {
       userRepository.findOne.returns(null);
       roleService.findMany.resolves([]);
 
-      await expect(service.create({ ...dto })).rejects.toThrow(
-        InternalServerErrorException,
-      );
+      await expect(service.create({ ...dto })).rejects.toThrow(InternalServerErrorException);
     });
   });
 
@@ -230,7 +219,7 @@ describe('UserService', () => {
 
       await service.update(USER_ID, { password: 'newpassword' });
 
-      const savedWith = userRepository.save.getCall(0).args[0];
+      const savedWith = userRepository.save.getCall(0).args[0] as unknown as User;
       expect(savedWith.password).not.toEqual('newpassword');
     });
 
@@ -241,17 +230,17 @@ describe('UserService', () => {
         .onSecondCall()
         .resolves(USERS[1]); // findByEmail
 
-      await expect(
-        service.update(USER_ID, { email: 'jane.doe@example.com' }),
-      ).rejects.toThrow(ConflictException);
+      await expect(service.update(USER_ID, { email: 'jane.doe@example.com' })).rejects.toThrow(
+        ConflictException,
+      );
     });
 
     it('should throw NotFoundException if user does not exist', async () => {
       userRepository.findOne.resolves(null);
 
-      await expect(
-        service.update(USER_ID, { firstName: 'Jack' }),
-      ).rejects.toThrow(NotFoundException);
+      await expect(service.update(USER_ID, { firstName: 'Jack' })).rejects.toThrow(
+        NotFoundException,
+      );
     });
   });
 
@@ -302,9 +291,9 @@ describe('UserService', () => {
     it('should throw NotFoundException if user does not exist', async () => {
       userRepository.findOne.resolves(null);
 
-      await expect(
-        service.assignRole(USER_ID, ROLES[0] as unknown as Role),
-      ).rejects.toThrow(NotFoundException);
+      await expect(service.assignRole(USER_ID, ROLES[0] as unknown as Role)).rejects.toThrow(
+        NotFoundException,
+      );
     });
   });
 });

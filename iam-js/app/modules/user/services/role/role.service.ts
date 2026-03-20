@@ -5,12 +5,10 @@ import { Repository, In } from 'typeorm';
 
 @Injectable()
 export class RoleService {
-  constructor(
-    @InjectRepository(Role) private roleRepository: Repository<Role>,
-  ) {}
+  constructor(@InjectRepository(Role) private roleRepository: Repository<Role>) {}
 
   async findAll(): Promise<Role[]> {
-    return await this.roleRepository.find({ relations: ['permissions'] });
+    return this.roleRepository.find({ relations: ['permissions'] });
   }
 
   async findOne(name: string): Promise<Role | null> {
@@ -19,7 +17,7 @@ export class RoleService {
       relations: ['permissions'],
     });
 
-    return role ? role : null;
+    return role;
   }
 
   async findMany(names: string[]): Promise<Role[]> {
