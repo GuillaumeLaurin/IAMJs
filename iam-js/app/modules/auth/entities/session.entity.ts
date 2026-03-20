@@ -1,18 +1,18 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from "typeorm";
-import { User } from "@app/modules/user/entities/user.entity";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import type { User } from '@app/modules/user/entities/user.entity';
 
 @Entity()
 export class Session {
-    @PrimaryGeneratedColumn('uuid')
-    id: string;
+  @PrimaryGeneratedColumn('uuid')
+  id!: string;
 
-    @ManyToOne(() => User, user => user.id)
-    @JoinColumn({ name: 'user_id' })
-    user: User;
+  @ManyToOne('User', 'sessions')
+  @JoinColumn({ name: 'user_id' })
+  user!: User;
 
-    @Column('date')
-    loginAt: Date;
+  @Column('date')
+  loginAt!: Date;
 
-    @Column('date')
-    logoutAt: Date;
+  @Column('date')
+  logoutAt!: Date;
 }

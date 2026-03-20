@@ -13,10 +13,7 @@ import { PermissionGuard } from '@user/guards/permission/permission.guard';
 import { UserMiddleware } from '@user/middlewares/user/user.middleware';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([User, Role, Permission]),
-    UserModule,
-  ],
+  imports: [TypeOrmModule.forFeature([User, Role, Permission]), UserModule],
   controllers: [],
   providers: [
     PermissionSeeder,
