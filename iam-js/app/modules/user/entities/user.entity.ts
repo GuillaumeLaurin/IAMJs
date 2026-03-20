@@ -1,6 +1,5 @@
 import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { Role } from '@user/entities/role.entity';
-import type { Session } from '@app/modules/auth/entities/session.entity';
 
 @Entity()
 export class User {
@@ -37,7 +36,4 @@ export class User {
   @ManyToMany(() => Role, { eager: true })
   @JoinTable()
   roles!: Role[];
-
-  @OneToMany('Session', 'user')
-  sessions!: Session[];
 }
