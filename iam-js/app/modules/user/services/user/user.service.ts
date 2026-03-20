@@ -22,7 +22,7 @@ export class UserService {
   ) {}
 
   async create(dto: CreateUserDto): Promise<User> {
-    let reassignedDto = dto;
+    const reassignedDto = dto;
     reassignedDto.email = reassignedDto.email.trim();
     reassignedDto.email = reassignedDto.email.toLowerCase();
 
@@ -76,7 +76,7 @@ export class UserService {
   }
 
   async update(id: string, dto: UpdateUserDto): Promise<User> {
-    let reassignedDto = dto;
+    const reassignedDto = dto;
     const user = await this.findOne(id);
     if (reassignedDto.password) reassignedDto.password = await argon.hash(reassignedDto.password);
     if (reassignedDto.email) {
@@ -112,7 +112,7 @@ export class UserService {
   }
 
   private trimAndcapitalizeFirstLetter(str: string): string {
-    let reassignedStr = str.trim();
+    const reassignedStr = str.trim();
 
     return reassignedStr.charAt(0).toUpperCase() + reassignedStr.slice(1);
   }

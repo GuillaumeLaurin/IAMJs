@@ -34,5 +34,5 @@ export class CreateUserDto {
         one special character.`,
   })
   @IsNotEmpty()
-  password;
+  password: string;
 }
