@@ -12,8 +12,8 @@ export class User {
   /**
    * This decorator will help to auto generated id for the table
    */
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column({ type: 'varchar', length: 30 })
   firstName: string;

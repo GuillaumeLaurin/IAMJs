@@ -4,7 +4,7 @@ import { SinonStubbedInstance, createStubInstance } from "sinon";
 import { UserService } from "@user/services/user/user.service";
 import { ROLES } from "@user/services/role/role.service.spec";
 
-const USER_ID = 1;
+const USER_ID = '1';
 
 const USER = {
     id: USER_ID,
@@ -21,7 +21,7 @@ const mockNext = () => {
     return fn;
 };
 
-const mockRequest = (payload?: { sub: number }): Request => ({
+const mockRequest = (payload?: { sub: string }): Request => ({
     tokenPayload: payload ?? null,
 } as unknown as Request);
 

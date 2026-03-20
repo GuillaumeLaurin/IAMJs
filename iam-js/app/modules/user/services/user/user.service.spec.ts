@@ -17,7 +17,7 @@ import {
 } from '@nestjs/common';
 import { Role } from '@user/entities/role.entity';
 
-const USER_ID = 1;
+const USER_ID = '1';
 const USER_EMAIL = 'john.doe@example.com';
 const USER_PASSWORD = 'password123';
 

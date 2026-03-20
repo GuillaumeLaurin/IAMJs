@@ -60,7 +60,7 @@ export class UserService {
     });
   }
 
-  async findOne(id: number): Promise<User> {
+  async findOne(id: string): Promise<User> {
     const user = await this.userRepository.findOne({
       where: { id },
       relations: ['roles', 'roles.permissions'],
@@ -78,7 +78,7 @@ export class UserService {
     });
   }
 
-  async update(id: number, dto: UpdateUserDto): Promise<User> {
+  async update(id: string, dto: UpdateUserDto): Promise<User> {
     const user = await this.findOne(id);
     if (dto.password) dto.password = await argon.hash(dto.password);
     if (dto.email) {
@@ -98,12 +98,12 @@ export class UserService {
     return await this.userRepository.save(user);
   }
 
-  async remove(id: number): Promise<void> {
+  async remove(id: string): Promise<void> {
     const user = await this.findOne(id);
     await this.userRepository.remove(user);
   }
 
-  async assignRole(userId: number, role: Role): Promise<User> {
+  async assignRole(userId: string, role: Role): Promise<User> {
     const user = await this.findOne(userId);
     const alreadyHas = user.roles.some((r) => r.id === role.id);
 
