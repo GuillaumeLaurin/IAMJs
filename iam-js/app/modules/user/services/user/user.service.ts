@@ -51,11 +51,11 @@ export class UserService {
       roles: defaults,
     });
 
-    return await this.userRepository.save(user);
+    return this.userRepository.save(user);
   }
 
   async findAll(): Promise<User[]> {
-    return await this.userRepository.find({
+    return this.userRepository.find({
       relations: ['roles', 'roles.permissions'],
     });
   }
@@ -95,7 +95,7 @@ export class UserService {
     if (dto.lastName)
       dto.lastName = this.trimAndcapitalizeFirstLetter(dto.lastName);
     Object.assign(user, dto);
-    return await this.userRepository.save(user);
+    return this.userRepository.save(user);
   }
 
   async remove(id: string): Promise<void> {

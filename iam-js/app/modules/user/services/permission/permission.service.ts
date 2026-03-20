@@ -11,7 +11,7 @@ export class PermissionService {
   ) {}
 
   async findAll(): Promise<Permission[]> {
-    return await this.permissionRepository.find();
+    return this.permissionRepository.find();
   }
 
   async findOne(name: string): Promise<Permission | null> {
