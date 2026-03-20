@@ -13,7 +13,6 @@ describe('PermissionSeeder', () => {
   let seeder: PermissionSeeder;
   let permissionsRepository: {
     find: SinonStub;
-    delete: SinonStub;
     update: SinonStub;
     create: SinonStub;
   };
@@ -23,7 +22,6 @@ describe('PermissionSeeder', () => {
 
     permissionsRepository = {
       find: stub(),
-      delete: stub(),
       update: stub(),
       create: stub(),
     };
@@ -56,7 +54,6 @@ describe('PermissionSeeder', () => {
   });
 
   it('should update permissions if description does not match db description', async () => {
-    // value it must return
     permissionsRepository.find.returns([
       {
         id: 1,
@@ -68,19 +65,5 @@ describe('PermissionSeeder', () => {
     await seeder.onApplicationBootstrap();
 
     expect(permissionsRepository.update.calledOnce).toBeTruthy();
-  });
-
-  it('should remove permission if it is not found in the list', async () => {
-    permissionsRepository.find.returns([
-      {
-        id: 1,
-        name: `${Action.Read}:${Resource.ApiKey}:${Scope.Team}`,
-        description: '...',
-      } as unknown as Permission,
-    ]);
-
-    await seeder.onApplicationBootstrap();
-
-    expect(permissionsRepository.delete.calledOnce).toBeTruthy();
   });
 });

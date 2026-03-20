@@ -5,29 +5,18 @@ import { Repository } from 'typeorm';
 import { Permission } from '@user/entities/permission.entity';
 import { PERMISSIONS } from '@user/consts/permission.const';
 
-const SEPARATOR = `===================================================`;
-
 interface SeedingInterface {
   id?: number;
   isNew: boolean;
   needsUpdate: boolean;
-  keepIt: boolean;
   name: string;
   description: string;
 }
 
-interface DeleteResult {
-  id: number;
-  name: string;
-  affected?: number | null;
-}
-
 interface SeedingReport {
-  deletedPermissions: number;
   updatedPermissions: number;
   createdPermissions: number;
   skippedPermissions: number;
-  deleteResults: DeleteResult[];
 }
 
 @Injectable()
@@ -52,7 +41,6 @@ export class PermissionSeeder implements OnApplicationBootstrap {
         id: permission.id,
         isNew: false,
         needsUpdate: false,
-        keepIt: false,
         name: permission.name,
         description: permission.description,
       });
@@ -64,31 +52,21 @@ export class PermissionSeeder implements OnApplicationBootstrap {
       if (isFound) {
         const foundPermission = mappedPermissions.get(permission.name);
 
-        // if there is a difference in the description, update the permission
         if (permission.description !== foundPermission.description) {
           foundPermission.needsUpdate = true;
           foundPermission.description = permission.description;
         }
 
-        // keep the permission
-        foundPermission.keepIt = true;
-
         continue;
       }
 
-      // if not found, create the permission
       mappedPermissions.set(permission.name, {
         isNew: true,
         needsUpdate: false,
-        keepIt: true,
         name: permission.name,
         description: permission.description,
       });
     }
-
-    const permissionsToDelete: SeedingInterface[] = Array.from(
-      mappedPermissions.values(),
-    ).filter((val) => val.keepIt === false);
 
     const permissionsToCreate: SeedingInterface[] = Array.from(
       mappedPermissions.values(),
@@ -99,33 +77,16 @@ export class PermissionSeeder implements OnApplicationBootstrap {
     ).filter((val) => val.needsUpdate === true);
 
     const seedingReport: SeedingReport = {
-      deletedPermissions: 0,
       updatedPermissions: 0,
       createdPermissions: 0,
       skippedPermissions: 0,
-      deleteResults: [],
     };
 
     seedingReport.skippedPermissions = permissions.length
-      ? permissions.length -
-        (permissionsToDelete.length + permissionsToUpdate.length)
+      ? permissions.length - permissionsToUpdate.length
       : 0;
 
     this.logger.log('Update Permission Repository');
-
-    for (const permission of permissionsToDelete) {
-      const deleteResult: DeleteResult = {
-        id: permission.id,
-        name: permission.name,
-      };
-      // id should be defined
-      deleteResult.affected = (
-        await this.permissionsRepository.delete({ id: permission.id })
-      )?.affected;
-
-      seedingReport.deleteResults.push(deleteResult);
-      seedingReport.deletedPermissions = seedingReport.deletedPermissions + 1;
-    }
 
     for (const permission of permissionsToUpdate) {
       await this.permissionsRepository.update(
@@ -148,18 +109,5 @@ export class PermissionSeeder implements OnApplicationBootstrap {
     this.logger.log(`Permissions skipped: ${seedingReport.skippedPermissions}`);
     this.logger.log(`Permissions created: ${seedingReport.createdPermissions}`);
     this.logger.log(`Permissions updated: ${seedingReport.updatedPermissions}`);
-    this.logger.log(`Permissions deleted: ${seedingReport.deletedPermissions}`);
-
-    if (
-      seedingReport.deletedPermissions &&
-      seedingReport.deleteResults.length
-    ) {
-      for (const deleteResult of seedingReport.deleteResults) {
-        this.logger.log(SEPARATOR);
-        this.logger.log(
-          `Delete permission with id ${deleteResult.id} '${deleteResult.name}' (Affected Rows: ${deleteResult.affected ? deleteResult.affected : 0})`,
-        );
-      }
-    }
   }
 }
