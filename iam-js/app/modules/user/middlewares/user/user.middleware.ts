@@ -6,7 +6,7 @@ import { NextFunction } from 'express';
 export class UserMiddleware implements NestMiddleware {
   constructor(private userService: UserService) {}
 
-  async use(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async use(req: Request, _: Response, next: NextFunction): Promise<void> {
     const payload = req['tokenPayload'];
 
     if (!payload) return next();

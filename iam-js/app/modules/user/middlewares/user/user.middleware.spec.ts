@@ -1,6 +1,8 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { UserMiddleware } from './user.middleware';
-import { SinonStubbedInstance, createStubInstance } from 'sinon';
+import { Test } from '@nestjs/testing';
+import type { TestingModule } from '@nestjs/testing';
+import { UserMiddleware } from '@user/middlewares/user/user.middleware';
+import { createStubInstance } from 'sinon';
+import type { SinonStubbedInstance } from 'sinon';
 import { UserService } from '@user/services/user/user.service';
 import { ROLES } from '@user/services/role/role.service.spec';
 

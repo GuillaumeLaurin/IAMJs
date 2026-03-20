@@ -1,6 +1,8 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { RoleGuard } from './role.guard';
-import { SinonStubbedInstance, createStubInstance } from 'sinon';
+import { Test } from '@nestjs/testing';
+import type { TestingModule } from '@nestjs/testing';
+import { RoleGuard } from '@user/guards/role/role.guard';
+import { createStubInstance } from 'sinon';
+import type { SinonStubbedInstance } from 'sinon';
 import { Reflector } from '@nestjs/core';
 import { ExecutionContext } from '@nestjs/common';
 import { ROLES } from '@user/services/role/role.service.spec';

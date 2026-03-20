@@ -1,8 +1,8 @@
-import { AppModule } from './app.module';
+import { AppModule } from '@app/app.module';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
-const bootstrap = async () => {
+const bootstrap = async (): Promise<void> => {
   const app = await NestFactory.create(AppModule);
 
   app.setGlobalPrefix('api');
@@ -19,7 +19,7 @@ const bootstrap = async () => {
   SwaggerModule.setup('api/docs', app, document);
   SwaggerModule.setup('', app, document);
 
-  await app.listen(process.env.PORT);
+  await app.listen(process.env.PORT as unknown as number);
 };
 
-bootstrap();
+bootstrap().catch();

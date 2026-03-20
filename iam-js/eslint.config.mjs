@@ -65,7 +65,7 @@ export default tseslint.config(
         { selector: 'interface', format: ['PascalCase'] },
         { selector: 'typeAlias', format: ['PascalCase'] },
         { selector: 'enum', format: ['PascalCase'] },
-        { selector: 'enumMember', format: ['UPPER_CASE'] },
+        { selector: 'enumMember', format: ['PascalCase'] },
         { selector: 'class', format: ['PascalCase'] },
         { selector: 'variable', format: ['camelCase', 'UPPER_CASE', 'PascalCase'] },
         { selector: 'function', format: ['camelCase', 'PascalCase'] },
