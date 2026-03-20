@@ -1,8 +1,10 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { RoleSeeder } from './role.seeder';
+import { Test } from '@nestjs/testing';
+import type { TestingModule } from '@nestjs/testing';
+import { RoleSeeder } from '@user/seeders/role/role.seeder';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Logger } from '@nestjs/common';
-import { SinonStub, stub } from 'sinon';
+import { stub } from 'sinon';
+import type { SinonStub } from 'sinon';
 import { ROLES } from '@user/consts/role.const';
 import { Permission } from '@user/entities/permission.entity';
 import { PERMISSIONS } from '@user/consts/permission.const';
@@ -12,16 +14,13 @@ import { Role as ERole } from '@user/enums/role.enum';
 function createPermissions(): Permission[] {
   const permissions: Permission[] = [];
 
-  let idx = 0;
-  for (const permission of PERMISSIONS) {
+  PERMISSIONS.forEach((val, idx) => {
     permissions.push({
       id: idx,
-      name: permission.name,
-      description: permission.description,
-    } as unknown as Permission);
-
-    idx = idx + 1;
-  }
+      name: val.name,
+      description: val.description,
+    });
+  });
 
   return permissions;
 }

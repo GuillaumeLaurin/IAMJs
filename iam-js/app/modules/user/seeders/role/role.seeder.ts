@@ -33,16 +33,14 @@ export class RoleSeeder implements OnApplicationBootstrap {
     const permissions = await this.permissionsRepository.find();
 
     const savedPermissions = new Map<string, Permission>();
-
-    for (const permission of permissions) {
+    permissions.forEach((permission) => {
       savedPermissions.set(permission.name, permission);
-    }
+    });
 
     const roles = await this.rolesRepository.find();
 
-    const mappedRoles: Map<string, SeedingInterface> = new Map<string, SeedingInterface>();
-
-    for (const role of roles) {
+    const mappedRoles = new Map<string, SeedingInterface>();
+    roles.forEach((role) => {
       mappedRoles.set(role.name, {
         id: role.id,
         isNew: false,
@@ -50,35 +48,29 @@ export class RoleSeeder implements OnApplicationBootstrap {
         name: role.name,
         permissions: role.permissions.map((permission) => permission.name),
       });
-    }
+    });
 
-    for (const role of ROLES) {
-      const isFound = mappedRoles.has(role.name);
+    ROLES.forEach((role) => {
+      const foundRole = mappedRoles.get(role.name);
 
-      if (isFound) {
-        const foundRole = mappedRoles.get(role.name);
-
+      if (foundRole) {
         if (!this.compareArray(role.permissions, foundRole.permissions)) {
           foundRole.needsUpdate = true;
           foundRole.permissions = role.permissions;
         }
-
-        continue;
+      } else {
+        mappedRoles.set(role.name, {
+          isNew: true,
+          needsUpdate: false,
+          name: role.name,
+          permissions: role.permissions,
+        });
       }
+    });
 
-      mappedRoles.set(role.name, {
-        isNew: true,
-        needsUpdate: false,
-        name: role.name,
-        permissions: role.permissions,
-      });
-    }
+    const rolesToCreate = Array.from(mappedRoles.values()).filter((val) => val.isNew === true);
 
-    const rolesToCreate: SeedingInterface[] = Array.from(mappedRoles.values()).filter(
-      (val) => val.isNew === true,
-    );
-
-    const rolesToUpdate: SeedingInterface[] = Array.from(mappedRoles.values()).filter(
+    const rolesToUpdate = Array.from(mappedRoles.values()).filter(
       (val) => val.needsUpdate === true,
     );
 
@@ -92,34 +84,37 @@ export class RoleSeeder implements OnApplicationBootstrap {
 
     this.logger.log('Update Roles Repository');
 
-    for (const role of rolesToUpdate) {
-      const perms = role.permissions.map((val) => savedPermissions.get(val));
-      await this.rolesRepository.update({ id: role.id }, { permissions: perms });
-      seedingReport.updatedRoles = seedingReport.updatedRoles + 1;
-    }
+    // Process updates and creates concurrently with Promise.all
+    await Promise.all(
+      rolesToUpdate.map(async (role) => {
+        const perms = role.permissions
+          .map((val) => savedPermissions.get(val))
+          .filter((perm): perm is Permission => perm !== undefined);
+        await this.rolesRepository.update({ id: role.id }, { permissions: perms });
+        seedingReport.updatedRoles += 1;
+      }),
+    );
 
-    for (const role of rolesToCreate) {
-      const perms = role.permissions.map((val) => savedPermissions.get(val));
-      await this.rolesRepository.create({
-        name: role.name,
-        permissions: perms,
-      });
-      seedingReport.createdRoles = seedingReport.createdRoles + 1;
-    }
+    await Promise.all(
+      rolesToCreate.map(async (role) => {
+        const perms = role.permissions
+          .map((val) => savedPermissions.get(val))
+          .filter((perm): perm is Permission => perm !== undefined);
+        await this.rolesRepository.save({
+          name: role.name,
+          permissions: perms,
+        });
+        seedingReport.createdRoles += 1;
+      }),
+    );
 
     this.logger.log('Update completed');
-
     this.logger.log(`Roles skipped: ${seedingReport.skippedRoles}`);
     this.logger.log(`Roles created: ${seedingReport.createdRoles}`);
     this.logger.log(`Roles updated: ${seedingReport.updatedRoles}`);
   }
 
   private compareArray<T>(a: T[], b: T[]): boolean {
-    for (const _a of a) {
-      if (!b.includes(_a)) {
-        return false;
-      }
-    }
-    return true;
+    return a.every((element) => b.includes(element));
   }
 }

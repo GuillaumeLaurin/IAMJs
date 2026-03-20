@@ -1,9 +1,11 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { Test } from '@nestjs/testing';
+import type { TestingModule } from '@nestjs/testing';
 import { PermissionSeeder } from '@user/seeders/permission/permission.seeder';
 import { Permission } from '@user/entities/permission.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Logger } from '@nestjs/common';
-import { SinonStub, stub } from 'sinon';
+import { stub } from 'sinon';
+import type { SinonStub } from 'sinon';
 import { PERMISSIONS } from '@user/consts/permission.const';
 import { Action } from '@user/enums/action.enum';
 import { Resource } from '@user/enums/resource.enum';
