@@ -33,7 +33,6 @@ describe('RoleSeeder', () => {
   };
   let rolesRepository: {
     find: SinonStub;
-    delete: SinonStub;
     update: SinonStub;
     create: SinonStub;
   };
@@ -45,7 +44,6 @@ describe('RoleSeeder', () => {
 
     rolesRepository = {
       find: stub(),
-      delete: stub(),
       update: stub(),
       create: stub(),
     };
@@ -95,15 +93,5 @@ describe('RoleSeeder', () => {
     await seeder.onApplicationBootstrap();
 
     expect(rolesRepository.update.calledOnce).toBeTruthy();
-  });
-
-  it('should remove role if it os not found in the list', async () => {
-    rolesRepository.find.returns([
-      { id: 1, name: `super-agent`, permissions: [] } as unknown as Role,
-    ]);
-
-    await seeder.onApplicationBootstrap();
-
-    expect(rolesRepository.delete.calledOnce).toBeTruthy();
   });
 });

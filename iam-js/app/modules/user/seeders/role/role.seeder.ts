@@ -5,29 +5,18 @@ import { Repository } from 'typeorm';
 import { Permission } from '@user/entities/permission.entity';
 import { ROLES } from '@user/consts/role.const';
 
-const SEPARATOR = `===================================================`;
-
 interface SeedingInterface {
   id?: number;
   isNew: boolean;
   needsUpdate: boolean;
-  keepIt: boolean;
   name: string;
   permissions: string[];
 }
 
-interface DeleteResult {
-  id: number;
-  name: string;
-  affected?: number | null;
-}
-
 interface SeedingReport {
-  deletedRoles: number;
   updatedRoles: number;
   createdRoles: number;
   skippedRoles: number;
-  deleteResults: DeleteResult[];
 }
 
 @Injectable()
@@ -61,7 +50,6 @@ export class RoleSeeder implements OnApplicationBootstrap {
         id: role.id,
         isNew: false,
         needsUpdate: false,
-        keepIt: false,
         name: role.name,
         permissions: role.permissions.map((permission) => permission.name),
       });
@@ -78,23 +66,16 @@ export class RoleSeeder implements OnApplicationBootstrap {
           foundRole.permissions = role.permissions;
         }
 
-        foundRole.keepIt = true;
-
         continue;
       }
 
       mappedRoles.set(role.name, {
         isNew: true,
         needsUpdate: false,
-        keepIt: true,
         name: role.name,
         permissions: role.permissions,
       });
     }
-
-    const rolesToDelete: SeedingInterface[] = Array.from(
-      mappedRoles.values(),
-    ).filter((val) => val.keepIt === false);
 
     const rolesToCreate: SeedingInterface[] = Array.from(
       mappedRoles.values(),
@@ -105,29 +86,16 @@ export class RoleSeeder implements OnApplicationBootstrap {
     ).filter((val) => val.needsUpdate === true);
 
     const seedingReport: SeedingReport = {
-      deletedRoles: 0,
       updatedRoles: 0,
       createdRoles: 0,
       skippedRoles: 0,
-      deleteResults: [],
     };
 
-    seedingReport.skippedRoles = permissions.length
-      ? permissions.length - (rolesToDelete.length + rolesToUpdate.length)
+    seedingReport.skippedRoles = roles.length
+      ? roles.length - rolesToUpdate.length
       : 0;
 
     this.logger.log('Update Roles Repository');
-
-    for (const role of rolesToDelete) {
-      const deleteResult: DeleteResult = { id: role.id, name: role.name };
-
-      deleteResult.affected = (
-        await this.rolesRepository.delete({ id: role.id })
-      )?.affected;
-
-      seedingReport.deleteResults.push(deleteResult);
-      seedingReport.deletedRoles = seedingReport.deletedRoles + 1;
-    }
 
     for (const role of rolesToUpdate) {
       const perms = role.permissions.map((val) => savedPermissions.get(val));
@@ -152,16 +120,6 @@ export class RoleSeeder implements OnApplicationBootstrap {
     this.logger.log(`Roles skipped: ${seedingReport.skippedRoles}`);
     this.logger.log(`Roles created: ${seedingReport.createdRoles}`);
     this.logger.log(`Roles updated: ${seedingReport.updatedRoles}`);
-    this.logger.log(`Roles deleted: ${seedingReport.deletedRoles}`);
-
-    if (seedingReport.deletedRoles && seedingReport.deleteResults.length) {
-      for (const deleteResult of seedingReport.deleteResults) {
-        this.logger.log(SEPARATOR);
-        this.logger.log(
-          `Delete permission with id ${deleteResult.id} '${deleteResult.name}' (Affected Rows: ${deleteResult.affected ? deleteResult.affected : 0})`,
-        );
-      }
-    }
   }
 
   private compareArray<T>(a: T[], b: T[]): boolean {
