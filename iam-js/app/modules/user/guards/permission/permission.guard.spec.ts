@@ -5,11 +5,7 @@ import { Reflector } from '@nestjs/core';
 import { ExecutionContext } from '@nestjs/common';
 import { ROLES, PERMISSIONS } from '@user/services/role/role.service.spec';
 
-const mockExecutionContext = (
-  user: any,
-  handler = {},
-  controller = {},
-): ExecutionContext =>
+const mockExecutionContext = (user: any, handler = {}, controller = {}): ExecutionContext =>
   ({
     getHandler: () => handler,
     getClass: () => controller,
@@ -59,10 +55,7 @@ describe('PermissionGuard', () => {
   });
 
   it('should return true if user has all required permissions spread across multiple roles', () => {
-    reflector.getAllAndOverride.returns([
-      PERMISSIONS[0].name,
-      PERMISSIONS[1].name,
-    ]);
+    reflector.getAllAndOverride.returns([PERMISSIONS[0].name, PERMISSIONS[1].name]);
 
     const user = { roles: [ROLES[0], ROLES[1]] }; // ROLES[0] has PERMISSIONS[1,2], ROLES[1] has PERMISSIONS[0]
     const ctx = mockExecutionContext(user);
@@ -71,10 +64,7 @@ describe('PermissionGuard', () => {
   });
 
   it('should return false if user is missing at least one required permission', () => {
-    reflector.getAllAndOverride.returns([
-      PERMISSIONS[0].name,
-      PERMISSIONS[2].name,
-    ]);
+    reflector.getAllAndOverride.returns([PERMISSIONS[0].name, PERMISSIONS[2].name]);
 
     const user = { roles: [ROLES[1]] }; // ROLES[1] only has PERMISSIONS[0]
     const ctx = mockExecutionContext(user);
@@ -116,10 +106,7 @@ describe('PermissionGuard', () => {
     guard.canActivate(ctx);
 
     expect(
-      reflector.getAllAndOverride.calledOnceWith('permissions', [
-        handler,
-        controller,
-      ]),
+      reflector.getAllAndOverride.calledOnceWith('permissions', [handler, controller]),
     ).toBeTruthy();
   });
 });

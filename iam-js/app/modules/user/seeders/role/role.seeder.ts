@@ -40,10 +40,7 @@ export class RoleSeeder implements OnApplicationBootstrap {
 
     const roles = await this.rolesRepository.find();
 
-    const mappedRoles: Map<string, SeedingInterface> = new Map<
-      string,
-      SeedingInterface
-    >();
+    const mappedRoles: Map<string, SeedingInterface> = new Map<string, SeedingInterface>();
 
     for (const role of roles) {
       mappedRoles.set(role.name, {
@@ -77,13 +74,13 @@ export class RoleSeeder implements OnApplicationBootstrap {
       });
     }
 
-    const rolesToCreate: SeedingInterface[] = Array.from(
-      mappedRoles.values(),
-    ).filter((val) => val.isNew === true);
+    const rolesToCreate: SeedingInterface[] = Array.from(mappedRoles.values()).filter(
+      (val) => val.isNew === true,
+    );
 
-    const rolesToUpdate: SeedingInterface[] = Array.from(
-      mappedRoles.values(),
-    ).filter((val) => val.needsUpdate === true);
+    const rolesToUpdate: SeedingInterface[] = Array.from(mappedRoles.values()).filter(
+      (val) => val.needsUpdate === true,
+    );
 
     const seedingReport: SeedingReport = {
       updatedRoles: 0,
@@ -91,18 +88,13 @@ export class RoleSeeder implements OnApplicationBootstrap {
       skippedRoles: 0,
     };
 
-    seedingReport.skippedRoles = roles.length
-      ? roles.length - rolesToUpdate.length
-      : 0;
+    seedingReport.skippedRoles = roles.length ? roles.length - rolesToUpdate.length : 0;
 
     this.logger.log('Update Roles Repository');
 
     for (const role of rolesToUpdate) {
       const perms = role.permissions.map((val) => savedPermissions.get(val));
-      await this.rolesRepository.update(
-        { id: role.id },
-        { permissions: perms },
-      );
+      await this.rolesRepository.update({ id: role.id }, { permissions: perms });
       seedingReport.updatedRoles = seedingReport.updatedRoles + 1;
     }
 

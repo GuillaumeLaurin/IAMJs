@@ -61,18 +61,14 @@ describe('PermissionService', () => {
   it('should returned the permission that has the same name', async () => {
     permissionRepository.findOneBy.returns(PERMISSIONS[0]);
     const result = await service.findOne(PERMISSION_1);
-    expect(
-      permissionRepository.findOneBy.calledOnceWith({ name: PERMISSION_1 }),
-    ).toBeTruthy();
+    expect(permissionRepository.findOneBy.calledOnceWith({ name: PERMISSION_1 })).toBeTruthy();
     expect(result).toEqual(PERMISSIONS[0]);
   });
 
   it('should returned null if not found', async () => {
     permissionRepository.findOneBy.returns(null);
     const result = await service.findOne(PERMISSION_1);
-    expect(
-      permissionRepository.findOneBy.calledOnceWith({ name: PERMISSION_1 }),
-    ).toBeTruthy();
+    expect(permissionRepository.findOneBy.calledOnceWith({ name: PERMISSION_1 })).toBeTruthy();
     expect(result).toBeNull();
   });
 });

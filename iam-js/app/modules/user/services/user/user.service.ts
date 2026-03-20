@@ -22,31 +22,28 @@ export class UserService {
   ) {}
 
   async create(dto: CreateUserDto): Promise<User> {
-    dto.email = dto.email.trim();
-    dto.email = dto.email.toLowerCase();
+    let reassignedDto = dto;
+    reassignedDto.email = reassignedDto.email.trim();
+    reassignedDto.email = reassignedDto.email.toLowerCase();
 
-    if (await this.findByEmail(dto.email)) {
+    if (await this.findByEmail(reassignedDto.email)) {
       throw new ConflictException('The email is already taken by another user');
     }
 
-    const hashed = await argon.hash(dto.password);
+    const hashed = await argon.hash(reassignedDto.password);
 
-    const defaults = await this.roleService.findMany([
-      ERole.Auditor,
-      ERole.Viewer,
-      ERole.Editor,
-    ]);
+    const defaults = await this.roleService.findMany([ERole.Auditor, ERole.Viewer, ERole.Editor]);
 
     if (!defaults.length) {
       throw new InternalServerErrorException('Default role not found');
     }
 
     const user = this.userRepository.create({
-      firstName: this.trimAndcapitalizeFirstLetter(dto.firstName),
-      lastName: this.trimAndcapitalizeFirstLetter(dto.lastName),
-      email: dto.email,
-      age: dto.age,
-      gender: dto.gender,
+      firstName: this.trimAndcapitalizeFirstLetter(reassignedDto.firstName),
+      lastName: this.trimAndcapitalizeFirstLetter(reassignedDto.lastName),
+      email: reassignedDto.email,
+      age: reassignedDto.age,
+      gender: reassignedDto.gender,
       password: hashed,
       roles: defaults,
     });
@@ -79,22 +76,21 @@ export class UserService {
   }
 
   async update(id: string, dto: UpdateUserDto): Promise<User> {
+    let reassignedDto = dto;
     const user = await this.findOne(id);
-    if (dto.password) dto.password = await argon.hash(dto.password);
-    if (dto.email) {
-      dto.email = dto.email.toLocaleLowerCase();
+    if (reassignedDto.password) reassignedDto.password = await argon.hash(reassignedDto.password);
+    if (reassignedDto.email) {
+      reassignedDto.email = reassignedDto.email.toLocaleLowerCase();
 
-      if (await this.findByEmail(dto.email)) {
-        throw new ConflictException(
-          'The email is already taken by another user',
-        );
+      if (await this.findByEmail(reassignedDto.email)) {
+        throw new ConflictException('The email is already taken by another user');
       }
     }
-    if (dto.firstName)
-      dto.firstName = this.trimAndcapitalizeFirstLetter(dto.firstName);
-    if (dto.lastName)
-      dto.lastName = this.trimAndcapitalizeFirstLetter(dto.lastName);
-    Object.assign(user, dto);
+    if (reassignedDto.firstName)
+      reassignedDto.firstName = this.trimAndcapitalizeFirstLetter(reassignedDto.firstName);
+    if (reassignedDto.lastName)
+      reassignedDto.lastName = this.trimAndcapitalizeFirstLetter(reassignedDto.lastName);
+    Object.assign(user, reassignedDto);
     return this.userRepository.save(user);
   }
 
@@ -116,8 +112,8 @@ export class UserService {
   }
 
   private trimAndcapitalizeFirstLetter(str: string): string {
-    str = str.trim();
+    let reassignedStr = str.trim();
 
-    return str.charAt(0).toUpperCase() + str.slice(1);
+    return reassignedStr.charAt(0).toUpperCase() + reassignedStr.slice(1);
   }
 }

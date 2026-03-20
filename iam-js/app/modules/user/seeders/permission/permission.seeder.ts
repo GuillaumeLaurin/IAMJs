@@ -29,10 +29,7 @@ export class PermissionSeeder implements OnApplicationBootstrap {
   ) {}
 
   async onApplicationBootstrap(): Promise<void> {
-    const mappedPermissions: Map<string, SeedingInterface> = new Map<
-      string,
-      SeedingInterface
-    >();
+    const mappedPermissions: Map<string, SeedingInterface> = new Map<string, SeedingInterface>();
 
     const permissions = await this.permissionsRepository.find();
 
@@ -68,13 +65,13 @@ export class PermissionSeeder implements OnApplicationBootstrap {
       });
     }
 
-    const permissionsToCreate: SeedingInterface[] = Array.from(
-      mappedPermissions.values(),
-    ).filter((val) => val.isNew === true);
+    const permissionsToCreate: SeedingInterface[] = Array.from(mappedPermissions.values()).filter(
+      (val) => val.isNew === true,
+    );
 
-    const permissionsToUpdate: SeedingInterface[] = Array.from(
-      mappedPermissions.values(),
-    ).filter((val) => val.needsUpdate === true);
+    const permissionsToUpdate: SeedingInterface[] = Array.from(mappedPermissions.values()).filter(
+      (val) => val.needsUpdate === true,
+    );
 
     const seedingReport: SeedingReport = {
       updatedPermissions: 0,

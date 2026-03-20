@@ -5,11 +5,7 @@ import { Reflector } from '@nestjs/core';
 import { ExecutionContext } from '@nestjs/common';
 import { ROLES } from '@user/services/role/role.service.spec';
 
-const mockExecutionContext = (
-  user: any,
-  handler = {},
-  controller = {},
-): ExecutionContext =>
+const mockExecutionContext = (user: any, handler = {}, controller = {}): ExecutionContext =>
   ({
     getHandler: () => handler,
     getClass: () => controller,
@@ -102,11 +98,6 @@ describe('RoleGuard', () => {
     const ctx = mockExecutionContext(null, handler, controller);
     guard.canActivate(ctx);
 
-    expect(
-      reflector.getAllAndOverride.calledOnceWith('roles', [
-        handler,
-        controller,
-      ]),
-    ).toBeTruthy();
+    expect(reflector.getAllAndOverride.calledOnceWith('roles', [handler, controller])).toBeTruthy();
   });
 });

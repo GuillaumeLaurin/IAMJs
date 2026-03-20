@@ -5,9 +5,7 @@ import { Repository, In } from 'typeorm';
 
 @Injectable()
 export class RoleService {
-  constructor(
-    @InjectRepository(Role) private roleRepository: Repository<Role>,
-  ) {}
+  constructor(@InjectRepository(Role) private roleRepository: Repository<Role>) {}
 
   async findAll(): Promise<Role[]> {
     return this.roleRepository.find({ relations: ['permissions'] });
