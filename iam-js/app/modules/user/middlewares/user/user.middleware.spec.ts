@@ -1,6 +1,7 @@
 import { Test } from '@nestjs/testing';
 import type { TestingModule } from '@nestjs/testing';
 import { UserMiddleware } from '@user/middlewares/user/user.middleware';
+import type { ExtendedRequest } from '@user/middlewares/user/user.middleware';
 import { createStubInstance } from 'sinon';
 import type { SinonStubbedInstance } from 'sinon';
 import { UserService } from '@user/services/user/user.service';
@@ -26,10 +27,10 @@ const mockNext = (): { (): void; wasCalled(): boolean } => {
   return fn;
 };
 
-const mockRequest = (payload?: { sub: string }): Request =>
+const mockRequest = (payload?: { sub: string }): ExtendedRequest =>
   ({
     tokenPayload: payload ?? null,
-  }) as unknown as Request;
+  }) as unknown as ExtendedRequest;
 
 describe('UserMiddleware', () => {
   let middleware: UserMiddleware;
@@ -73,7 +74,7 @@ describe('UserMiddleware', () => {
     await middleware.use(req, {} as Response, next);
 
     expect(userService.findOne.calledOnceWith(USER_ID)).toBeTruthy();
-    expect(req['user']).toEqual(USER);
+    expect(req.user).toEqual(USER);
   });
 
   it('should call next after attaching the user', async () => {
