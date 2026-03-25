@@ -1,6 +1,8 @@
-sevices:
+services:
   app:
     build:
+      context: .
+    ports:
       - "${PORT}:${PORT}"
     environment:
       POSTGRES_HOST: db
@@ -14,7 +16,7 @@ sevices:
         condition: service_healthy
 
   db:
-    image: postgres:18-alpine
+    image: postgres:17-alpine
     environment:
       POSTGRES_USER: ${POSTGRES_USERNAME}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -25,7 +27,6 @@ sevices:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USERNAME}"]
       interval: 5s
       retries: 5
-  
-  volumes:
-    pgdata
-  
+
+volumes:
+  pgdata:
