@@ -32,7 +32,6 @@ describe('RoleSeeder', () => {
   };
   let rolesRepository: {
     find: SinonStub;
-    update: SinonStub;
     save: SinonStub;
   };
 
@@ -43,7 +42,6 @@ describe('RoleSeeder', () => {
 
     rolesRepository = {
       find: stub(),
-      update: stub(),
       save: stub(),
     };
 
@@ -91,6 +89,6 @@ describe('RoleSeeder', () => {
 
     await seeder.onApplicationBootstrap();
 
-    expect(rolesRepository.update.calledOnce).toBeTruthy();
+    expect(rolesRepository.save.calledOnce).toBeTruthy();
   });
 });
