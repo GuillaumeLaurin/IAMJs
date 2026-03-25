@@ -90,7 +90,13 @@ export class RoleSeeder implements OnApplicationBootstrap {
         const perms = role.permissions
           .map((val) => savedPermissions.get(val))
           .filter((perm): perm is Permission => perm !== undefined);
-        await this.rolesRepository.update({ id: role.id }, { permissions: perms });
+
+        await this.rolesRepository.save({
+          id: role.id,
+          name: role.name,
+          permissions: perms,
+        });
+
         seedingReport.updatedRoles += 1;
       }),
     );

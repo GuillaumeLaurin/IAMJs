@@ -28,7 +28,7 @@ cd IAMJS/iam-js
 Create a `.env` file at the root of the project:
 
 ```properties
-POSTGRES_HOST=db
+POSTGRES_HOST=localhost
 POSTGRES_PORT=5432
 POSTGRES_USERNAME=postgres
 POSTGRES_PASSWORD=postgres
