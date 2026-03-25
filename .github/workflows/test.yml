@@ -1,0 +1,10 @@
+name: IAMJS Tests
+
+on:
+  issues:
+    types: [opened, edited, milestoned]
+  pull_request:
+    types:
+      - opened
+    branches:
+      - 'releases/**'
