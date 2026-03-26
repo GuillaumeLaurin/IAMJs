@@ -1,4 +1,8 @@
 # IAMJs
+
+![lint](https://github.com/GuillaumeLaurin/IAMJs/actions/workflows/lint.yml/badge.svg?branch=main)
+![test](https://github.com/GuillaumeLaurin/IAMJs/actions/workflows/test.yml/badge.svg?branch=main)
+
 Identity & Access Management (IAM) — Built with NestJS, featuring JWT auth, RBAC, OAuth2, and full user lifecycle management.
 
 ## Dependencies
