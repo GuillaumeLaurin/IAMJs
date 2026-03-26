@@ -4,12 +4,12 @@ import { Permission } from '@user/entities/permission.entity';
 @Entity()
 export class Role {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column({ unique: true })
-  name: string;
+  name!: string;
 
   @ManyToMany(() => Permission, { eager: true })
   @JoinTable()
-  permissions: Permission[];
+  permissions!: Permission[];
 }

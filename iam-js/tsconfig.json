@@ -27,6 +27,7 @@
     "paths": {
       "@app/*": ["./app/*"],
       "@user/*": ["./app/modules/user/*"],
+      "@auth/*": ["./app/modules/auth/*"],
     }
   }
 }

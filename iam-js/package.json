@@ -4,13 +4,13 @@
   "description": "",
   "author": "",
   "private": true,
-  "license": "UNLICENSED",
+  "license": "MIT",
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"app/**/*.ts\"",
-    "start": "nest start",
-    "start:dev": "nest start --watch",
-    "start:debug": "nest start --debug --watch",
+    "start": "rimraf out && nest start",
+    "start:dev": "rimraf out && nest start --watch",
+    "start:debug": "rimraf out && nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"app/**/*.ts\" --format stylish",
     "lint:fix": "eslint \"app/**/*.ts\" --format stylish --fix",
@@ -36,9 +36,10 @@
     "class-validator": "^0.14.4",
     "hbs": "^4.2.0",
     "mongoose": "^9.3.0",
-    "mysql2": "^3.19.1",
+    "mysql2": "^3.20.0",
     "pg": "^8.20.0",
     "reflect-metadata": "^0.2.2",
+    "rimraf": "^6.1.3",
     "rxjs": "^7.8.1",
     "sinon": "^21.0.3",
     "typeorm": "^0.3.28"
@@ -69,6 +70,11 @@
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.20.0"
   },
+  "_moduleAliases": {
+    "@app": "out/app",
+    "@user": "out/app/modules/user",
+    "@auth": "out/app/modules/auth"
+  },
   "jest": {
     "moduleFileExtensions": [
       "js",
@@ -89,7 +95,8 @@
     "testEnvironment": "node",
     "moduleNameMapper": {
       "^@app(.*)$": "<rootDir>/app/$1",
-      "^@user(.*)$": "<rootDir>/app/modules/user/$1"
+      "^@user(.*)$": "<rootDir>/app/modules/user/$1",
+      "^@auth(.*)$": "<rootDir>/app/modules/auth/$1"
     }
   }
 }

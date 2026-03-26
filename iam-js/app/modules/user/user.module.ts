@@ -1,16 +1,16 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './entities/user.entity';
-import { Role } from './entities/role.entity';
-import { Permission } from './entities/permission.entity';
-import { PermissionSeeder } from './seeders/permission/permission.seeder';
-import { RoleSeeder } from './seeders/role/role.seeder';
-import { PermissionService } from './services/permission/permission.service';
-import { RoleService } from './services/role/role.service';
-import { UserService } from './services/user/user.service';
-import { RoleGuard } from './guards/role/role.guard';
-import { PermissionGuard } from './guards/permission/permission.guard';
-import { UserMiddleware } from './middlewares/user/user.middleware';
+import { User } from '@user/entities/user.entity';
+import { Role } from '@user/entities/role.entity';
+import { Permission } from '@user/entities/permission.entity';
+import { PermissionSeeder } from '@user/seeders/permission/permission.seeder';
+import { RoleSeeder } from '@user/seeders/role/role.seeder';
+import { PermissionService } from '@user/services/permission/permission.service';
+import { RoleService } from '@user/services/role/role.service';
+import { UserService } from '@user/services/user/user.service';
+import { RoleGuard } from '@user/guards/role/role.guard';
+import { PermissionGuard } from '@user/guards/permission/permission.guard';
+import { UserMiddleware } from '@user/middlewares/user/user.middleware';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User, Role, Permission])],

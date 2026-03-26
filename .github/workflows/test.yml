@@ -1,0 +1,39 @@
+name: Test
+
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        type: string
+        default: '20'
+      cache-key:
+        type: string
+        required: true
+
+jobs:
+  test:
+    name: Tests
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: iam-js
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: npm
+          cache-dependency-path: iam-js/package-lock.json
+
+      - name: Restore node_modules cache
+        uses: actions/cache/restore@v4
+        with: 
+          path: iam-js/node_modules
+          key: ${{ inputs.cache-key }}
+          fail-on-cache-miss: true
+      
+      - name: Test
+        run: npm run test

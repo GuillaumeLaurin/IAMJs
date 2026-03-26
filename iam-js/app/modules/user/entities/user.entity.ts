@@ -7,23 +7,23 @@ export class User {
    * This decorator will help to auto generated id for the table
    */
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column({ type: 'varchar', length: 30 })
-  firstName: string;
+  firstName!: string;
 
   @Column({ type: 'varchar', length: 30 })
-  lastName: string;
+  lastName!: string;
 
   // Unique
   @Column({ type: 'varchar', length: 40 })
-  email: string;
+  email!: string;
 
   @Column({ type: 'int' })
-  age: number;
+  age!: number;
 
   @Column({ type: 'varchar' })
-  password: string;
+  password!: string;
 
   @Column({ type: 'enum', enum: ['m', 'f', 'o'] })
   /**
@@ -31,9 +31,9 @@ export class User {
    * f - female
    * o - other
    */
-  gender: string;
+  gender!: string;
 
   @ManyToMany(() => Role, { eager: true })
   @JoinTable()
-  roles: Role[];
+  roles!: Role[];
 }
