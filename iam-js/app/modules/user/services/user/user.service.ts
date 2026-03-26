@@ -112,7 +112,7 @@ export class UserService {
   }
 
   async incremetTokenVersion(id: string): Promise<void> {
-    this.userRepository.increment({ id }, 'tokenVersion', 1);
+    await this.userRepository.increment({ id }, 'tokenVersion', 1);
   }
 
   private trimAndcapitalizeFirstLetter(str: string): string {

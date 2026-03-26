@@ -1,6 +1,6 @@
-import { TokenPair } from '@auth/types/token-pair.type';
-import { Payload } from '@auth/types/payload.type';
-import { Inject, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { TokenPair } from '@auth/interfaces/token-pair.interface';
+import { Payload } from '@auth/interfaces/payload.interface';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { hash, verify } from 'argon2';
 import { ConfigService } from '@nestjs/config';
@@ -10,8 +10,8 @@ import { UserService } from '@app/modules/user/services/user/user.service';
 import { v4 as uuidv4 } from 'uuid';
 
 const KEY = {
-  refreshToken: (userId: string) => `refresh:${userId}`,
-  blacklist: (jti: string) => `blacklist:${jti}`,
+  refreshToken: (userId: string): string => `refresh:${userId}`,
+  blacklist: (jti: string): string => `blacklist:${jti}`,
 };
 
 const ACCESS_TTL_SEC = 15 * 60;
