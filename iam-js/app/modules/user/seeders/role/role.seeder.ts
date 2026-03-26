@@ -121,6 +121,7 @@ export class RoleSeeder implements OnApplicationBootstrap {
   }
 
   private compareArray<T>(a: T[], b: T[]): boolean {
+    if (a.length !== b.length) return false;
     return a.every((element) => b.includes(element));
   }
 }
