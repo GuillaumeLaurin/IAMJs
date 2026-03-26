@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - 'main'
+      - 'releases/**'
+      - 'feature/ci-cd'
+  
+jobs:
+  actionLint:
+    name: Lint workflows
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run actionlint
+        uses: rhysd/actionlint@v1.7.11
+  
+  install:
+    name: Install & Build
+    needs: actionlint
+    uses: ./.github/workflows/install.yml
+    with:
+      node-version: '20'
+  
+  lint:
+    name: Lint
+    needs: install
+    uses:./.github/workflows/lint.yml
+    with:
+      node-version: '20'
+      cache-key: ${{ needs.install.outputs.cache-key }}
+
+  test:
+    name: Tests
+    needs: install
+    uses: ./.github/workflows/test.yml
+    with: 
+      node-version: '20'
+      cache-key: ${{ needs.install.outputs.cache-key }}

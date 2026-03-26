@@ -1,0 +1,58 @@
+name: Install & Build
+
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        type: string
+        default: '20'
+    outputs:
+      cache-key:
+        description: 'Key for cached node_modules'
+        value: ${{ jobs.install.outputs.cache-key }}
+
+jobs:
+  install:
+    name: Install & Build
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: iam-js
+
+    outputs: 
+      cache-key: ${{ steps.cache-key.outputs.value }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: npm
+          cache-dependency-path: iam-js/package-lock.json
+      
+      - name: Compute cache key
+        id: cache-key
+        run: echo "value=node-modules-${{ runner.os }}-${{ hashFiles('iam-js/package-lock.json') }}" >> $GITHUB_OUTPUT
+
+      - name: Restore node_modules cache
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: iam-js/node_modules
+          key: ${{ steps.cache-key.outputs.value }}
+      
+      - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci
+      
+      - name: Build
+        run: npm run build
+
+      - name: Save node_modules cache
+        if: steps.cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: iam-js/node_modules
+          key: ${{ steps.cache-key.outputs.value }}
