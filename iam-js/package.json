@@ -42,6 +42,7 @@
     "mongoose": "^9.3.0",
     "mysql2": "^3.20.0",
     "passport": "^0.7.0",
+    "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
     "pg": "^8.20.0",
     "reflect-metadata": "^0.2.2",
@@ -60,6 +61,7 @@
     "@types/ioredis": "^4.28.10",
     "@types/jest": "^30.0.0",
     "@types/node": "^22.10.7",
+    "@types/passport-jwt": "^4.0.1",
     "@types/passport-local": "^1.0.38",
     "@types/sinon": "^21.0.0",
     "@types/supertest": "^6.0.2",
@@ -102,7 +104,9 @@
     ],
     "coverageDirectory": "./coverage",
     "testEnvironment": "node",
-    "transformIgnorePatterns": ["node_modules/(?!(uuid)/)"],
+    "transformIgnorePatterns": [
+      "node_modules/(?!(uuid)/)"
+    ],
     "moduleNameMapper": {
       "^uuid$": "<rootDir>/node_modules/uuid/dist-node/index.js",
       "^@app(.*)$": "<rootDir>/app/$1",
