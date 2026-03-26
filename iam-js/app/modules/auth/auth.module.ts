@@ -6,6 +6,12 @@ import { RedisModule } from '@redis/redis.module';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { ConfigModule } from '@nestjs/config';
+import { TokenService } from './services/token/token.service';
+import { AuthService } from './services/auth/auth.service';
+import { AccessStrategy } from './strategies/access/access.strategy';
+import { RefreshStrategy } from './strategies/refresh/refresh.strategy';
+import { AuthGuard } from './guards/auth.guard';
+import { RefreshGuard } from './guards/refresh.guard';
 
 @Module({
   imports: [
@@ -17,7 +23,7 @@ import { ConfigModule } from '@nestjs/config';
     RedisModule,
   ],
   controllers: [],
-  providers: [],
-  exports: [],
+  providers: [TokenService, AuthService, AccessStrategy, RefreshStrategy, AuthGuard, RefreshGuard],
+  exports: [TokenService, AuthService, AccessStrategy, RefreshGuard, AuthGuard, RefreshGuard],
 })
 export class AuthModule {}
