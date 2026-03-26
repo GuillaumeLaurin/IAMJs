@@ -34,7 +34,7 @@ jobs:
       
       - name: Compute cache key
         id: cache-key
-        run: echo "value=node-modules-${{ runner.os }}-${{ hashFiles('iam-js/package-lock.json') }}" >> $GITHUB_OUTPUT
+        run: echo "value=node-modules-${{ runner.os }}-${{ hashFiles('iam-js/package-lock.json') }}" >> "$GITHUB_OUTPUT"
 
       - name: Restore node_modules cache
         id: cache
