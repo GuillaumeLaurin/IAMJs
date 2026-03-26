@@ -89,11 +89,6 @@ describe('RoleSeeder', () => {
 
     await seeder.onApplicationBootstrap();
 
-    // Debug
-    console.log('save callCount:', rolesRepository.save.callCount);
-    console.log('save called:', rolesRepository.save.called);
-    console.log('save args:', rolesRepository.save.args);
-
     expect(rolesRepository.save.calledWith(match({ id: 1 }))).toBeTruthy();
   });
 });
