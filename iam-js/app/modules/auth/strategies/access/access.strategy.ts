@@ -8,7 +8,7 @@ import { ConfigService } from '@nestjs/config';
 import { User } from '@app/modules/user/entities/user.entity';
 
 @Injectable()
-export class AccessStrategy extends PassportStrategy(Strategy, 'access') {
+export class AccessStrategy extends PassportStrategy(Strategy, 'jwt-access') {
   constructor(
     private configService: ConfigService,
     private userService: UserService,

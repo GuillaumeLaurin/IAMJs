@@ -10,7 +10,7 @@ interface ValidatedUser extends Payload {
 }
 
 @Injectable()
-export class RefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
+export class RefreshStrategy extends PassportStrategy(Strategy, 'jwt-refresh') {
   constructor(private configService: ConfigService) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
