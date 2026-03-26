@@ -1,5 +1,5 @@
 export type Payload = {
-    sub: string;
-    iat?: number;
-    exp?: number;
-}
+  sub: string;
+  iat?: number;
+  exp?: number;
+};
