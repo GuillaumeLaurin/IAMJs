@@ -3,7 +3,7 @@ import type { TestingModule } from '@nestjs/testing';
 import { RoleSeeder } from '@user/seeders/role/role.seeder';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Logger } from '@nestjs/common';
-import { stub } from 'sinon';
+import { stub, match } from 'sinon';
 import type { SinonStub } from 'sinon';
 import { ROLES } from '@user/consts/role.const';
 import { Permission } from '@user/entities/permission.entity';
@@ -89,6 +89,11 @@ describe('RoleSeeder', () => {
 
     await seeder.onApplicationBootstrap();
 
-    expect(rolesRepository.save.calledOnce).toBeTruthy();
+    // Debug
+    console.log('save callCount:', rolesRepository.save.callCount);
+    console.log('save called:', rolesRepository.save.called);
+    console.log('save args:', rolesRepository.save.args);
+
+    expect(rolesRepository.save.calledWith(match({ id: 1 }))).toBeTruthy();
   });
 });
