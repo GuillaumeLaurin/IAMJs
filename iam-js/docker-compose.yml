@@ -10,9 +10,17 @@ services:
       POSTGRES_USERNAME: ${POSTGRES_USERNAME}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DATABASE: ${POSTGRES_DATABASE}
+      REDIS_HOST: redis
+      REDIS_PORT: ${REDIS_PORT}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      JWT_ACCESS_TOKEN: ${JWT_ACCESS_TOKEN}
+      JWT_REFRESH_TOKEN: ${JWT_REFRESH_TOKEN}
+      NODE_ENV: ${NODE_ENV}
       PORT: ${PORT}
     depends_on:
       db:
+        condition: service_healthy
+      redis:
         condition: service_healthy
 
   db:
@@ -29,6 +37,22 @@ services:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USERNAME}"]
       interval: 5s
       retries: 5
-
+  
+  redis:
+    image: redis:8.6-trixie
+    ports:
+      - "6379:6379"
+    command: >
+      sh -c "redis-server --requirepass $${REDIS_PASSWORD}"
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      interval: 5s
+      retries: 5
+    
 volumes:
   pgdata:
+  redisdata:

@@ -28,6 +28,7 @@
       "@app/*": ["./app/*"],
       "@user/*": ["./app/modules/user/*"],
       "@auth/*": ["./app/modules/auth/*"],
+      "@redis/*": ["./app/modules/redis/*"]
     }
   }
 }
