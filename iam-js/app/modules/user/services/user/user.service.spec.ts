@@ -296,4 +296,74 @@ describe('UserService', () => {
       );
     });
   });
+  describe('findOrCreateUser', () => {
+    const dto = {
+      provider: 'google',
+      providerId: 'google-id-123',
+      email: 'John.Doe@Example.com',
+      firstName: 'John',
+      lastName: 'Doe',
+    };
+
+    it('should return the existing user if found by provider and providerId', async () => {
+      userRepository.findOne.onFirstCall().resolves(USERS[0]);
+
+      const result = await service.findOrCreateUser({ ...dto });
+
+      expect(userRepository.findOne.calledOnce).toBeTruthy();
+      expect(result).toEqual(USERS[0]);
+    });
+
+    it('should link the provider to an existing user found by email and return it', async () => {
+      const existingByEmail = { ...USERS[0], provider: null, providerId: null };
+      const updated = { ...existingByEmail, provider: dto.provider, providerId: dto.providerId };
+
+      userRepository.findOne
+        .onFirstCall()
+        .resolves(null) // not found by provider
+        .onSecondCall()
+        .resolves(existingByEmail); // found by email
+      userRepository.save.resolves(updated);
+
+      const result = await service.findOrCreateUser({ ...dto });
+
+      expect(userRepository.save.calledOnce).toBeTruthy();
+      expect(result.provider).toEqual(dto.provider);
+      expect(result.providerId).toEqual(dto.providerId);
+    });
+
+    it('should lowercase the email when searching by email', async () => {
+      userRepository.findOne.onFirstCall().resolves(null).onSecondCall().resolves(null);
+      roleService.findMany.resolves([...ROLES]);
+      userRepository.create.returns(USERS[0]);
+      userRepository.save.resolves(USERS[0]);
+
+      await service.findOrCreateUser({ ...dto });
+
+      const secondCall = userRepository.findOne.getCall(1).args[0] as { where: { email: string } };
+      expect(secondCall.where.email).toEqual('john.doe@example.com');
+    });
+
+    it('should create and return a new user if not found by provider or email', async () => {
+      userRepository.findOne.onFirstCall().resolves(null).onSecondCall().resolves(null);
+      roleService.findMany.resolves([...ROLES]);
+      userRepository.create.returns(USERS[0]);
+      userRepository.save.resolves(USERS[0]);
+
+      const result = await service.findOrCreateUser({ ...dto });
+
+      expect(userRepository.create.calledOnce).toBeTruthy();
+      expect(userRepository.save.calledOnce).toBeTruthy();
+      expect(result).toEqual(USERS[0]);
+    });
+
+    it('should throw InternalServerErrorException if no default roles are found when creating', async () => {
+      userRepository.findOne.onFirstCall().resolves(null).onSecondCall().resolves(null);
+      roleService.findMany.resolves([]);
+
+      await expect(service.findOrCreateUser({ ...dto })).rejects.toThrow(
+        InternalServerErrorException,
+      );
+    });
+  });
 });
