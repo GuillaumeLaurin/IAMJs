@@ -66,7 +66,7 @@ GOOGLE_CALLBACK_URL = http://localhost:3000/api/auth/google/callback
 ### 3. Start the application
 
 ```bash
-docker compose up --build
+make up
 ```
 
 The API will be available at **http://localhost:3000**.
