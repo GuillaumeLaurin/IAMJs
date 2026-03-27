@@ -7,7 +7,33 @@ Identity & Access Management (IAM) — Built with NestJS, featuring JWT auth, RB
 
 ## Dependencies
 
-- Docker / Docker Desktop
+| Dependency | Level |
+|---|---|
+| `Docker` | Recommended |
+| `Chocolatey` or `Scoop` | optional |
+| `Make` | optional |
+
+## How to download Make
+
+### 1. Windows
+
+Open a terminal as admin and run the following command :
+
+With Chocolatey
+
+```bash
+choco install make
+```
+
+Or with Scoop
+
+```bash
+scoop install make
+```
+
+### 2. Linux
+
+Make should be installed by default
 
 ## How to run with Docker
 
@@ -29,7 +55,7 @@ cd IAMJS/iam-js
 
 ### 2. Create your environment file
 
-Create a `.env` file at the root of the project:
+Create a `.env` file under iam-js folder:
 
 ```properties
 POSTGRES_HOST = localhost
@@ -70,6 +96,7 @@ make up
 ```
 
 The API will be available at **http://localhost:3000**.
+The Application will be available at **http://localhost:4200**
 
 ---
 
