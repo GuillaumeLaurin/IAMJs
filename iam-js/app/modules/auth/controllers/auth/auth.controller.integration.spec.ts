@@ -1,6 +1,7 @@
+import type { Server } from 'http';
 import { Test } from '@nestjs/testing';
 import type { TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
+import type { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import cookieParser from 'cookie-parser';
 import { AuthController } from '@auth/controllers/auth/auth.controller';
@@ -43,6 +44,7 @@ const MOCK_TOKEN_PAIR: TokenPair = {
 
 describe('AuthController (integration)', () => {
   let app: INestApplication;
+  let httpServer: Server;
   let authService: SinonStubbedInstance<AuthService>;
   let userService: SinonStubbedInstance<UserService>;
   let tokenService: SinonStubbedInstance<TokenService>;
@@ -65,10 +67,7 @@ describe('AuthController (integration)', () => {
     configServiceGetOrThrow.withArgs('JWT_REFRESH_TOKEN').returns(REFRESH_SECRET);
 
     const module: TestingModule = await Test.createTestingModule({
-      imports: [
-        PassportModule,
-        JwtModule.register({}),
-      ],
+      imports: [PassportModule, JwtModule.register({})],
       controllers: [AuthController],
       providers: [
         AuthGuard,
@@ -88,6 +87,7 @@ describe('AuthController (integration)', () => {
     app = module.createNestApplication();
     app.use(cookieParser());
     await app.init();
+    httpServer = app.getHttpServer() as Server;
 
     jwtService = module.get<JwtService>(JwtService);
   });
@@ -96,13 +96,17 @@ describe('AuthController (integration)', () => {
     await app.close();
   });
 
-  const signAccessToken = (overrides: Partial<{ sub: string; tokenVersion: number; jti: string }> = {}): string =>
+  const signAccessToken = (
+    overrides: Partial<{ sub: string; tokenVersion: number; jti: string }> = {},
+  ): string =>
     jwtService.sign(
       { sub: USER_ID, tokenVersion: TOKEN_VERSION, jti: JTI, ...overrides },
       { secret: ACCESS_SECRET, expiresIn: '15m' },
     );
 
-  const signRefreshToken = (overrides: Partial<{ sub: string; tokenVersion: number; jti: string }> = {}): string =>
+  const signRefreshToken = (
+    overrides: Partial<{ sub: string; tokenVersion: number; jti: string }> = {},
+  ): string =>
     jwtService.sign(
       { sub: USER_ID, tokenVersion: TOKEN_VERSION, jti: JTI, ...overrides },
       { secret: REFRESH_SECRET, expiresIn: '7d' },
@@ -121,10 +125,7 @@ describe('AuthController (integration)', () => {
     it('should return 200 and call authService.signup', async () => {
       authService.signup.resolves();
 
-      await request(app.getHttpServer())
-        .post('/auth/signup')
-        .send(dto)
-        .expect(200);
+      await request(httpServer).post('/auth/signup').send(dto).expect(200);
 
       expect(authService.signup.calledOnce).toBeTruthy();
     });
@@ -139,10 +140,7 @@ describe('AuthController (integration)', () => {
     it('should return 200 and the access token', async () => {
       authService.signin.resolves(MOCK_TOKEN_PAIR);
 
-      const res = await request(app.getHttpServer())
-        .post('/auth/signin')
-        .send(dto)
-        .expect(200);
+      const res = await request(httpServer).post('/auth/signin').send(dto).expect(200);
 
       expect(res.body).toEqual({ accessToken: MOCK_TOKEN_PAIR.accessToken });
     });
@@ -150,10 +148,7 @@ describe('AuthController (integration)', () => {
     it('should set the refresh_token cookie', async () => {
       authService.signin.resolves(MOCK_TOKEN_PAIR);
 
-      const res = await request(app.getHttpServer())
-        .post('/auth/signin')
-        .send(dto)
-        .expect(200);
+      const res = await request(httpServer).post('/auth/signin').send(dto).expect(200);
 
       const cookies = res.headers['set-cookie'] as unknown as string[];
       expect(cookies.some((c: string) => c.startsWith('refresh_token='))).toBeTruthy();
@@ -165,7 +160,7 @@ describe('AuthController (integration)', () => {
       const refreshToken = signRefreshToken();
       authService.refresh.resolves(MOCK_TOKEN_PAIR);
 
-      const res = await request(app.getHttpServer())
+      const res = await request(httpServer)
         .post('/auth/refresh')
         .set('Cookie', `refresh_token=${refreshToken}`)
         .expect(200);
@@ -177,7 +172,7 @@ describe('AuthController (integration)', () => {
       const refreshToken = signRefreshToken();
       authService.refresh.resolves(MOCK_TOKEN_PAIR);
 
-      const res = await request(app.getHttpServer())
+      const res = await request(httpServer)
         .post('/auth/refresh')
         .set('Cookie', `refresh_token=${refreshToken}`)
         .expect(200);
@@ -187,13 +182,11 @@ describe('AuthController (integration)', () => {
     });
 
     it('should return 401 with no refresh token', async () => {
-      await request(app.getHttpServer())
-        .post('/auth/refresh')
-        .expect(401);
+      await request(httpServer).post('/auth/refresh').expect(401);
     });
 
     it('should return 401 with an invalid refresh token', async () => {
-      await request(app.getHttpServer())
+      await request(httpServer)
         .post('/auth/refresh')
         .set('Cookie', 'refresh_token=invalid.token.here')
         .expect(401);
@@ -207,7 +200,7 @@ describe('AuthController (integration)', () => {
       userService.findOne.resolves(MOCK_USER);
       authService.signout.resolves();
 
-      await request(app.getHttpServer())
+      await request(httpServer)
         .post('/auth/signout')
         .set('Authorization', `Bearer ${accessToken}`)
         .expect(204);
@@ -221,7 +214,7 @@ describe('AuthController (integration)', () => {
       userService.findOne.resolves(MOCK_USER);
       authService.signout.resolves();
 
-      const res = await request(app.getHttpServer())
+      const res = await request(httpServer)
         .post('/auth/signout')
         .set('Authorization', `Bearer ${accessToken}`)
         .expect(204);
@@ -231,16 +224,14 @@ describe('AuthController (integration)', () => {
     });
 
     it('should return 401 with no access token', async () => {
-      await request(app.getHttpServer())
-        .post('/auth/signout')
-        .expect(401);
+      await request(httpServer).post('/auth/signout').expect(401);
     });
 
     it('should return 401 if the access token is blacklisted', async () => {
       const accessToken = signAccessToken();
       tokenService.isAccessTokenBlacklisted.resolves(true);
 
-      await request(app.getHttpServer())
+      await request(httpServer)
         .post('/auth/signout')
         .set('Authorization', `Bearer ${accessToken}`)
         .expect(401);
@@ -251,7 +242,7 @@ describe('AuthController (integration)', () => {
       tokenService.isAccessTokenBlacklisted.resolves(false);
       userService.findOne.resolves(MOCK_USER);
 
-      await request(app.getHttpServer())
+      await request(httpServer)
         .post('/auth/signout')
         .set('Authorization', `Bearer ${accessToken}`)
         .expect(401);

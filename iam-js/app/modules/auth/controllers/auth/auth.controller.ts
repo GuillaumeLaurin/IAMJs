@@ -40,7 +40,7 @@ export class AuthController {
 
     res.cookie('refresh_token', tokens.refreshToken, {
       httpOnly: true,
-      secure: this.configService.get('NODE_ENV')! === SECURE_ENVIRONMENT,
+      secure: SECURE_ENVIRONMENT === this.configService.get('NODE_ENV')!,
       sameSite: SAME_SITE,
       maxAge: REFRESH_TTL_SEC,
     });
@@ -61,7 +61,7 @@ export class AuthController {
 
     res.cookie('refresh_token', tokens.refreshToken, {
       httpOnly: true,
-      secure: this.configService.get('NODE_ENV')! === SECURE_ENVIRONMENT,
+      secure: SECURE_ENVIRONMENT === this.configService.get('NODE_ENV')!,
       sameSite: SAME_SITE,
       maxAge: REFRESH_TTL_SEC,
     });
