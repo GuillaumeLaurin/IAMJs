@@ -118,10 +118,7 @@ export class AuthController {
   @UseGuards(GoogleGuard)
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Google OAuth2 callback' })
-  async googleCallback(
-    @Req() req: Request,
-    @Res({ passthrough: true }) res: Response,
-  ): Promise<AccessTokenDto> {
+  googleCallback(@Req() req: Request, @Res({ passthrough: true }) res: Response): AccessTokenDto {
     const tokens = req.user as TokenPair;
 
     res.cookie('refresh_token', tokens.refreshToken, {
@@ -144,10 +141,7 @@ export class AuthController {
   @UseGuards(GithubGuard)
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'GitHub OAuth2 callback' })
-  async githubCallback(
-    @Req() req: Request,
-    @Res({ passthrough: true }) res: Response,
-  ): Promise<AccessTokenDto> {
+  githubCallback(@Req() req: Request, @Res({ passthrough: true }) res: Response): AccessTokenDto {
     const tokens = req.user as TokenPair;
 
     res.cookie('refresh_token', tokens.refreshToken, {

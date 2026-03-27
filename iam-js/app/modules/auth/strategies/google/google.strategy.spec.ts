@@ -7,11 +7,11 @@ import { createStubInstance, stub } from 'sinon';
 import type { SinonStubbedInstance, SinonStub } from 'sinon';
 import type { TokenPair } from '@auth/interfaces/token-pair.interface';
 
-type GoogleProfile = {
+interface GoogleProfile {
   id: string;
-  emails: Array<{ value: string }>;
+  emails: { value: string }[];
   name: { givenName: string; familyName: string };
-};
+}
 
 const MOCK_TOKEN_PAIR: TokenPair = {
   accessToken: 'access.token.stub',

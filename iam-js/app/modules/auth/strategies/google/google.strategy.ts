@@ -24,7 +24,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     _refreshToken: string,
     profile: {
       id: string;
-      emails: Array<{ value: string }>;
+      emails: { value: string }[];
       name: { givenName: string; familyName: string };
     },
     done: VerifyCallback,

@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 import type { Server } from 'http';
 import { Test } from '@nestjs/testing';
 import type { TestingModule } from '@nestjs/testing';

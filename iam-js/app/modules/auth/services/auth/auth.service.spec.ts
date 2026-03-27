@@ -10,7 +10,7 @@ import type { SinonStubbedInstance, SinonStub } from 'sinon';
 import { UnauthorizedException } from '@nestjs/common';
 import type { User } from '@app/modules/user/entities/user.entity';
 import type { TokenPair } from '@auth/interfaces/token-pair.interface';
-import { OAuthProfile } from '../../interfaces/oauth-profile.interface';
+import type { OAuthProfile } from '@auth/interfaces/oauth-profile.interface';
 
 const USER_ID = '1';
 const USER_PASSWORD_PLAIN = 'password123';
