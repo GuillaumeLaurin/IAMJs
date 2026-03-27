@@ -51,6 +51,14 @@ JWT_REFRESH_SECRET =
 `OePJLmlBgCyt6xWyIf97df7JyFAPPMY3E1u7v7LX7t84AlwY4uhBa2GHkqQK0xnxdUNjLpO4uwPLyiocJhBuzz`
 
 NODE_ENV = development
+
+GITHUB_CLIENT_ID = xxx
+GITHUB_CLIENT_SECRET = xxx
+GITHUB_CALLBACK_URL = http://localhost:3000/api/auth/github/callback
+
+GOOGLE_CLIENT_ID = xxx
+GOOGLE_CLIENT_SECRET = xxx
+GOOGLE_CALLBACK_URL = http://localhost:3000/api/auth/google/callback
 ```
 
 > See `.env.example` for reference.
