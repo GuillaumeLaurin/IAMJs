@@ -1,18 +1,94 @@
-import { defineConfig, globalIgnores } from "eslint/config";
-import nextVitals from "eslint-config-next/core-web-vitals";
-import nextTs from "eslint-config-next/typescript";
+// @ts-check
+import eslint from '@eslint/js';
+import { configs as airbnbConfigs } from 'eslint-config-airbnb-extended';
+import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
+import globals from 'globals';
+import tseslint from 'typescript-eslint';
 
-const eslintConfig = defineConfig([
-  ...nextVitals,
-  ...nextTs,
-  // Override default ignores of eslint-config-next.
-  globalIgnores([
-    // Default ignores of eslint-config-next:
-    ".next/**",
-    "out/**",
-    "build/**",
-    "next-env.d.ts",
-  ]),
-]);
+export default tseslint.config(
+  {
+    ignores: ['eslint.config.mjs', 'dist/**', 'build/**', 'node_modules/**'],
+  },
 
-export default eslintConfig;
+  // Base ESLint recommended rules
+  eslint.configs.recommended,
+
+  // Airbnb style guide WITH React + TypeScript support via flat config
+  ...airbnbConfigs.base.recommended,
+  ...airbnbConfigs.base.typescript,
+  ...airbnbConfigs.react.recommended,
+  ...airbnbConfigs.react.typescript,
+
+  // TypeScript strict type-checked rules
+  ...tseslint.configs.recommendedTypeChecked,
+  ...tseslint.configs.stylisticTypeChecked,
+
+  // Prettier (must be last to override formatting conflicts)
+  eslintPluginPrettierRecommended,
+
+  // Language & parser options
+  {
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        ...globals.es2021,
+        ...globals.jest,
+      },
+      sourceType: 'module',
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+    },
+  },
+
+  // Custom rule overrides
+  {
+    rules: {
+      // ── Airbnb overrides (relaxed for React patterns) ──
+      'class-methods-use-this': 'off',
+      'no-useless-constructor': 'off',
+      'import/prefer-default-export': 'off',
+
+      // ── React ──
+      'react/react-in-jsx-scope': 'off',
+      'react/require-default-props': 'off',
+      'react/jsx-props-no-spreading': 'off',
+      'react/function-component-definition': [
+        'error',
+        { namedComponents: 'arrow-function', unnamedComponents: 'arrow-function' },
+      ],
+
+      // ── TypeScript ──
+      '@typescript-eslint/no-useless-constructor': 'off',
+      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/explicit-function-return-type': 'off',
+      '@typescript-eslint/explicit-module-boundary-types': 'off',
+      '@typescript-eslint/no-floating-promises': 'warn',
+      '@typescript-eslint/no-unsafe-argument': 'warn',
+      '@typescript-eslint/no-unsafe-member-access': 'warn',
+      '@typescript-eslint/no-unsafe-assignment': 'warn',
+      '@typescript-eslint/consistent-type-imports': [
+        'warn',
+        { prefer: 'type-imports', fixStyle: 'inline-type-imports' },
+      ],
+      '@typescript-eslint/naming-convention': [
+        'error',
+        { selector: 'interface', format: ['PascalCase'] },
+        { selector: 'typeAlias', format: ['PascalCase'] },
+        { selector: 'enum', format: ['PascalCase'] },
+        { selector: 'enumMember', format: ['PascalCase'] },
+        { selector: 'class', format: ['PascalCase'] },
+        { selector: 'variable', format: ['camelCase', 'UPPER_CASE', 'PascalCase'] },
+        { selector: 'function', format: ['camelCase', 'PascalCase'] },
+        { selector: 'parameter', format: ['camelCase'], leadingUnderscore: 'allow' },
+      ],
+
+      // ── Prettier ──
+      'prettier/prettier': ['error', { endOfLine: 'auto' }],
+    },
+  },
+);
