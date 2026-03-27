@@ -6,12 +6,13 @@ import { RedisModule } from '@redis/redis.module';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { ConfigModule } from '@nestjs/config';
-import { TokenService } from './services/token/token.service';
-import { AuthService } from './services/auth/auth.service';
-import { AccessStrategy } from './strategies/access/access.strategy';
-import { RefreshStrategy } from './strategies/refresh/refresh.strategy';
-import { AuthGuard } from './guards/auth.guard';
-import { RefreshGuard } from './guards/refresh.guard';
+import { TokenService } from '@auth/services/token/token.service';
+import { AuthService } from '@auth/services/auth/auth.service';
+import { AccessStrategy } from '@auth/strategies/access/access.strategy';
+import { RefreshStrategy } from '@auth/strategies/refresh/refresh.strategy';
+import { AuthGuard } from '@auth/guards/auth.guard';
+import { RefreshGuard } from '@auth/guards/refresh.guard';
+import { AuthController } from '@auth/controllers/auth/auth.controller';
 
 @Module({
   imports: [
@@ -22,7 +23,7 @@ import { RefreshGuard } from './guards/refresh.guard';
     JwtModule.register({}),
     RedisModule,
   ],
-  controllers: [],
+  controllers: [AuthController],
   providers: [TokenService, AuthService, AccessStrategy, RefreshStrategy, AuthGuard, RefreshGuard],
   exports: [TokenService, AuthService, AccessStrategy, RefreshGuard, AuthGuard, RefreshGuard],
 })
