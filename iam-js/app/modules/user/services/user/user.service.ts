@@ -13,6 +13,7 @@ import { RoleService } from '@user/services/role/role.service';
 import { Role as ERole } from '@user/enums/role.enum';
 import { UpdateUserDto } from '@user/dto/update-user.dto';
 import { Role } from '@user/entities/role.entity';
+import { OAuthUserDto } from '../../dto/oauth-user.dto';
 
 @Injectable()
 export class UserService {
@@ -45,6 +46,46 @@ export class UserService {
       age: reassignedDto.age,
       gender: reassignedDto.gender,
       password: hashed,
+      roles: defaults,
+    });
+
+    return this.userRepository.save(user);
+  }
+
+  async findOrCreateUser(dto: OAuthUserDto): Promise<User> {
+    const existing = await this.userRepository.findOne({
+      where: { provider: dto.provider, providerId: dto.providerId },
+      relations: ['roles', 'roles.permissions'],
+    });
+
+    if (existing) return existing;
+
+    const byEmail = await this.userRepository.findOne({
+      where: { email: dto.email.toLowerCase() },
+      relations: ['roles', 'roles.permissions'],
+    });
+
+    if (byEmail) {
+      byEmail.provider = dto.provider;
+      byEmail.providerId = dto.providerId;
+      return this.userRepository.save(byEmail);
+    }
+
+    const defaults = await this.roleService.findMany([ERole.Auditor, ERole.Viewer, ERole.Editor]);
+
+    if (!defaults.length) {
+      throw new InternalServerErrorException('Default role not found');
+    }
+
+    const user = this.userRepository.create({
+      firstName: dto.firstName,
+      lastName: dto.lastName,
+      email: dto.email.toLowerCase(),
+      age: 0,
+      gender: 'o',
+      password: '',
+      provider: dto.provider,
+      providerId: dto.providerId,
       roles: defaults,
     });
 

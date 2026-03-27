@@ -13,6 +13,9 @@ import { RefreshStrategy } from '@auth/strategies/refresh/refresh.strategy';
 import { AuthGuard } from '@auth/guards/auth.guard';
 import { RefreshGuard } from '@auth/guards/refresh.guard';
 import { AuthController } from '@auth/controllers/auth/auth.controller';
+import { GoogleStrategy } from '@auth/strategies/google/google.strategy';
+import { GithubStrategy } from '@auth/strategies/github/github.strategy';
+import { GoogleGuard } from '@auth/guards/google.guard';
 
 @Module({
   imports: [
@@ -24,7 +27,18 @@ import { AuthController } from '@auth/controllers/auth/auth.controller';
     RedisModule,
   ],
   controllers: [AuthController],
-  providers: [TokenService, AuthService, AccessStrategy, RefreshStrategy, AuthGuard, RefreshGuard],
-  exports: [TokenService, AuthService, AccessStrategy, RefreshGuard, AuthGuard, RefreshGuard],
+  providers: [
+    TokenService,
+    AuthService,
+    AccessStrategy,
+    RefreshStrategy,
+    AuthGuard,
+    RefreshGuard,
+    GoogleStrategy,
+    GithubStrategy,
+    GoogleGuard,
+    GoogleStrategy,
+  ],
+  exports: [TokenService, AuthService, RefreshGuard, AuthGuard, GoogleGuard, GoogleStrategy],
 })
 export class AuthModule {}

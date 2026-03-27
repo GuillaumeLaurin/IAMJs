@@ -8,6 +8,7 @@ import { TokenPair } from '@auth/interfaces/token-pair.interface';
 import { Session } from '@auth/entities/session.entity';
 import { IsNull, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { OAuthProfile } from '../../interfaces/oauth-profile.interface';
 
 @Injectable()
 export class AuthService {
@@ -32,6 +33,20 @@ export class AuthService {
 
     await this.saveSignIn(user.id);
 
+    return this.tokenService.generateTokenPair(user.id);
+  }
+
+  async oauthSignin(profile: OAuthProfile): Promise<TokenPair> {
+    const dto: OAuthProfile = {
+      provider: profile.provider,
+      providerId: profile.providerId,
+      email: profile.email,
+      firstName: profile.firstName,
+      lastName: profile.lastName,
+    };
+
+    const user = await this.userService.findOrCreateUser(dto);
+    await this.saveSignIn(user.id);
     return this.tokenService.generateTokenPair(user.id);
   }
 

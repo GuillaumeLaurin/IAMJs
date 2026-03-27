@@ -1,7 +1,8 @@
+/* eslint-disable max-classes-per-file */
 import type { Server } from 'http';
 import { Test } from '@nestjs/testing';
 import type { TestingModule } from '@nestjs/testing';
-import type { INestApplication } from '@nestjs/common';
+import type { INestApplication, CanActivate, ExecutionContext } from '@nestjs/common';
 import request from 'supertest';
 import cookieParser from 'cookie-parser';
 import { AuthController } from '@auth/controllers/auth/auth.controller';
@@ -9,6 +10,8 @@ import { AuthService } from '@auth/services/auth/auth.service';
 import { ConfigService } from '@nestjs/config';
 import { AuthGuard } from '@auth/guards/auth.guard';
 import { RefreshGuard } from '@auth/guards/refresh.guard';
+import { GoogleGuard } from '@auth/guards/google.guard';
+import { GithubGuard } from '@auth/guards/github.guard';
 import { AccessStrategy } from '@auth/strategies/access/access.strategy';
 import { RefreshStrategy } from '@auth/strategies/refresh/refresh.strategy';
 import { UserService } from '@app/modules/user/services/user/user.service';
@@ -41,6 +44,23 @@ const MOCK_TOKEN_PAIR: TokenPair = {
   accessToken: 'new.access.token',
   refreshToken: 'new.refresh.token',
 };
+
+// Mock OAuth guards — bypass the real OAuth redirect flow and inject req.user directly
+class MockGoogleGuard implements CanActivate {
+  canActivate(context: ExecutionContext): boolean {
+    const req = context.switchToHttp().getRequest<{ user: TokenPair }>();
+    req.user = MOCK_TOKEN_PAIR;
+    return true;
+  }
+}
+
+class MockGithubGuard implements CanActivate {
+  canActivate(context: ExecutionContext): boolean {
+    const req = context.switchToHttp().getRequest<{ user: TokenPair }>();
+    req.user = MOCK_TOKEN_PAIR;
+    return true;
+  }
+}
 
 describe('AuthController (integration)', () => {
   let app: INestApplication;
@@ -82,7 +102,12 @@ describe('AuthController (integration)', () => {
           useValue: { get: configServiceGet, getOrThrow: configServiceGetOrThrow },
         },
       ],
-    }).compile();
+    })
+      .overrideGuard(GoogleGuard)
+      .useClass(MockGoogleGuard)
+      .overrideGuard(GithubGuard)
+      .useClass(MockGithubGuard)
+      .compile();
 
     app = module.createNestApplication();
     app.use(cookieParser());
@@ -149,6 +174,44 @@ describe('AuthController (integration)', () => {
       authService.signin.resolves(MOCK_TOKEN_PAIR);
 
       const res = await request(httpServer).post('/auth/signin').send(dto).expect(200);
+
+      const cookies = res.headers['set-cookie'] as unknown as string[];
+      expect(cookies.some((c: string) => c.startsWith('refresh_token='))).toBeTruthy();
+    });
+  });
+
+  describe('GET /auth/google/callback', () => {
+    it('should return 200 and the access token', async () => {
+      configServiceGet.withArgs('NODE_ENV').returns('development');
+
+      const res = await request(httpServer).get('/auth/google/callback').expect(200);
+
+      expect(res.body).toEqual({ accessToken: MOCK_TOKEN_PAIR.accessToken });
+    });
+
+    it('should set the refresh_token cookie', async () => {
+      configServiceGet.withArgs('NODE_ENV').returns('development');
+
+      const res = await request(httpServer).get('/auth/google/callback').expect(200);
+
+      const cookies = res.headers['set-cookie'] as unknown as string[];
+      expect(cookies.some((c: string) => c.startsWith('refresh_token='))).toBeTruthy();
+    });
+  });
+
+  describe('GET /auth/github/callback', () => {
+    it('should return 200 and the access token', async () => {
+      configServiceGet.withArgs('NODE_ENV').returns('development');
+
+      const res = await request(httpServer).get('/auth/github/callback').expect(200);
+
+      expect(res.body).toEqual({ accessToken: MOCK_TOKEN_PAIR.accessToken });
+    });
+
+    it('should set the refresh_token cookie', async () => {
+      configServiceGet.withArgs('NODE_ENV').returns('development');
+
+      const res = await request(httpServer).get('/auth/github/callback').expect(200);
 
       const cookies = res.headers['set-cookie'] as unknown as string[];
       expect(cookies.some((c: string) => c.startsWith('refresh_token='))).toBeTruthy();

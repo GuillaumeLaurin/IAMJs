@@ -48,6 +48,12 @@ export class User {
   @JoinTable()
   roles!: Role[];
 
+  @Column({ nullable: true })
+  provider?: string;
+
+  @Column({ nullable: true, unique: true })
+  providerId?: string;
+
   @CreateDateColumn()
   createdAt!: Date;
 

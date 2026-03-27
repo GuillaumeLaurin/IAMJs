@@ -159,6 +159,92 @@ describe('AuthController', () => {
     });
   });
 
+  describe('googleCallback', () => {
+    it('should return the access token from req.user', () => {
+      configService.get.returns('development');
+      const req = { user: MOCK_TOKEN_PAIR } as unknown as Request;
+
+      const result = controller.googleCallback(req, res as unknown as Response);
+
+      expect(result).toEqual({ accessToken: ACCESS_TOKEN });
+    });
+
+    it('should set the refresh_token cookie from req.user', () => {
+      configService.get.returns('development');
+      const req = { user: MOCK_TOKEN_PAIR } as unknown as Request;
+
+      controller.googleCallback(req, res as unknown as Response);
+
+      expect(res.cookie.calledOnce).toBeTruthy();
+      const [cookieName, cookieValue] = res.cookie.getCall(0).args as [string, string];
+      expect(cookieName).toEqual('refresh_token');
+      expect(cookieValue).toEqual(REFRESH_TOKEN);
+    });
+
+    it('should set secure cookie flag when in production', () => {
+      configService.get.returns('production');
+      const req = { user: MOCK_TOKEN_PAIR } as unknown as Request;
+
+      controller.googleCallback(req, res as unknown as Response);
+
+      const [, , options] = res.cookie.getCall(0).args as [string, string, { secure: boolean }];
+      expect(options.secure).toBe(true);
+    });
+
+    it('should not set secure cookie flag outside of production', () => {
+      configService.get.returns('development');
+      const req = { user: MOCK_TOKEN_PAIR } as unknown as Request;
+
+      controller.googleCallback(req, res as unknown as Response);
+
+      const [, , options] = res.cookie.getCall(0).args as [string, string, { secure: boolean }];
+      expect(options.secure).toBe(false);
+    });
+  });
+
+  describe('githubCallback', () => {
+    it('should return the access token from req.user', () => {
+      configService.get.returns('development');
+      const req = { user: MOCK_TOKEN_PAIR } as unknown as Request;
+
+      const result = controller.githubCallback(req, res as unknown as Response);
+
+      expect(result).toEqual({ accessToken: ACCESS_TOKEN });
+    });
+
+    it('should set the refresh_token cookie from req.user', () => {
+      configService.get.returns('development');
+      const req = { user: MOCK_TOKEN_PAIR } as unknown as Request;
+
+      controller.githubCallback(req, res as unknown as Response);
+
+      expect(res.cookie.calledOnce).toBeTruthy();
+      const [cookieName, cookieValue] = res.cookie.getCall(0).args as [string, string];
+      expect(cookieName).toEqual('refresh_token');
+      expect(cookieValue).toEqual(REFRESH_TOKEN);
+    });
+
+    it('should set secure cookie flag when in production', () => {
+      configService.get.returns('production');
+      const req = { user: MOCK_TOKEN_PAIR } as unknown as Request;
+
+      controller.githubCallback(req, res as unknown as Response);
+
+      const [, , options] = res.cookie.getCall(0).args as [string, string, { secure: boolean }];
+      expect(options.secure).toBe(true);
+    });
+
+    it('should not set secure cookie flag outside of production', () => {
+      configService.get.returns('development');
+      const req = { user: MOCK_TOKEN_PAIR } as unknown as Request;
+
+      controller.githubCallback(req, res as unknown as Response);
+
+      const [, , options] = res.cookie.getCall(0).args as [string, string, { secure: boolean }];
+      expect(options.secure).toBe(false);
+    });
+  });
+
   describe('signout', () => {
     it('should call authService.signout with the user id', async () => {
       authService.signout.resolves();
