@@ -35,7 +35,9 @@ describe('GithubStrategy', () => {
 
     configServiceGetOrThrow.withArgs('GITHUB_CLIENT_ID').returns('stub-client-id');
     configServiceGetOrThrow.withArgs('GITHUB_CLIENT_SECRET').returns('stub-client-secret');
-    configServiceGetOrThrow.withArgs('GITHUB_CALLBACK_URL').returns('http://localhost/auth/github/callback');
+    configServiceGetOrThrow
+      .withArgs('GITHUB_CALLBACK_URL')
+      .returns('http://localhost/auth/github/callback');
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
