@@ -7,7 +7,33 @@ Identity & Access Management (IAM) — Built with NestJS, featuring JWT auth, RB
 
 ## Dependencies
 
-- Docker / Docker Desktop
+| Dependency | Level |
+|---|---|
+| `Docker` | Recommended |
+| `Chocolatey` or `Scoop` | optional |
+| `Make` | optional |
+
+## How to download Make
+
+### 1. Windows
+
+Open a terminal as admin and run the following command :
+
+With Chocolatey
+
+```bash
+choco install make
+```
+
+Or with Scoop
+
+```bash
+scoop install make
+```
+
+### 2. Linux
+
+Make should be installed by default
 
 ## How to run with Docker
 
@@ -29,7 +55,7 @@ cd IAMJS/iam-js
 
 ### 2. Create your environment file
 
-Create a `.env` file at the root of the project:
+Create a `.env` file under iam-js folder:
 
 ```properties
 POSTGRES_HOST = localhost
@@ -46,9 +72,8 @@ REDIS_PORT = 6379
 REDIS_PASSWORD = redis
 REDIS_DB = 0
 
-JWT_ACCESS_SECRET = `pReZHilCwPTHs39FdHmWpE8WW6br4TPnocYLqvPqbKsriVtLlhiyDYN5Id7lAAm3jTgP2NJdtLUpp6xG9JXEo9`
-JWT_REFRESH_SECRET =
-`OePJLmlBgCyt6xWyIf97df7JyFAPPMY3E1u7v7LX7t84AlwY4uhBa2GHkqQK0xnxdUNjLpO4uwPLyiocJhBuzz`
+JWT_ACCESS_SECRET = pReZHilCwPTHs39FdHmWpE8WW6br4TPnocYLqvPqbKsriVtLlhiyDYN5Id7lAAm3jTgP2NJdtLUpp6xG9JXEo9
+JWT_REFRESH_SECRET = OePJLmlBgCyt6xWyIf97df7JyFAPPMY3E1u7v7LX7t84AlwY4uhBa2GHkqQK0xnxdUNjLpO4uwPLyiocJhBuzz
 
 NODE_ENV = development
 
@@ -66,10 +91,11 @@ GOOGLE_CALLBACK_URL = http://localhost:3000/api/auth/google/callback
 ### 3. Start the application
 
 ```bash
-docker compose up --build
+make up
 ```
 
 The API will be available at **http://localhost:3000**.
+The Application will be available at **http://localhost:4200**
 
 ---
 

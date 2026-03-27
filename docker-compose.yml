@@ -1,0 +1,63 @@
+services:
+  client:
+    build:
+      context: ./client
+      dockerfile: dockerfile
+    ports:
+      - "4200:4200"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:3000/api
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: ./iam-js
+      dockerfile: dockerfile
+    env_file:
+      - ./iam-js/.env
+    ports:
+      - "${PORT}:${PORT}"
+    environment:
+      POSTGRES_HOST: db
+      REDIS_HOST: redis
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  db:
+    image: postgres:17-alpine
+    env_file:
+      - ./iam-js/.env       # ← même fichier, pas de duplication
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DATABASE}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USERNAME}"]
+      interval: 5s
+      retries: 5
+
+  redis:
+    image: redis:8.0-alpine
+    env_file:
+      - ./iam-js/.env       # ← même fichier
+    ports:
+      - "6379:6379"
+    command: redis-server --requirepass ${REDIS_PASSWORD}
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      interval: 5s
+      retries: 5
+
+volumes:
+  pgdata:
+  redisdata:

@@ -2,7 +2,7 @@
   "name": "iam-js",
   "version": "0.0.1",
   "description": "",
-  "author": "",
+  "author": "Guillaume Laurin",
   "private": true,
   "license": "MIT",
   "scripts": {
