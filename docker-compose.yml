@@ -1,7 +1,7 @@
 services:
-  frontend:
+  client:
     build:
-      context: ./frontend
+      context: ./client
       dockerfile: dockerfile
     ports:
       - "4200:4200"
@@ -10,7 +10,7 @@ services:
     depends_on:
       - backend
     volumes:
-      - ./frontend:/app
+      - ./client:/app
       - /app/node_modules
       - /app/.next
 
