@@ -1,4 +1,14 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, Req, Res, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import {
   ApiTags,
   ApiOperation,
@@ -18,6 +28,9 @@ import { ValidatedUser } from '@auth/strategies/refresh/refresh.strategy';
 import { AuthGuard } from '@auth/guards/auth.guard';
 import { User } from '@app/modules/user/entities/user.entity';
 import { AccessTokenDto } from '@auth/dto/access-token.dto';
+import { GoogleGuard } from '@auth/guards/google.guard';
+import { GithubGuard } from '@auth/guards/github.guard';
+import { TokenPair } from '@auth/interfaces/token-pair.interface';
 
 const SECURE_ENVIRONMENT = 'production';
 const SAME_SITE = 'strict';
@@ -88,6 +101,58 @@ export class AuthController {
     res.cookie('refresh_token', tokens.refreshToken, {
       httpOnly: true,
       secure: SECURE_ENVIRONMENT === this.configService.get('NODE_ENV')!,
+      sameSite: SAME_SITE,
+      maxAge: REFRESH_TTL_SEC,
+    });
+
+    return { accessToken: tokens.accessToken };
+  }
+
+  @Get('google')
+  @UseGuards(GoogleGuard)
+  @ApiOperation({ summary: 'Initiate Google OAuth2 signin' })
+  @ApiResponse({ status: 302, description: 'Redirects to Google.' })
+  googleSignin(): void {}
+
+  @Get('google/callback')
+  @UseGuards(GoogleGuard)
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Google OAuth2 callback' })
+  async googleCallback(
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<AccessTokenDto> {
+    const tokens = req.user as TokenPair;
+
+    res.cookie('refresh_token', tokens.refreshToken, {
+      httpOnly: true,
+      secure: SECURE_ENVIRONMENT === this.configService.get('NODE_ENV'),
+      sameSite: SAME_SITE,
+      maxAge: REFRESH_TTL_SEC,
+    });
+
+    return { accessToken: tokens.accessToken };
+  }
+
+  @Get('github')
+  @UseGuards(GithubGuard)
+  @ApiOperation({ summary: 'Initiate GitHub OAuth2 login' })
+  @ApiResponse({ status: 302, description: 'Redirects to GitHub.' })
+  githubSignin(): void {}
+
+  @Get('github/callback')
+  @UseGuards(GithubGuard)
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'GitHub OAuth2 callback' })
+  async githubCallback(
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<AccessTokenDto> {
+    const tokens = req.user as TokenPair;
+
+    res.cookie('refresh_token', tokens.refreshToken, {
+      httpOnly: true,
+      secure: SECURE_ENVIRONMENT === this.configService.get('NODE_ENV'),
       sameSite: SAME_SITE,
       maxAge: REFRESH_TTL_SEC,
     });
