@@ -13,6 +13,6 @@ export class Session {
   @Column('date')
   loginAt!: Date;
 
-  @Column('date')
-  logoutAt!: Date;
+  @Column('date', { nullable: true })
+  logoutAt!: Date | null;
 }

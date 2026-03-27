@@ -13,6 +13,8 @@ const bootstrap = async (): Promise<void> => {
     .setTitle('IAMJs API')
     .setDescription('API documentation for IAMJs')
     .setVersion('1.0')
+    .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT' }, 'access-token')
+    .addCookieAuth('refresh_token')
     .build();
   const document = SwaggerModule.createDocument(app, config);
 

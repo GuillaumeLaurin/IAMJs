@@ -23,6 +23,7 @@ Useful Docker commands for running and managing the IAMJs application.
 | `docker compose logs` | Show logs from all containers |
 | `docker compose logs app` | Show logs from the NestJS container |
 | `docker compose logs db` | Show logs from the PostgreSQL container |
+| `docker compose logs redis` | Show logs from the Redis container |
 | `docker compose logs -f app` | Stream live logs from the NestJS container |
 
 ## Status
@@ -37,6 +38,7 @@ Useful Docker commands for running and managing the IAMJs application.
 |---|---|
 | `docker compose restart app` | Restart the NestJS container |
 | `docker compose restart db` | Restart the PostgreSQL container |
+| `docker compose restart redis` | Restart the Redis container |
 
 ## Reset
 
