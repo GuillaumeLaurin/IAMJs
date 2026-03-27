@@ -38,7 +38,7 @@ describe('AccessStrategy', () => {
     userService = createStubInstance<UserService>(UserService);
     tokenService = createStubInstance<TokenService>(TokenService);
     configService = createStubInstance<ConfigService>(ConfigService);
-    configService.getOrThrow.returns('access-secret');
+    configService.get.returns('access-secret');
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [

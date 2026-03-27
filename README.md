@@ -50,6 +50,7 @@ JWT_ACCESS_SECRET = `pReZHilCwPTHs39FdHmWpE8WW6br4TPnocYLqvPqbKsriVtLlhiyDYN5Id7
 JWT_REFRESH_SECRET =
 `OePJLmlBgCyt6xWyIf97df7JyFAPPMY3E1u7v7LX7t84AlwY4uhBa2GHkqQK0xnxdUNjLpO4uwPLyiocJhBuzz`
 
+NODE_ENV = development
 ```
 
 > See `.env.example` for reference.

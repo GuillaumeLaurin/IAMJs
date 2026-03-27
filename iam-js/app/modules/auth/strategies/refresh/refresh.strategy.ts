@@ -5,7 +5,7 @@ import { ConfigService } from '@nestjs/config';
 import { Request } from 'express';
 import { Payload } from '@auth/interfaces/payload.interface';
 
-interface ValidatedUser extends Payload {
+export interface ValidatedUser extends Payload {
   refreshToken: string;
 }
 

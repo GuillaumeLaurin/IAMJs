@@ -14,8 +14,8 @@ const KEY = {
   blacklist: (jti: string): string => `blacklist:${jti}`,
 };
 
-const ACCESS_TTL_SEC = 15 * 60;
-const REFRESH_TTL_SEC = 7 * 24 * 60 * 60;
+export const ACCESS_TTL_SEC = 15 * 60;
+export const REFRESH_TTL_SEC = 7 * 24 * 60 * 60;
 
 @Injectable()
 export class TokenService {

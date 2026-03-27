@@ -15,6 +15,7 @@ services:
       REDIS_PASSWORD: ${REDIS_PASSWORD}
       JWT_ACCESS_TOKEN: ${JWT_ACCESS_TOKEN}
       JWT_REFRESH_TOKEN: ${JWT_REFRESH_TOKEN}
+      NODE_ENV: ${NODE_ENV}
       PORT: ${PORT}
     depends_on:
       db:
