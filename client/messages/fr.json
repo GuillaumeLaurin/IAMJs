@@ -1,0 +1,60 @@
+{
+  "common": {
+    "appName": "IAMJs",
+    "privacy": "Confidentialité",
+    "terms": "Conditions",
+    "status": "Statut",
+    "copyright": "© 2026 IAMJs. Tous droits réservés.",
+    "encrypted": "Chiffrement de bout en bout",
+    "securityActive": "Sécurité workspace active"
+  },
+  "login": {
+    "title": "Bon retour parmi nous",
+    "subtitle": "Entrez vos identifiants pour continuer",
+    "heroTitle": "Votre espace {accent} de gestion.",
+    "heroAccent": "intelligent",
+    "heroDescription": "Accédez à votre tableau de bord où données et décisions se rencontrent. Analysez, collaborez et pilotez avec précision.",
+    "testimonial": "\"Le meilleur outil que j'ai utilisé pour piloter mon business. Simple, rapide, efficace.\"",
+    "members": "+1.2k membres",
+    "google": "Google",
+    "github": "GitHub",
+    "orByEmail": "Ou par email",
+    "emailLabel": "Email professionnel",
+    "emailPlaceholder": "nom@entreprise.com",
+    "passwordLabel": "Mot de passe",
+    "passwordPlaceholder": "••••••••",
+    "forgot": "Oublié ?",
+    "rememberMe": "Rester connecté",
+    "submit": "Accéder à l'espace de travail",
+    "loading": "Connexion...",
+    "noAccount": "Pas encore de compte ?",
+    "requestAccess": "Demander l'accès",
+    "showPassword": "Afficher le mot de passe",
+    "hidePassword": "Masquer le mot de passe",
+    "serverError": "Une erreur est survenue. Réessayez plus tard."
+  },
+  "validation": {
+    "emailRequired": "L'email est requis",
+    "emailInvalid": "Format d'email invalide",
+    "passwordRequired": "Le mot de passe est requis",
+    "passwordMin": "Minimum 8 caractères"
+  },
+  "callback": {
+    "loading": "Connexion en cours...",
+    "noToken": "Aucun token reçu. Veuillez réessayer.",
+    "redirecting": "Redirection vers la page de connexion..."
+  },
+  "home": {
+    "signIn": "Se connecter",
+    "getStarted": "Commencer gratuitement",
+    "badge": "Nouveau : Tableaux de bord en temps réel",
+    "heroLine1": "Gérez tout.",
+    "heroLine2": "Simplement.",
+    "heroDescription": "Un dashboard puissant pour suivre vos métriques, gérer vos utilisateurs et piloter votre business — le tout en un seul endroit.",
+    "ctaPrimary": "Démarrer le projet",
+    "ctaSecondary": "Voir les features",
+    "statUsers": "Utilisateurs actifs",
+    "statUptime": "Uptime garanti",
+    "statResponse": "Temps de réponse"
+  }
+}

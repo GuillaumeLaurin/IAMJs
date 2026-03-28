@@ -1,0 +1,60 @@
+{
+  "common": {
+    "appName": "IAMJs",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "status": "Status",
+    "copyright": "© 2026 IAMJs. All rights reserved.",
+    "encrypted": "End-to-End Encrypted",
+    "securityActive": "Workspace security active"
+  },
+  "login": {
+    "title": "Welcome back",
+    "subtitle": "Enter your credentials to continue",
+    "heroTitle": "Your {accent} management space.",
+    "heroAccent": "intelligent",
+    "heroDescription": "Access your dashboard where data and decisions meet. Analyze, collaborate, and steer with precision.",
+    "testimonial": "\"The best tool I've used to run my business. Simple, fast, efficient.\"",
+    "members": "+1.2k members",
+    "google": "Google",
+    "github": "GitHub",
+    "orByEmail": "Or with email",
+    "emailLabel": "Work email",
+    "emailPlaceholder": "name@company.com",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "••••••••",
+    "forgot": "Forgot?",
+    "rememberMe": "Keep me logged in",
+    "submit": "Enter workspace",
+    "loading": "Signing in...",
+    "noAccount": "Don't have an account?",
+    "requestAccess": "Request access",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "serverError": "Something went wrong. Please try again later."
+  },
+  "validation": {
+    "emailRequired": "Email is required",
+    "emailInvalid": "Invalid email format",
+    "passwordRequired": "Password is required",
+    "passwordMin": "Minimum 8 characters"
+  },
+  "callback": {
+    "loading": "Signing in...",
+    "noToken": "No token received. Please try again.",
+    "redirecting": "Redirecting to login page..."
+  },
+  "home": {
+    "signIn": "Sign in",
+    "getStarted": "Get started free",
+    "badge": "New: Real-time dashboards",
+    "heroLine1": "Manage everything.",
+    "heroLine2": "Simply.",
+    "heroDescription": "A powerful dashboard to track your metrics, manage your users and run your business — all in one place.",
+    "ctaPrimary": "Start your project",
+    "ctaSecondary": "See features",
+    "statUsers": "Active users",
+    "statUptime": "Guaranteed uptime",
+    "statResponse": "Response time"
+  }
+}
