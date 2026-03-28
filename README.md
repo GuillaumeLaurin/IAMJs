@@ -43,17 +43,31 @@ Make should be installed by default
 
 ```bash
 git clone https://github.com/GuillaumeLaurin/IAMJs.git
-cd IAMJS/iam-js
+cd IAMJS
 ```
 
 #### SSH
 
 ```bash
 git clone git@github.com:GuillaumeLaurin/IAMJs.git
-cd IAMJS/iam-js
+cd IAMJS
 ```
 
-### 2. Create your environment file
+### 2. Initialize Client `node_modules`
+
+```bash
+cd client
+npm ci
+```
+
+### 3. Intialize Backend `node_modules`
+
+```bash
+cd iam-js
+npm ci
+```
+
+### 4. Create your environment file
 
 Create a `.env` file under iam-js folder:
 
@@ -88,7 +102,7 @@ GOOGLE_CALLBACK_URL = http://localhost:3000/api/auth/google/callback
 
 > See `.env.example` for reference.
 
-### 3. Start the application
+### 5. Start the application
 
 ```bash
 make up
