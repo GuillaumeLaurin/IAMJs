@@ -11,8 +11,9 @@
   "login": {
     "title": "Bon retour parmi nous",
     "subtitle": "Entrez vos identifiants pour continuer",
-    "heroTitle": "Votre espace {accent} de gestion.",
+    "heroPrefix": "Votre espace",
     "heroAccent": "intelligent",
+    "heroSuffix": "de gestion.",
     "heroDescription": "Accédez à votre tableau de bord où données et décisions se rencontrent. Analysez, collaborez et pilotez avec précision.",
     "testimonial": "\"Le meilleur outil que j'ai utilisé pour piloter mon business. Simple, rapide, efficace.\"",
     "members": "+1.2k membres",

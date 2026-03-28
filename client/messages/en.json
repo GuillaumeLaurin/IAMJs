@@ -11,8 +11,9 @@
   "login": {
     "title": "Welcome back",
     "subtitle": "Enter your credentials to continue",
-    "heroTitle": "Your {accent} management space.",
+    "heroPrefix": "Your",
     "heroAccent": "intelligent",
+    "heroSuffix": "management space.",
     "heroDescription": "Access your dashboard where data and decisions meet. Analyze, collaborate, and steer with precision.",
     "testimonial": "\"The best tool I've used to run my business. Simple, fast, efficient.\"",
     "members": "+1.2k members",
