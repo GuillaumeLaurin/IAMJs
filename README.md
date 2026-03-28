@@ -98,6 +98,8 @@ GITHUB_CALLBACK_URL = http://localhost:3000/api/auth/github/callback
 GOOGLE_CLIENT_ID = xxx
 GOOGLE_CLIENT_SECRET = xxx
 GOOGLE_CALLBACK_URL = http://localhost:3000/api/auth/google/callback
+
+CLIENT_URL = http://localhost:4200
 ```
 
 > See `.env.example` for reference.
