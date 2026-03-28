@@ -10,6 +10,7 @@ import type { SinonStubbedInstance, SinonStub } from 'sinon';
 import { UnauthorizedException } from '@nestjs/common';
 import type { User } from '@app/modules/user/entities/user.entity';
 import type { TokenPair } from '@auth/interfaces/token-pair.interface';
+import type { OAuthProfile } from '@auth/interfaces/oauth-profile.interface';
 
 const USER_ID = '1';
 const USER_PASSWORD_PLAIN = 'password123';
@@ -137,6 +138,64 @@ describe('AuthService', () => {
         tokenService.rotateTokens.calledOnceWith(USER_ID, MOCK_TOKEN_PAIR.refreshToken),
       ).toBeTruthy();
       expect(result).toEqual(MOCK_TOKEN_PAIR);
+    });
+  });
+
+  describe('oauthSignin', () => {
+    const profile = {
+      provider: 'google',
+      providerId: 'google-id-123',
+      email: 'john.doe@example.com',
+      firstName: 'John',
+      lastName: 'Doe',
+    } as unknown as OAuthProfile;
+
+    it('should return a token pair after finding or creating the user', async () => {
+      const mockUser = { id: USER_ID } as unknown as User;
+      userService.findOrCreateUser.resolves(mockUser);
+      sessionRepository.create.returns({});
+      sessionRepository.save.resolves();
+      tokenService.generateTokenPair.resolves(MOCK_TOKEN_PAIR);
+
+      const result = await service.oauthSignin(profile);
+
+      expect(result).toEqual(MOCK_TOKEN_PAIR);
+    });
+
+    it('should call userService.findOrCreateUser with the given profile', async () => {
+      const mockUser = { id: USER_ID } as unknown as User;
+      userService.findOrCreateUser.resolves(mockUser);
+      sessionRepository.create.returns({});
+      sessionRepository.save.resolves();
+      tokenService.generateTokenPair.resolves(MOCK_TOKEN_PAIR);
+
+      await service.oauthSignin(profile);
+
+      expect(userService.findOrCreateUser.calledOnceWith(profile)).toBeTruthy();
+    });
+
+    it('should save a new session after oauth signin', async () => {
+      const mockUser = { id: USER_ID } as unknown as User;
+      userService.findOrCreateUser.resolves(mockUser);
+      sessionRepository.create.returns({});
+      sessionRepository.save.resolves();
+      tokenService.generateTokenPair.resolves(MOCK_TOKEN_PAIR);
+
+      await service.oauthSignin(profile);
+
+      expect(sessionRepository.save.calledOnce).toBeTruthy();
+    });
+
+    it('should call tokenService.generateTokenPair with the user id', async () => {
+      const mockUser = { id: USER_ID } as unknown as User;
+      userService.findOrCreateUser.resolves(mockUser);
+      sessionRepository.create.returns({});
+      sessionRepository.save.resolves();
+      tokenService.generateTokenPair.resolves(MOCK_TOKEN_PAIR);
+
+      await service.oauthSignin(profile);
+
+      expect(tokenService.generateTokenPair.calledOnceWith(USER_ID)).toBeTruthy();
     });
   });
 
