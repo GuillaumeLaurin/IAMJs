@@ -81,7 +81,9 @@ describe('RegisterPage', () => {
 
     it('should display the hero prefix', () => {
       render(<RegisterPage />);
-      expect(screen.getByText(MOCK_REGISTER_TRANSLATIONS.heroPrefix, { exact: false })).toBeDefined();
+      expect(
+        screen.getByText(MOCK_REGISTER_TRANSLATIONS.heroPrefix, { exact: false }),
+      ).toBeDefined();
     });
 
     it('should display the hero accent', () => {
@@ -91,7 +93,9 @@ describe('RegisterPage', () => {
 
     it('should display the hero suffix', () => {
       render(<RegisterPage />);
-      expect(screen.getByText(MOCK_REGISTER_TRANSLATIONS.heroSuffix, { exact: false })).toBeDefined();
+      expect(
+        screen.getByText(MOCK_REGISTER_TRANSLATIONS.heroSuffix, { exact: false }),
+      ).toBeDefined();
     });
 
     it('should display the hero description', () => {
