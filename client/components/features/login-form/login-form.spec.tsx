@@ -23,12 +23,11 @@ const MOCK_TRANSLATIONS: Record<string, string> = {
   serverError: 'Une erreur est survenue',
   showPassword: 'Afficher le mot de passe',
   hidePassword: 'Masquer le mot de passe',
+  passwordRequired: "Le mot de passe est requis",
 };
 
-// NOTE: La regex du composant utilise `d` littéral au lieu de `\d`.
-// Ce mot de passe contient : minuscule, majuscule, la lettre "d", un caractère spécial.
 const VALID_EMAIL = 'user@example.com';
-const VALID_PASSWORD = 'Passwor1@';
+const VALID_PASSWORD = 'Passw0rd@';
 
 const mockUseTranslations = jest.fn();
 const mockFetch = jest.fn();

@@ -17,17 +17,15 @@ export default function LoginForm() {
 
   const loginSchema = z.object({
     email: z
-        .email("format de l'email invalide"),
+        .email("format de l'email invalide")
+        .min(1, v("emailRequired")),
     password: z
         .string()
-        .min(1, "Le mot de passe est requis")
-        .regex(PASSWORD_REGEX,`Password must contain Minimum 8 and maximum 20 characters,
-        at least one uppercase letter,
-        one lowercase letter,
-        one number and
-        one special character.`),
+        .min(1, v("passwordRequired"))
+        .regex(PASSWORD_REGEX, v("passwordInvalid")),
     rememberMe: z.boolean().optional(),
-});
+  });
+
   type LoginFormData = z.infer<typeof loginSchema>;
 
   const [showPassword, setShowPassword] = useState(false);
@@ -46,7 +44,7 @@ export default function LoginForm() {
     },
   });
 
-  async function onSubmit(data: LoginFormData) {
+  async function onSubmit(data: LoginFormData): Promise<void> {
     setServerError(null);
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/signin`, {
@@ -65,7 +63,7 @@ export default function LoginForm() {
     }
   }
 
-  function handleOAuth(provider: "google" | "github") {
+  function handleOAuth(provider: "google" | "github"): void {
     navigateTo(`${process.env.NEXT_PUBLIC_API_URL}/auth/${provider}`);
   }
 
