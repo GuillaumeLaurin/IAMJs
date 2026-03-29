@@ -42,7 +42,9 @@
     "passwordDifferent": "Password is different from the one previously entered",
     "firstNameRequired": "The first name is required.",
     "lastNameRequired": "The last name is required.",
-    "genderRequired": "Gender is required."
+    "genderRequired": "Gender is required.",
+    "ageMin": "You must be at least 18 years old",
+    "ageMax": "Age cannot exceed 100 years"
   },
   "callback": {
     "loading": "Signing in...",

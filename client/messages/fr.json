@@ -42,7 +42,9 @@
     "passwordDifferent": "Le mot de passe est différent de celui précédemment entré.",
     "firstNameRequired": "Le prénom est requis.",
     "lastNameRequired": "Le nom de famille est requis.",
-    "genderRequired": "Le genre est requis."
+    "genderRequired": "Le genre est requis.",
+    "ageMin": "Vous devez avoir au moins 18 ans",
+    "ageMax": "Vous ne pouvez pas dépasser 100 ans"
   },
   "callback": {
     "loading": "Connexion en cours...",
