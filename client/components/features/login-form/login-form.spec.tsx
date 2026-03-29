@@ -2,6 +2,8 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import LoginForm from '@/components/features/login-form/login-form';
 
+const NEXT_PUBLIC_API_URL = 'http://localhost:10000/api';
+
 const MOCK_TRANSLATIONS: Record<string, string> = {
   title: 'Connexion',
   subtitle: 'Connectez-vous à votre compte',
@@ -60,6 +62,8 @@ describe('LoginForm', () => {
     mockFetch.mockReset();
     mockNavigateTo.mockReset();
 
+    process.env.NEXT_PUBLIC_API_URL = NEXT_PUBLIC_API_URL;
+
     mockUseTranslations.mockReturnValue((key: string) => MOCK_TRANSLATIONS[key] ?? key);
     global.fetch = mockFetch;
   });
@@ -100,14 +104,14 @@ describe('LoginForm', () => {
       render(<LoginForm />);
       await userEvent.click(screen.getByText(MOCK_TRANSLATIONS.google));
 
-      expect(mockNavigateTo).toHaveBeenCalledWith('/api/auth/google');
+      expect(mockNavigateTo).toHaveBeenCalledWith(`${process.env.NEXT_PUBLIC_API_URL}/auth/google`);
     });
 
     it('should navigate to GitHub OAuth when GitHub button is clicked', async () => {
       render(<LoginForm />);
       await userEvent.click(screen.getByText(MOCK_TRANSLATIONS.github));
 
-      expect(mockNavigateTo).toHaveBeenCalledWith('/api/auth/github');
+      expect(mockNavigateTo).toHaveBeenCalledWith(`${process.env.NEXT_PUBLIC_API_URL}/auth/github`);
     });
   });
 

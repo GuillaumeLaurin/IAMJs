@@ -66,7 +66,7 @@ export default function LoginForm() {
   }
 
   function handleOAuth(provider: "google" | "github") {
-    navigateTo(`/api/auth/${provider}`);
+    navigateTo(`${process.env.NEXT_PUBLIC_API_URL}/auth/${provider}`);
   }
 
   return (
