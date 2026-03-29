@@ -1,5 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import LoginPage from '@/app/[locale]/login/page';
+import type { useTranslations } from 'next-intl';
+
+type TranslationFunction = ReturnType<typeof useTranslations>;
 
 const MOCK_LOGIN_TRANSLATIONS: Record<string, string> = {
   heroPrefix: 'Bienvenue sur',
@@ -22,12 +25,14 @@ const MOCK_COMMON_TRANSLATIONS: Record<string, string> = {
 const mockUseTranslations = jest.fn();
 
 jest.mock('next-intl', () => ({
-  useTranslations: (namespace: string) => mockUseTranslations(namespace),
+  useTranslations: (namespace: string) => mockUseTranslations(namespace) as TranslationFunction,
 }));
 
 jest.mock('@/i18n/navigation', () => ({
   Link: ({ href, children, ...props }: { href: string; children: React.ReactNode }) => (
-    <a href={href} {...props}>{children}</a>
+    <a href={href} {...props}>
+      {children}
+    </a>
   ),
 }));
 
@@ -42,7 +47,11 @@ jest.mock('@/components/features/login-form/login-form', () => ({
 
 jest.mock('@/components/ui/locale-switcher/locale-switcher', () => ({
   __esModule: true,
-  default: () => <button data-testid="locale-switcher">FR</button>,
+  default: () => (
+    <button type="button" data-testid="locale-switcher">
+      FR
+    </button>
+  ),
 }));
 
 describe('LoginPage', () => {
@@ -50,7 +59,8 @@ describe('LoginPage', () => {
     mockUseTranslations.mockReset();
 
     mockUseTranslations.mockImplementation((namespace: string) => {
-      const translations = namespace === 'login' ? MOCK_LOGIN_TRANSLATIONS : MOCK_COMMON_TRANSLATIONS;
+      const translations =
+        namespace === 'login' ? MOCK_LOGIN_TRANSLATIONS : MOCK_COMMON_TRANSLATIONS;
       return (key: string) => translations[key] ?? key;
     });
   });
@@ -120,7 +130,9 @@ describe('LoginPage', () => {
   describe('navigation links', () => {
     it('should render home links with href "/"', () => {
       render(<LoginPage />);
-      const homeLinks = screen.getAllByRole('link').filter((link) => link.getAttribute('href') === '/');
+      const homeLinks = screen
+        .getAllByRole('link')
+        .filter((link) => link.getAttribute('href') === '/');
       expect(homeLinks.length).toBeGreaterThanOrEqual(1);
     });
 

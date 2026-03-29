@@ -211,7 +211,7 @@ describe('LoginForm', () => {
       await fillAndSubmit(VALID_EMAIL, VALID_PASSWORD);
 
       await waitFor(() => {
-        expect(mockFetch).toHaveBeenCalledWith('/api/auth/login', {
+        expect(mockFetch).toHaveBeenCalledWith(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/signin`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

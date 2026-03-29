@@ -1,25 +1,27 @@
-import { NextIntlClientProvider, useMessages } from "next-intl";
-import { notFound } from "next/navigation";
-import { routing } from "@/i18n/routing";
-import type { ReactNode } from "react";
+import { NextIntlClientProvider } from 'next-intl';
+import { notFound } from 'next/navigation';
+import { routing } from '@/i18n/routing';
+import type { ReactNode } from 'react';
 
-type Props = {
+interface Props {
   children: ReactNode;
   params: Promise<{ locale: string }>;
-};
+}
 
-export default async function LocaleLayout({ children, params }: Props) {
+const LocaleLayout = async ({ children, params }: Props) => {
   const { locale } = await params;
 
   // Validate locale
-  if (!routing.locales.includes(locale as "fr" | "en")) {
+  if (!routing.locales.includes(locale as 'fr' | 'en')) {
     notFound();
   }
 
   // Load messages for the active locale
   let messages;
   try {
-    messages = (await import(`../../messages/${locale}.json`)).default;
+    messages = (
+      (await import(`../../messages/${locale}.json`)) as { default: Record<string, string> }
+    ).default;
   } catch {
     notFound();
   }
@@ -33,4 +35,6 @@ export default async function LocaleLayout({ children, params }: Props) {
       </body>
     </html>
   );
-}
+};
+
+export default LocaleLayout;

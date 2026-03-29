@@ -1,5 +1,10 @@
 import { render, screen } from '@testing-library/react';
 import AuthCallbackPage from '@/app/[locale]/auth/callback/page';
+import type { useTranslations } from 'next-intl';
+import type { useRouter } from '@/i18n/navigation';
+
+type TranslationFunction = ReturnType<typeof useTranslations>;
+type RouterFunction = ReturnType<typeof useRouter>;
 
 const MOCK_TRANSLATIONS: Record<string, string> = {
   noToken: 'Token manquant',
@@ -14,15 +19,15 @@ const mockUseSearchParams = jest.fn();
 const mockSetItem = jest.fn();
 
 jest.mock('next-intl', () => ({
-  useTranslations: () => mockUseTranslations(),
+  useTranslations: () => mockUseTranslations() as TranslationFunction,
 }));
 
 jest.mock('next/navigation', () => ({
-  useSearchParams: () => mockUseSearchParams(),
+  useSearchParams: () => mockUseSearchParams() as TranslationFunction,
 }));
 
 jest.mock('@/i18n/navigation', () => ({
-  useRouter: () => mockUseRouter(),
+  useRouter: () => mockUseRouter() as RouterFunction,
 }));
 
 jest.mock('lucide-react', () => ({
