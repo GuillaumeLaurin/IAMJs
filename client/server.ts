@@ -6,16 +6,18 @@ import next from 'next';
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
-
-const httpsOptions = {
-    key: fs.readFileSync('/app/certs/localhost+2-key.pem'),
-    cert: fs.readFileSync('/app/certs/localhost+2.pem'),
-};
+const port = process.env.PORT ?? 4200;
 
 app.prepare().then(() => {
-    createServer(httpsOptions, (req, res) => {
-        handle(req, res);
-    }).listen(process.env.PORT, () => {
-        /* listen */
-    });
+    if (process.env.HTTPS_ENABLED === 'true') {
+        const httpsOptions = {
+            key: fs.readFileSync(process.env.SSL_KEY_PATH!),
+            cert: fs.readFileSync(process.env.SSL_CERT_PATH!),
+        };
+        createServer(httpsOptions, (req, res) => handle(req, res))
+        .listen(port, () => {/* listen */});
+    } else {
+        createServer((req, res) => handle(req, res))
+        .listen(port, () => { /*listen*/})
+    }
 });

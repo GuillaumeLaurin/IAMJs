@@ -6,17 +6,20 @@ import cookieParser from 'cookie-parser';
 import * as fs from 'fs';
 
 const bootstrap = async (): Promise<void> => {
-  const httpsOptions = {
-    key: fs.readFileSync('/app/certs/localhost+2-key.pem'),
-    cert: fs.readFileSync('/app/certs/localhost+2.pem'),
-  };
+  const httpsOptions =
+    process.env.HTTPS_ENABLED === 'true'
+      ? {
+          key: fs.readFileSync(process.env.SSL_KEY_PATH!),
+          cert: fs.readFileSync(process.env.SSL_CERT_PATH!),
+        }
+      : undefined;
 
   const app = await NestFactory.create(AppModule, { httpsOptions });
 
   app.enableCors({
     origin: process.env.CLIENT_URL,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    credentials: true
+    credentials: true,
   });
 
   app.setGlobalPrefix('api');
