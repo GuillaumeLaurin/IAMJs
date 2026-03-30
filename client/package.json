@@ -9,6 +9,7 @@
     "dev": "next start -p 4200",
     "build": "next build",
     "start": "next start -p 4200",
+    "start:https": "tsx server.ts",
     "lint": "eslint \"app/**/*.{ts,tsx}\" --format stylish",
     "lint:fix": "eslint \"app/**/*.{ts,tsx}\" --format stylish --fix",
     "format": "prettier --write \"app/**/*.{ts,tsx,js,jsx,json,css,scss,md}\"",
@@ -63,6 +64,7 @@
     "prettier": "^3.8.1",
     "tailwindcss": "^4",
     "ts-node": "^10.9.2",
+    "tsx": "^4.21.0",
     "typescript": "^5",
     "typescript-eslint": "^8.57.2"
   }

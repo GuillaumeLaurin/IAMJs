@@ -3,9 +3,15 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import cookieParser from 'cookie-parser';
+import * as fs from 'fs';
 
 const bootstrap = async (): Promise<void> => {
-  const app = await NestFactory.create(AppModule);
+  const httpsOptions = {
+    key: fs.readFileSync('/app/certs/localhost+2-key.pem'),
+    cert: fs.readFileSync('/app/certs/localhost+2.pem'),
+  };
+
+  const app = await NestFactory.create(AppModule, { httpsOptions });
 
   app.enableCors({
     origin: process.env.CLIENT_URL,

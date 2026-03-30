@@ -23,12 +23,14 @@ With Chocolatey
 
 ```bash
 choco install make
+choco install mkcert
 ```
 
 Or with Scoop
 
 ```bash
 scoop install make
+scoop install mkcert
 ```
 
 ### 2. Linux
@@ -69,7 +71,7 @@ npm ci
 
 ### 4. Create your environment file
 
-Create a `.env` file under iam-js folder:
+Create a `.env` file under root folder:
 
 ```properties
 POSTGRES_HOST = localhost
@@ -103,6 +105,17 @@ CLIENT_URL = http://localhost:4200
 ```
 
 > See `.env.example` for reference.
+
+*Create a `.env` file under iam-js and client folder if you want to run it outside of a docker container.*
+
+### 5. Create Certificate
+
+```bash
+mkdir certs && cd certs
+mkcert localhost 127.0.0.1 ::1
+```
+
+*It will create a certs folder at the root of the project.*
 
 ### 5. Start the application
 

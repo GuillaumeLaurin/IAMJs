@@ -9,6 +9,8 @@ services:
       NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
     depends_on:
       - backend
+    volumes:
+      - ./certs:/app/certs:ro
 
   backend:
     build:
@@ -17,7 +19,7 @@ services:
     env_file:
       - ./iam-js/.env
     ports:
-      - "${PORT}:${PORT}"
+      - "3000:3000"
     environment:
       POSTGRES_HOST: db
       REDIS_HOST: redis
@@ -26,6 +28,8 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+    volumes:
+      - ./certs:/app/certs:ro
 
   db:
     image: postgres:17-alpine
