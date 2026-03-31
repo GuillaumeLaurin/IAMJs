@@ -188,7 +188,7 @@ describe('AuthController (integration)', () => {
 
       const res = await request(httpServer).get('/auth/google/callback').expect(302);
 
-      expect(res.headers['location']).toEqual(
+      expect(res.headers.location).toEqual(
         `http://localhost:3000/auth/callback?accessToken=${MOCK_TOKEN_PAIR.accessToken}`,
       );
     });
@@ -211,7 +211,7 @@ describe('AuthController (integration)', () => {
 
       const res = await request(httpServer).get('/auth/github/callback').expect(302);
 
-      expect(res.headers['location']).toEqual(
+      expect(res.headers.location).toEqual(
         `http://localhost:3000/auth/callback?accessToken=${MOCK_TOKEN_PAIR.accessToken}`,
       );
     });
