@@ -108,5 +108,8 @@
     "remove": "remove",
     "export": "export",
     "create": "create"
+  },
+  "dashboard": {
+    "viewAllArchives": "View All Archives"
   }
 }
