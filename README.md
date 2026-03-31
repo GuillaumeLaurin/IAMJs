@@ -117,14 +117,32 @@ mkcert localhost 127.0.0.1 ::1
 
 *It will create a certs folder at the root of the project.*
 
-### 5. Start the application
+#### 5.1 To install a certificate from a certification authority
+
+Open Powershell as an administrator
+
+```bash
+mkcert -install
+```
+
+### 6. Start the application
+
+#### 6.1 You do not have an .env under root folder
 
 ```bash
 make up
 ```
 
-The API will be available at **http://localhost:3000**.
-The Application will be available at **http://localhost:4200**
+#### 6.2 You have a .env under root folder
+
+```bash
+docker compose up --build [-d]
+```
+
+- [-d] : optional, it will detach the build from your terminal
+
+The API will be available at **https://localhost:3000**.
+The Application will be available at **https://localhost:4200**
 
 ---
 
