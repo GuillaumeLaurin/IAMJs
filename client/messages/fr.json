@@ -102,5 +102,11 @@
     "featureSecurity": "Sécurité de niveau entreprise",
     "featureSpeed": "Performances ultra-rapides",
     "featureCollaboration": "Conçu pour la collaboration"
+  },
+  "button-action": {
+    "add": "ajouter",
+    "remove": "retirer",
+    "export": "exporter",
+    "create": "créer"
   }
 }

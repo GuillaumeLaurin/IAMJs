@@ -102,5 +102,11 @@
     "featureSecurity": "Enterprise-grade security",
     "featureSpeed": "Lightning fast performance",
     "featureCollaboration": "Built for collaboration"
+  },
+  "button-action": {
+    "add": "add",
+    "remove": "remove",
+    "export": "export",
+    "create": "create"
   }
 }
