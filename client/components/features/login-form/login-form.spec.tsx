@@ -1,5 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import MockAdapter from 'axios-mock-adapter';
+import { api } from '@/lib/axios';
 import LoginForm from '@/components/features/login-form/login-form';
 
 const NEXT_PUBLIC_API_URL = 'http://localhost:10000/api';
@@ -29,8 +31,8 @@ const MOCK_TRANSLATIONS: Record<string, string> = {
 const VALID_EMAIL = 'user@example.com';
 const VALID_PASSWORD = 'Passw0rd@';
 
+const mockApi = new MockAdapter(api); // 👈 remplace mockFetch
 const mockUseTranslations = jest.fn();
-const mockFetch = jest.fn();
 const mockNavigateTo = jest.fn();
 
 jest.mock('next-intl', () => ({
@@ -58,13 +60,11 @@ jest.mock('lucide-react', () => ({
 describe('LoginForm', () => {
   beforeEach(() => {
     mockUseTranslations.mockReset();
-    mockFetch.mockReset();
     mockNavigateTo.mockReset();
+    mockApi.reset(); // 👈 remplace mockFetch.mockReset()
 
     process.env.NEXT_PUBLIC_API_URL = NEXT_PUBLIC_API_URL;
-
     mockUseTranslations.mockReturnValue((key: string) => MOCK_TRANSLATIONS[key] ?? key);
-    global.fetch = mockFetch;
   });
 
   afterEach(() => {
@@ -203,27 +203,24 @@ describe('LoginForm', () => {
       await userEvent.click(screen.getByText(MOCK_TRANSLATIONS.submit));
     }
 
-    it('should call fetch with correct data on valid submission', async () => {
-      mockFetch.mockResolvedValueOnce({ ok: true });
+    it('should call api with correct data on valid submission', async () => {
+      mockApi.onPost('/auth/signin').reply(200, { accessToken: 'fake-token' }); // 👈
       render(<LoginForm />);
 
       await fillAndSubmit(VALID_EMAIL, VALID_PASSWORD);
 
       await waitFor(() => {
-        expect(mockFetch).toHaveBeenCalledWith(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/signin`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            email: VALID_EMAIL,
-            password: VALID_PASSWORD,
-            rememberMe: false,
-          }),
+        expect(mockApi.history.post[0].url).toBe('/auth/signin');
+        expect(JSON.parse(mockApi.history.post[0].data)).toEqual({
+          email: VALID_EMAIL,
+          password: VALID_PASSWORD,
+          rememberMe: false,
         });
       });
     });
 
     it('should navigate to /dashboard on successful login', async () => {
-      mockFetch.mockResolvedValueOnce({ ok: true });
+      mockApi.onPost('/auth/signin').reply(200, { accessToken: 'fake-token' });
       render(<LoginForm />);
 
       await fillAndSubmit(VALID_EMAIL, VALID_PASSWORD);
@@ -234,10 +231,7 @@ describe('LoginForm', () => {
     });
 
     it('should display server error message when response is not ok', async () => {
-      mockFetch.mockResolvedValueOnce({
-        ok: false,
-        json: async () => ({ message: 'Invalid credentials' }),
-      });
+      mockApi.onPost('/auth/signin').reply(401, { message: 'Invalid credentials' }); // 👈
       render(<LoginForm />);
 
       await fillAndSubmit(VALID_EMAIL, VALID_PASSWORD);
@@ -246,10 +240,7 @@ describe('LoginForm', () => {
     });
 
     it('should display default server error when response has no message', async () => {
-      mockFetch.mockResolvedValueOnce({
-        ok: false,
-        json: async () => ({}),
-      });
+      mockApi.onPost('/auth/signin').reply(401, {}); // 👈
       render(<LoginForm />);
 
       await fillAndSubmit(VALID_EMAIL, VALID_PASSWORD);
@@ -258,7 +249,7 @@ describe('LoginForm', () => {
     });
 
     it('should display default server error on network failure', async () => {
-      mockFetch.mockRejectedValueOnce(new Error('Network error'));
+      mockApi.onPost('/auth/signin').networkError(); // 👈 remplace mockRejectedValueOnce
       render(<LoginForm />);
 
       await fillAndSubmit(VALID_EMAIL, VALID_PASSWORD);
@@ -276,12 +267,12 @@ describe('LoginForm', () => {
       expect(await screen.findByText('Le mot de passe est requis')).toBeDefined();
     });
 
-    it('should not call fetch when form is invalid', async () => {
+    it('should not call api when form is invalid', async () => {
       render(<LoginForm />);
       await userEvent.click(screen.getByText(MOCK_TRANSLATIONS.submit));
 
       await waitFor(() => {
-        expect(mockFetch).not.toHaveBeenCalled();
+        expect(mockApi.history.post.length).toBe(0); // 👈 remplace expect(mockFetch).not.toHaveBeenCalled()
       });
     });
   });

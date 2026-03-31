@@ -7,7 +7,11 @@ import { z } from "zod";
 import { Eye, EyeOff, Loader2, Mail, Lock } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
+import { useAuthStore } from "@/store/auth.store";
 import { navigateTo } from "@/lib/navigate";
+import { api } from "@/lib/axios";
+import axios, { AxiosError } from 'axios';
+import { AccessTokenDto } from "@/dto/access-token.dto";
 
 const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/;
 
@@ -30,6 +34,7 @@ export default function LoginForm() {
 
   const [showPassword, setShowPassword] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
+  const setAccessToken = useAuthStore((state) => state.setAccessToken);
 
   const {
     register,
@@ -44,22 +49,18 @@ export default function LoginForm() {
     },
   });
 
-  async function onSubmit(data: LoginFormData): Promise<void> {
+  async function onSubmit(dto: LoginFormData): Promise<void> {
     setServerError(null);
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/signin`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-      if (!response.ok) {
-        const body = await response.json();
-        setServerError(body.message ?? t("serverError"));
-        return;
-      }
+      const { data } = await api.post<AccessTokenDto>('/auth/signin', dto);
+      setAccessToken(data.accessToken);
+
       navigateTo("/dashboard");
-    } catch {
-      setServerError(t("serverError"));
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+          const message = error.response?.data?.message ?? t("serverError");
+          setServerError(message);
+      }
     }
   }
 
