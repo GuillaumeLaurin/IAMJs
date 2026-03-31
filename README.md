@@ -23,12 +23,14 @@ With Chocolatey
 
 ```bash
 choco install make
+choco install mkcert
 ```
 
 Or with Scoop
 
 ```bash
 scoop install make
+scoop install mkcert
 ```
 
 ### 2. Linux
@@ -43,19 +45,33 @@ Make should be installed by default
 
 ```bash
 git clone https://github.com/GuillaumeLaurin/IAMJs.git
-cd IAMJS/iam-js
+cd IAMJS
 ```
 
 #### SSH
 
 ```bash
 git clone git@github.com:GuillaumeLaurin/IAMJs.git
-cd IAMJS/iam-js
+cd IAMJS
 ```
 
-### 2. Create your environment file
+### 2. Initialize Client `node_modules`
 
-Create a `.env` file under iam-js folder:
+```bash
+cd client
+npm ci
+```
+
+### 3. Intialize Backend `node_modules`
+
+```bash
+cd iam-js
+npm ci
+```
+
+### 4. Create your environment file
+
+Create a `.env` file under root folder:
 
 ```properties
 POSTGRES_HOST = localhost
@@ -84,18 +100,49 @@ GITHUB_CALLBACK_URL = http://localhost:3000/api/auth/github/callback
 GOOGLE_CLIENT_ID = xxx
 GOOGLE_CLIENT_SECRET = xxx
 GOOGLE_CALLBACK_URL = http://localhost:3000/api/auth/google/callback
+
+CLIENT_URL = http://localhost:4200
 ```
 
 > See `.env.example` for reference.
 
-### 3. Start the application
+*Create a `.env` file under iam-js and client folder if you want to run it outside of a docker container.*
+
+### 5. Create Certificate
+
+```bash
+mkdir certs && cd certs
+mkcert localhost 127.0.0.1 ::1
+```
+
+*It will create a certs folder at the root of the project.*
+
+#### 5.1 To install a certificate from a certification authority
+
+Open Powershell as an administrator
+
+```bash
+mkcert -install
+```
+
+### 6. Start the application
+
+#### 6.1 You do not have an .env under root folder
 
 ```bash
 make up
 ```
 
-The API will be available at **http://localhost:3000**.
-The Application will be available at **http://localhost:4200**
+#### 6.2 You have a .env under root folder
+
+```bash
+docker compose up --build [-d]
+```
+
+- [-d] : optional, it will detach the build from your terminal
+
+The API will be available at **https://localhost:3000**.
+The Application will be available at **https://localhost:4200**
 
 ---
 

@@ -6,9 +6,15 @@ services:
     ports:
       - "4200:4200"
     environment:
-      - NEXT_PUBLIC_API_URL=http://localhost:3000/api
+      HTTPS_ENABLED: true
+      SSL_KEY_PATH: /app/certs/localhost+2-key.pem
+      SSL_CERT_PATH: /app/certs/localhost+2.pem
+      PORT: 4200
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
     depends_on:
       - backend
+    volumes:
+      - ./certs:/app/certs:ro
 
   backend:
     build:
@@ -17,8 +23,12 @@ services:
     env_file:
       - ./iam-js/.env
     ports:
-      - "${PORT}:${PORT}"
+      - "3000:3000"
     environment:
+      HTTPS_ENABLED: true
+      SSL_KEY_PATH: /app/certs/localhost+2-key.pem
+      SSL_CERT_PATH: /app/certs/localhost+2.pem
+      PORT: 3000
       POSTGRES_HOST: db
       REDIS_HOST: redis
     depends_on:
@@ -26,6 +36,8 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+    volumes:
+      - ./certs:/app/certs:ro
 
   db:
     image: postgres:17-alpine

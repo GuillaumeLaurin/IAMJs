@@ -9,6 +9,7 @@
     "dev": "next start -p 4200",
     "build": "next build",
     "start": "next start -p 4200",
+    "start:https": "tsx server.ts",
     "lint": "eslint \"app/**/*.{ts,tsx}\" --format stylish",
     "lint:fix": "eslint \"app/**/*.{ts,tsx}\" --format stylish --fix",
     "format": "prettier --write \"app/**/*.{ts,tsx,js,jsx,json,css,scss,md}\"",
@@ -18,9 +19,23 @@
     "test:coverage": "jest --coverage"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.2.2",
+    "@swc/helpers": "^0.5.20",
+    "@tanstack/react-query": "^5.96.0",
+    "@tanstack/react-table": "^8.21.3",
+    "axios": "^1.14.0",
+    "lucide-react": "^1.7.0",
     "next": "16.2.1",
+    "next-intl": "^4.8.3",
+    "next-themes": "^0.4.6",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-dom": "19.2.4",
+    "react-hook-form": "^7.72.0",
+    "recharts": "^3.8.1",
+    "shadcn-ui": "^0.9.5",
+    "sinon": "^21.0.3",
+    "zod": "^4.3.6",
+    "zustand": "^5.0.12"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.4",
@@ -30,9 +45,12 @@
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",
+    "@types/jest": "^30.0.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/sinon": "^21.0.0",
+    "axios-mock-adapter": "^2.1.0",
     "eslint": "^9.39.4",
     "eslint-config-airbnb-extended": "^3.0.1",
     "eslint-config-next": "16.2.1",
@@ -48,6 +66,7 @@
     "prettier": "^3.8.1",
     "tailwindcss": "^4",
     "ts-node": "^10.9.2",
+    "tsx": "^4.21.0",
     "typescript": "^5",
     "typescript-eslint": "^8.57.2"
   }

@@ -101,6 +101,12 @@ export default tseslint.config(
 
       // ── Prettier ──
       'prettier/prettier': ['error', { endOfLine: 'auto' }],
+      
+      // ── DevDependencies ──
+      "import-x/no-extraneous-dependencies": [
+        "error", {
+          devDependencies: ["**/*.spec.*"],
+        }],
     },
   },
 );
