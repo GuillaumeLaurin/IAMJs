@@ -7,6 +7,10 @@ import { z } from "zod";
 import { Eye, EyeOff, Loader2, Mail, Lock, User, Calendar, Users } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
+import { useAuthStore } from "@/store/auth.store";
+import { api } from "@/lib/axios";
+import { AccessTokenDto } from "@/dto/access-token.dto";
+import axios, {AxiosError } from 'axios';
 import { navigateTo } from "@/lib/navigate";
 
 interface SignUpDto {
@@ -56,6 +60,7 @@ export default function RegisterForm() {
   const [showPassword1, setShowPassword1] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
+  const setAccessToken = useAuthStore((state) => state.setAccessToken);
 
   const {
     register,
@@ -85,25 +90,16 @@ export default function RegisterForm() {
     };
   }
 
-  async function onSubmit(data: RegisterFormData): Promise<void> {
+  async function onSubmit(schema: RegisterFormData): Promise<void> {
     setServerError(null);
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/auth/signup`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(convertSchemaToDto(data)),
-        }
-      );
-      if (!response.ok) {
-        const body = await response.json();
-        setServerError(body.message ?? t("serverError"));
-        return;
+      await api.post<AccessTokenDto>('/auth/signup', convertSchemaToDto(schema));
+      navigateTo("/login");
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const message = error.response?.data?.message ?? t("serverError");
+        setServerError(message);
       }
-      navigateTo("/dashboard");
-    } catch {
-      setServerError(t("serverError"));
     }
   }
 

@@ -1,6 +1,10 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import RegisterForm from '@/components/features/register-form/register-form';
+import MockAdapter from 'axios-mock-adapter';
+import { api } from '@/lib/axios';
+
+const mockApi = new MockAdapter(api);
 
 const NEXT_PUBLIC_API_URL = 'http://localhost:10000/api';
 
@@ -88,6 +92,7 @@ describe('RegisterForm', () => {
     mockUseTranslations.mockReset();
     mockFetch.mockReset();
     mockNavigateTo.mockReset();
+    mockApi.reset();
 
     process.env.NEXT_PUBLIC_API_URL = NEXT_PUBLIC_API_URL;
 
@@ -350,47 +355,38 @@ describe('RegisterForm', () => {
       await userEvent.click(screen.getByText(MOCK_TRANSLATIONS.submit));
     }
 
-    it('should call fetch with correct data on valid submission', async () => {
-      mockFetch.mockResolvedValueOnce({ ok: true });
+    it('should call api with correct data on valid submission', async () => {
+      mockApi.onPost('/auth/signup').reply(200); // 👈
       render(<RegisterForm />);
 
       await fillAndSubmit(VALID_FIRST_NAME, VALID_LAST_NAME, VALID_EMAIL, VALID_PASSWORD, VALID_PASSWORD);
 
       await waitFor(() => {
-        expect(mockFetch).toHaveBeenCalledWith(
-          `${process.env.NEXT_PUBLIC_API_URL}/auth/signup`,
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              firstName: VALID_FIRST_NAME,
-              lastName: VALID_LAST_NAME,
-              email: VALID_EMAIL,
-              age: 18,
-              gender: 'm',
-              password: VALID_PASSWORD,
-            }),
-          },
-        );
+        expect(mockApi.history.post[0].url).toBe('/auth/signup');
+        expect(JSON.parse(mockApi.history.post[0].data)).toEqual({
+          firstName: VALID_FIRST_NAME,
+          lastName: VALID_LAST_NAME,
+          email: VALID_EMAIL,
+          age: 18,
+          gender: 'm',
+          password: VALID_PASSWORD,
+        });
       });
     });
 
-    it('should navigate to /dashboard on successful registration', async () => {
-      mockFetch.mockResolvedValueOnce({ ok: true });
+    it('should navigate to /login on successful registration', async () => {
+      mockApi.onPost('/auth/signup').reply(200);
       render(<RegisterForm />);
 
       await fillAndSubmit(VALID_FIRST_NAME, VALID_LAST_NAME, VALID_EMAIL, VALID_PASSWORD, VALID_PASSWORD);
 
       await waitFor(() => {
-        expect(mockNavigateTo).toHaveBeenCalledWith('/dashboard');
+        expect(mockNavigateTo).toHaveBeenCalledWith('/login'); // 👈
       });
     });
 
     it('should display server error message when response is not ok', async () => {
-      mockFetch.mockResolvedValueOnce({
-        ok: false,
-        json: async () => ({ message: 'Email already exists' }),
-      });
+      mockApi.onPost('/auth/signup').reply(409, { message: 'Email already exists' });
       render(<RegisterForm />);
 
       await fillAndSubmit(VALID_FIRST_NAME, VALID_LAST_NAME, VALID_EMAIL, VALID_PASSWORD, VALID_PASSWORD);
@@ -399,10 +395,7 @@ describe('RegisterForm', () => {
     });
 
     it('should display default server error when response has no message', async () => {
-      mockFetch.mockResolvedValueOnce({
-        ok: false,
-        json: async () => ({}),
-      });
+      mockApi.onPost('/auth/signup').reply(409, {});
       render(<RegisterForm />);
 
       await fillAndSubmit(VALID_FIRST_NAME, VALID_LAST_NAME, VALID_EMAIL, VALID_PASSWORD, VALID_PASSWORD);
@@ -411,7 +404,7 @@ describe('RegisterForm', () => {
     });
 
     it('should display default server error on network failure', async () => {
-      mockFetch.mockRejectedValueOnce(new Error('Network error'));
+      mockApi.onPost('/auth/signup').networkError();
       render(<RegisterForm />);
 
       await fillAndSubmit(VALID_FIRST_NAME, VALID_LAST_NAME, VALID_EMAIL, VALID_PASSWORD, VALID_PASSWORD);
@@ -425,9 +418,7 @@ describe('RegisterForm', () => {
       render(<RegisterForm />);
       await userEvent.click(screen.getByText(MOCK_TRANSLATIONS.submit));
 
-      await waitFor(() => {
-        expect(mockFetch).not.toHaveBeenCalled();
-      });
+      expect(mockApi.history.post.length).toBe(0);
     });
 
     it('should show first name error when first name is too short', async () => {
