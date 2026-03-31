@@ -10,7 +10,7 @@ import { Link } from "@/i18n/navigation";
 import { useAuthStore } from "@/store/auth.store";
 import { navigateTo } from "@/lib/navigate";
 import { api } from "@/lib/axios";
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 import { AccessTokenDto } from "@/dto/access-token.dto";
 
 const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/;
