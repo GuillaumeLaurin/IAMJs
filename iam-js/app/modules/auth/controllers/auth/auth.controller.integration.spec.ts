@@ -81,6 +81,7 @@ describe('AuthController (integration)', () => {
     configServiceGetOrThrow = stub();
 
     configServiceGet.withArgs('NODE_ENV').returns('development');
+    configServiceGet.withArgs('CLIENT_URL').returns('http://localhost:3000');
     configServiceGet.withArgs('JWT_REFRESH_TOKEN').returns(REFRESH_SECRET);
     configServiceGet.withArgs('JWT_ACCESS_TOKEN').returns(ACCESS_SECRET);
     configServiceGetOrThrow.withArgs('JWT_ACCESS_TOKEN').returns(ACCESS_SECRET);
@@ -181,18 +182,22 @@ describe('AuthController (integration)', () => {
   });
 
   describe('GET /auth/google/callback', () => {
-    it('should return 200 and the access token', async () => {
+    it('should redirect to the client callback URL with the access token', async () => {
       configServiceGet.withArgs('NODE_ENV').returns('development');
+      configServiceGet.withArgs('CLIENT_URL').returns('http://localhost:3000');
 
-      const res = await request(httpServer).get('/auth/google/callback').expect(200);
+      const res = await request(httpServer).get('/auth/google/callback').expect(302);
 
-      expect(res.body).toEqual({ accessToken: MOCK_TOKEN_PAIR.accessToken });
+      expect(res.headers['location']).toEqual(
+        `http://localhost:3000/auth/callback?accessToken=${MOCK_TOKEN_PAIR.accessToken}`,
+      );
     });
 
     it('should set the refresh_token cookie', async () => {
       configServiceGet.withArgs('NODE_ENV').returns('development');
+      configServiceGet.withArgs('CLIENT_URL').returns('http://localhost:3000');
 
-      const res = await request(httpServer).get('/auth/google/callback').expect(200);
+      const res = await request(httpServer).get('/auth/google/callback').expect(302);
 
       const cookies = res.headers['set-cookie'] as unknown as string[];
       expect(cookies.some((c: string) => c.startsWith('refresh_token='))).toBeTruthy();
@@ -200,18 +205,22 @@ describe('AuthController (integration)', () => {
   });
 
   describe('GET /auth/github/callback', () => {
-    it('should return 200 and the access token', async () => {
+    it('should redirect to the client callback URL with the access token', async () => {
       configServiceGet.withArgs('NODE_ENV').returns('development');
+      configServiceGet.withArgs('CLIENT_URL').returns('http://localhost:3000');
 
-      const res = await request(httpServer).get('/auth/github/callback').expect(200);
+      const res = await request(httpServer).get('/auth/github/callback').expect(302);
 
-      expect(res.body).toEqual({ accessToken: MOCK_TOKEN_PAIR.accessToken });
+      expect(res.headers['location']).toEqual(
+        `http://localhost:3000/auth/callback?accessToken=${MOCK_TOKEN_PAIR.accessToken}`,
+      );
     });
 
     it('should set the refresh_token cookie', async () => {
       configServiceGet.withArgs('NODE_ENV').returns('development');
+      configServiceGet.withArgs('CLIENT_URL').returns('http://localhost:3000');
 
-      const res = await request(httpServer).get('/auth/github/callback').expect(200);
+      const res = await request(httpServer).get('/auth/github/callback').expect(302);
 
       const cookies = res.headers['set-cookie'] as unknown as string[];
       expect(cookies.some((c: string) => c.startsWith('refresh_token='))).toBeTruthy();
