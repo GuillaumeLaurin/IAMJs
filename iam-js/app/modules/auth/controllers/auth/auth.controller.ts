@@ -116,19 +116,14 @@ export class AuthController {
 
   @Get('google/callback')
   @UseGuards(GoogleGuard)
-  @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Google OAuth2 callback' })
-  googleCallback(@Req() req: Request, @Res({ passthrough: true }) res: Response): AccessTokenDto {
+  googleCallback(@Req() req: Request, @Res({ passthrough: true }) res: Response): void {
     const tokens = req.user as TokenPair;
 
-    res.cookie('refresh_token', tokens.refreshToken, {
-      httpOnly: true,
-      secure: SECURE_ENVIRONMENT === this.configService.get('NODE_ENV'),
-      sameSite: SAME_SITE,
-      maxAge: REFRESH_TTL_SEC,
-    });
+    this.setRefreshTokenCookie(res, tokens.refreshToken);
 
-    return { accessToken: tokens.accessToken };
+    const clientUrl = this.getClientUrl();
+    res.redirect(`${clientUrl}/auth/callback?accessToken=${tokens.accessToken}`);
   }
 
   @Get('github')
@@ -139,19 +134,14 @@ export class AuthController {
 
   @Get('github/callback')
   @UseGuards(GithubGuard)
-  @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'GitHub OAuth2 callback' })
-  githubCallback(@Req() req: Request, @Res({ passthrough: true }) res: Response): AccessTokenDto {
+  githubCallback(@Req() req: Request, @Res({ passthrough: true }) res: Response): void {
     const tokens = req.user as TokenPair;
 
-    res.cookie('refresh_token', tokens.refreshToken, {
-      httpOnly: true,
-      secure: SECURE_ENVIRONMENT === this.configService.get('NODE_ENV'),
-      sameSite: SAME_SITE,
-      maxAge: REFRESH_TTL_SEC,
-    });
+    this.setRefreshTokenCookie(res, tokens.refreshToken);
 
-    return { accessToken: tokens.accessToken };
+    const clientUrl = this.getClientUrl();
+    res.redirect(`${clientUrl}/auth/callback?accessToken=${tokens.accessToken}`);
   }
 
   @Post('refresh')
@@ -213,5 +203,18 @@ export class AuthController {
     await this.authService.signout(id);
 
     res.clearCookie('refresh_token');
+  }
+
+  private setRefreshTokenCookie(res: Response, refreshToken: string): void {
+    res.cookie('refresh_token', refreshToken, {
+      httpOnly: true,
+      secure: SECURE_ENVIRONMENT === this.configService.get('NODE_ENV'),
+      sameSite: SAME_SITE,
+      maxAge: REFRESH_TTL_SEC,
+    });
+  }
+
+  private getClientUrl(): string {
+    return this.configService.get<string>('CLIENT_URL')!;
   }
 }

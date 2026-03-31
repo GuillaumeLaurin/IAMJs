@@ -16,6 +16,7 @@ import { AuthController } from '@auth/controllers/auth/auth.controller';
 import { GoogleStrategy } from '@auth/strategies/google/google.strategy';
 import { GithubStrategy } from '@auth/strategies/github/github.strategy';
 import { GoogleGuard } from '@auth/guards/google.guard';
+import { GithubGuard } from '@auth/guards/github.guard';
 
 @Module({
   imports: [
@@ -37,8 +38,8 @@ import { GoogleGuard } from '@auth/guards/google.guard';
     GoogleStrategy,
     GithubStrategy,
     GoogleGuard,
-    GoogleStrategy,
+    GithubGuard,
   ],
-  exports: [TokenService, AuthService, RefreshGuard, AuthGuard, GoogleGuard, GoogleStrategy],
+  exports: [TokenService, AuthService, RefreshGuard, AuthGuard, GoogleGuard, GithubGuard],
 })
 export class AuthModule {}

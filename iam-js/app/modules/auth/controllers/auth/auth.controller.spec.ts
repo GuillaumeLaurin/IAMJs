@@ -25,7 +25,7 @@ describe('AuthController', () => {
   let controller: AuthController;
   let authService: SinonStubbedInstance<AuthService>;
   let configService: SinonStubbedInstance<ConfigService>;
-  let res: { cookie: SinonStub; clearCookie: SinonStub };
+  let res: { cookie: SinonStub; clearCookie: SinonStub; redirect: SinonStub };
 
   beforeEach(async () => {
     authService = createStubInstance<AuthService>(AuthService);
@@ -34,6 +34,7 @@ describe('AuthController', () => {
     res = {
       cookie: stub(),
       clearCookie: stub(),
+      redirect: stub(),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -160,15 +161,6 @@ describe('AuthController', () => {
   });
 
   describe('googleCallback', () => {
-    it('should return the access token from req.user', () => {
-      configService.get.returns('development');
-      const req = { user: MOCK_TOKEN_PAIR } as unknown as Request;
-
-      const result = controller.googleCallback(req, res as unknown as Response);
-
-      expect(result).toEqual({ accessToken: ACCESS_TOKEN });
-    });
-
     it('should set the refresh_token cookie from req.user', () => {
       configService.get.returns('development');
       const req = { user: MOCK_TOKEN_PAIR } as unknown as Request;
@@ -179,6 +171,21 @@ describe('AuthController', () => {
       const [cookieName, cookieValue] = res.cookie.getCall(0).args as [string, string];
       expect(cookieName).toEqual('refresh_token');
       expect(cookieValue).toEqual(REFRESH_TOKEN);
+    });
+
+    it('should redirect to the client URL with the access token', () => {
+      configService.get.callsFake((key: string) => {
+        if (key === 'NODE_ENV') return 'development';
+        if (key === 'CLIENT_URL') return 'http://localhost:3000';
+        return undefined;
+      });
+      const req = { user: MOCK_TOKEN_PAIR } as unknown as Request;
+
+      controller.googleCallback(req, res as unknown as Response);
+
+      expect(res.redirect.calledOnce).toBeTruthy();
+      const [url] = res.redirect.getCall(0).args as [string];
+      expect(url).toEqual(`http://localhost:3000/auth/callback?accessToken=${ACCESS_TOKEN}`);
     });
 
     it('should set secure cookie flag when in production', () => {
@@ -203,15 +210,6 @@ describe('AuthController', () => {
   });
 
   describe('githubCallback', () => {
-    it('should return the access token from req.user', () => {
-      configService.get.returns('development');
-      const req = { user: MOCK_TOKEN_PAIR } as unknown as Request;
-
-      const result = controller.githubCallback(req, res as unknown as Response);
-
-      expect(result).toEqual({ accessToken: ACCESS_TOKEN });
-    });
-
     it('should set the refresh_token cookie from req.user', () => {
       configService.get.returns('development');
       const req = { user: MOCK_TOKEN_PAIR } as unknown as Request;
@@ -222,6 +220,21 @@ describe('AuthController', () => {
       const [cookieName, cookieValue] = res.cookie.getCall(0).args as [string, string];
       expect(cookieName).toEqual('refresh_token');
       expect(cookieValue).toEqual(REFRESH_TOKEN);
+    });
+
+    it('should redirect to the client URL with the access token', () => {
+      configService.get.callsFake((key: string) => {
+        if (key === 'NODE_ENV') return 'development';
+        if (key === 'CLIENT_URL') return 'http://localhost:3000';
+        return undefined;
+      });
+      const req = { user: MOCK_TOKEN_PAIR } as unknown as Request;
+
+      controller.githubCallback(req, res as unknown as Response);
+
+      expect(res.redirect.calledOnce).toBeTruthy();
+      const [url] = res.redirect.getCall(0).args as [string];
+      expect(url).toEqual(`http://localhost:3000/auth/callback?accessToken=${ACCESS_TOKEN}`);
     });
 
     it('should set secure cookie flag when in production', () => {

@@ -7,7 +7,35 @@ Identity & Access Management (IAM) — Built with NestJS, featuring JWT auth, RB
 
 ## Dependencies
 
-- Docker / Docker Desktop
+| Dependency | Level |
+|---|---|
+| `Docker` | Recommended |
+| `Chocolatey` or `Scoop` | optional |
+| `Make` | optional |
+
+## How to download Make
+
+### 1. Windows
+
+Open a terminal as admin and run the following command :
+
+With Chocolatey
+
+```bash
+choco install make
+choco install mkcert
+```
+
+Or with Scoop
+
+```bash
+scoop install make
+scoop install mkcert
+```
+
+### 2. Linux
+
+Make should be installed by default
 
 ## How to run with Docker
 
@@ -17,19 +45,33 @@ Identity & Access Management (IAM) — Built with NestJS, featuring JWT auth, RB
 
 ```bash
 git clone https://github.com/GuillaumeLaurin/IAMJs.git
-cd IAMJS/iam-js
+cd IAMJS
 ```
 
 #### SSH
 
 ```bash
 git clone git@github.com:GuillaumeLaurin/IAMJs.git
-cd IAMJS/iam-js
+cd IAMJS
 ```
 
-### 2. Create your environment file
+### 2. Initialize Client `node_modules`
 
-Create a `.env` file at the root of the project:
+```bash
+cd client
+npm ci
+```
+
+### 3. Intialize Backend `node_modules`
+
+```bash
+cd iam-js
+npm ci
+```
+
+### 4. Create your environment file
+
+Create a `.env` file under root folder:
 
 ```properties
 POSTGRES_HOST = localhost
@@ -46,9 +88,8 @@ REDIS_PORT = 6379
 REDIS_PASSWORD = redis
 REDIS_DB = 0
 
-JWT_ACCESS_SECRET = `pReZHilCwPTHs39FdHmWpE8WW6br4TPnocYLqvPqbKsriVtLlhiyDYN5Id7lAAm3jTgP2NJdtLUpp6xG9JXEo9`
-JWT_REFRESH_SECRET =
-`OePJLmlBgCyt6xWyIf97df7JyFAPPMY3E1u7v7LX7t84AlwY4uhBa2GHkqQK0xnxdUNjLpO4uwPLyiocJhBuzz`
+JWT_ACCESS_SECRET = pReZHilCwPTHs39FdHmWpE8WW6br4TPnocYLqvPqbKsriVtLlhiyDYN5Id7lAAm3jTgP2NJdtLUpp6xG9JXEo9
+JWT_REFRESH_SECRET = OePJLmlBgCyt6xWyIf97df7JyFAPPMY3E1u7v7LX7t84AlwY4uhBa2GHkqQK0xnxdUNjLpO4uwPLyiocJhBuzz
 
 NODE_ENV = development
 
@@ -59,17 +100,49 @@ GITHUB_CALLBACK_URL = http://localhost:3000/api/auth/github/callback
 GOOGLE_CLIENT_ID = xxx
 GOOGLE_CLIENT_SECRET = xxx
 GOOGLE_CALLBACK_URL = http://localhost:3000/api/auth/google/callback
+
+CLIENT_URL = http://localhost:4200
 ```
 
 > See `.env.example` for reference.
 
-### 3. Start the application
+*Create a `.env` file under iam-js and client folder if you want to run it outside of a docker container.*
+
+### 5. Create Certificate
 
 ```bash
-docker compose up --build
+mkdir certs && cd certs
+mkcert localhost 127.0.0.1 ::1
 ```
 
-The API will be available at **http://localhost:3000**.
+*It will create a certs folder at the root of the project.*
+
+#### 5.1 To install a certificate from a certification authority
+
+Open Powershell as an administrator
+
+```bash
+mkcert -install
+```
+
+### 6. Start the application
+
+#### 6.1 You do not have an .env under root folder
+
+```bash
+make up
+```
+
+#### 6.2 You have a .env under root folder
+
+```bash
+docker compose up --build [-d]
+```
+
+- [-d] : optional, it will detach the build from your terminal
+
+The API will be available at **https://localhost:3000**.
+The Application will be available at **https://localhost:4200**
 
 ---
 

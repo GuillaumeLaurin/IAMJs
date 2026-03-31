@@ -3,9 +3,24 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import cookieParser from 'cookie-parser';
+import * as fs from 'fs';
 
 const bootstrap = async (): Promise<void> => {
-  const app = await NestFactory.create(AppModule);
+  const httpsOptions =
+    process.env.HTTPS_ENABLED === 'true'
+      ? {
+          key: fs.readFileSync(process.env.SSL_KEY_PATH!),
+          cert: fs.readFileSync(process.env.SSL_CERT_PATH!),
+        }
+      : undefined;
+
+  const app = await NestFactory.create(AppModule, { httpsOptions });
+
+  app.enableCors({
+    origin: process.env.CLIENT_URL,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    credentials: true,
+  });
 
   app.setGlobalPrefix('api');
   app.enableShutdownHooks();
