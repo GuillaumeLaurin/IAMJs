@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import RegisterForm from '@/components/features/register-form/register-form';
+import RegisterForm from '@/components/features/auth/register-form/register-form';
 import MockAdapter from 'axios-mock-adapter';
 import { api } from '@/lib/axios';
 

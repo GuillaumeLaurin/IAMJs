@@ -1,7 +1,7 @@
 import { Shield } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
-import LoginForm from '@/components/features/login-form/login-form';
+import LoginForm from '@/components/features/auth/login-form/login-form';
 import LocaleSwitcher from '@/components/ui/locale-switcher/locale-switcher';
 
 const LoginPage = () => {

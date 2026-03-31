@@ -1,7 +1,7 @@
 import { Shield } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
-import RegisterForm from '@/components/features/register-form/register-form';
+import RegisterForm from '@/components/features/auth/register-form/register-form';
 import LocaleSwitcher from '@/components/ui/locale-switcher/locale-switcher';
 
 const RegisterPage = () => {

@@ -2,7 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import MockAdapter from 'axios-mock-adapter';
 import { api } from '@/lib/axios';
-import LoginForm from '@/components/features/login-form/login-form';
+import LoginForm from '@/components/features/auth/login-form/login-form';
 
 const NEXT_PUBLIC_API_URL = 'http://localhost:10000/api';
 
