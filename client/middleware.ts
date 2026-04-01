@@ -7,10 +7,6 @@ const intlMiddleware = createMiddleware(routing);
 const PUBLIC_ROUTES_ONLY = ['/login', '/register'];
 const PROTECTED_ROUTES = ['/dashboard'];
 
-function getToken(request: NextRequest): string | undefined {
-  return request.cookies.get('auth-token')?.value;
-}
-
 function stripLocale(pathname: string): string {
   return pathname.replace(/^\/[a-z]{2}(-[A-Z]{2})?/, '') || '/';
 }

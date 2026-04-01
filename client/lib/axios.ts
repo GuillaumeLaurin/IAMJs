@@ -1,8 +1,11 @@
-'use client';
-
 import { AccessTokenDto } from '@/dto/access-token.dto';
 import { useAuthStore } from '@/store/auth.store';
-import axios from 'axios';
+import axios, { InternalAxiosRequestConfig } from 'axios';
+import { navigateTo } from './navigate';
+
+interface RetryConfig extends InternalAxiosRequestConfig {
+  _retry?: boolean;
+}
 
 export const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -21,9 +24,11 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
-    const original = error.config;
+    const original: RetryConfig = error.config;
 
-    if (error.response?.status === 401 && !original._retry) {
+    const isRefresRequest = original.url?.includes('/auth/refresh');
+
+    if (error.response?.status === 401 && !original._retry && !isRefresRequest) {
       original._retry = true;
 
       try {
@@ -33,6 +38,7 @@ api.interceptors.response.use(
         return api(original);
       } catch {
         useAuthStore.getState().clear();
+        navigateTo('/login');
       }
     }
 
