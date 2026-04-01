@@ -19,18 +19,19 @@ function stripLocale(pathname: string): string {
 export default function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const path = stripLocale(pathname);
-  const token = getToken(request);
+  
+  const hasSession = !!request.cookies.get("refresh_token")?.value;
 
   const isPublicOnly = PUBLIC_ROUTES_ONLY.some(r => path.startsWith(r));
   const isProtected = PROTECTED_ROUTES.some(r => path.startsWith(r));
 
-  if (token && isPublicOnly) {
+  if (hasSession && isPublicOnly) {
     const url = request.nextUrl.clone();
     url.pathname = "/dashboard";
     return NextResponse.redirect(url);
   }
 
-  if (!token && isProtected) {
+  if (!hasSession && isProtected) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     return NextResponse.redirect(url);
