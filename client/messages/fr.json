@@ -117,6 +117,7 @@
     "by": "par",
     "workspaceSynced": "Votre espace de travail a été synchronisé pour la dernière fois il y a",
     "minutesAgo": "minutes.",
-    "verifyIntegrity": "Verifier l'integrité"
+    "verifyIntegrity": "Verifier l'integrité",
+    "searchPlaceHolder": "Rechercher des documents, des membres d'équipe ou des étiquettes..."
   }
 }

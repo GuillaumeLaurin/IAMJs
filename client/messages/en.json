@@ -117,6 +117,7 @@
     "by": "by",
     "workspaceSynced": "Your workspace was last synced",
     "minutesAgo": "minutes ago.",
-    "verifyIntegrity": "Verify Integrity"
+    "verifyIntegrity": "Verify Integrity",
+    "searchPlaceHolder": "Search documents, team members, or tags..."
   }
 }
