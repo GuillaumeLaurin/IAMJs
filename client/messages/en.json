@@ -114,6 +114,9 @@
     "newDocument": "New Document",
     "helpCenter": "Help Center",
     "edited": "Edited",
-    "by": "by"
+    "by": "by",
+    "workspaceSynced": "Your workspace was last synced",
+    "minutesAgo": "minutes ago.",
+    "verifyIntegrity": "Verify Integrity"
   }
 }
