@@ -11,8 +11,9 @@ const MILISECONDS = 1000;
 const SECONDS = 60;
 
 const useGreeting = () => {
+  const t = useTranslations('greeting');
+  
   const getGreeting = () => {
-    const t = useTranslations('greeting');
     const hour = new Date().getHours();
 
     if (hour >= MIN_MORNING && hour < MAX_MORNING) {
