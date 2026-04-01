@@ -118,6 +118,17 @@
     "workspaceSynced": "Votre espace de travail a été synchronisé pour la dernière fois il y a",
     "minutesAgo": "minutes.",
     "verifyIntegrity": "Verifier l'integrité",
-    "searchPlaceHolder": "Rechercher des documents, des membres d'équipe ou des étiquettes..."
+    "searchPlaceHolder": "Rechercher des documents, des membres d'équipe ou des étiquettes...",
+    "youHave": "Tu as",
+    "documents": "documents",
+    "documentAction": "nécessitant une révision",
+    "tip": "Conseil",
+    "use": "utiliser",
+    "infoCmdK": "pour lancer la palette de commandes n'importe où."
+  },
+  "greeting": {
+    "morning": "Bon matin",
+    "afternoon": "Bon après-midi",
+    "evening": "Bonne soirée"
   }
 }

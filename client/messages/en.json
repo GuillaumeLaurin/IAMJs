@@ -118,6 +118,17 @@
     "workspaceSynced": "Your workspace was last synced",
     "minutesAgo": "minutes ago.",
     "verifyIntegrity": "Verify Integrity",
-    "searchPlaceHolder": "Search documents, team members, or tags..."
+    "searchPlaceHolder": "Search documents, team members, or tags...",
+    "youHave": "You have",
+    "documents": "documents",
+    "documentAction": "requiring review",
+    "tip": "Tip",
+    "use": "use",
+    "infoCmdK": "to launch the command palette anywhere."
+  },
+  "greeting": {
+    "morning": "Good morning",
+    "afternoon": "Good afternoon",
+    "evening": "Good evening"
   }
 }

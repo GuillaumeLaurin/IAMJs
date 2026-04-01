@@ -7,7 +7,7 @@ export interface BackupStatCardProps {
 /**
  * BackupStatCard
  */
-export function BackupCard({ lastSyncedMinutesAgo }: BackupStatCardProps) {
+export function BackupStatCard({ lastSyncedMinutesAgo }: BackupStatCardProps) {
   const t = useTranslations('dashboard');
 
   return (
