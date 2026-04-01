@@ -1,3 +1,5 @@
+import { useTranslations } from "next-intl";
+
 export interface Collaborator {
   src: string;
   alt: string;
@@ -28,6 +30,8 @@ export default function FeaturedDocumentCard({
   collaborators,
   extraCollaboratorsCount,
 }: FeaturedDocumentCardProps) {
+  const t = useTranslations('dashboard');
+
   return (
     <div className="col-span-8 bg-surface-container-lowest rounded-[2rem] p-10 shadow-sm hover:shadow-[0_12px_32px_rgba(25,28,30,0.06)] transition-all group">
       <div className="flex justify-between items-start mb-8">
@@ -39,7 +43,7 @@ export default function FeaturedDocumentCard({
             {title}
           </h3>
           <p>
-            Edited {lastEditedAt} by {lastEditedBy}
+            {t('edited')} {lastEditedAt} {t('by')} {lastEditedBy}
           </p>
         </div>
         <button className="text-slate-300 hover:text-primary transition-colors">

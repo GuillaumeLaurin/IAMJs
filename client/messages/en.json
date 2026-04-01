@@ -110,6 +110,10 @@
     "create": "create"
   },
   "dashboard": {
-    "viewAllArchives": "View All Archives"
+    "viewAllArchives": "View All Archives",
+    "newDocument": "New Document",
+    "helpCenter": "Help Center",
+    "edited": "Edited",
+    "by": "by"
   }
 }
