@@ -1,5 +1,7 @@
-import Sidebar from "@/components/features/dashboard/side-bar/side-bar";
-import TopBar from "@/components/features/dashboard/top-bar/top-bar";
+'use client';
+
+import Sidebar from '@/components/features/dashboard/side-bar/side-bar';
+import TopBar from '@/components/features/dashboard/top-bar/top-bar';
 
 /**
  * DashboardLayout
@@ -12,12 +14,10 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
       <Sidebar />
       <div className="ml-64 min-h-screen flex flex-col">
         <TopBar />
-        <main className="flex-1">
-          {children}
-        </main>
+        <main className="flex-1">{children}</main>
       </div>
     </div>
   );
-}
+};
 
 export default DashboardLayout;

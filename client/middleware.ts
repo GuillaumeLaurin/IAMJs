@@ -1,8 +1,7 @@
-import createMiddleware from "next-intl/middleware";
-import { routing } from "./i18n/routing";
-import { NextRequest, NextResponse } from "next/server";
+import createMiddleware from 'next-intl/middleware';
+import { routing } from './i18n/routing';
+import { NextRequest, NextResponse } from 'next/server';
 
- 
 const intlMiddleware = createMiddleware(routing);
 
 const PUBLIC_ROUTES_ONLY = ['/login', '/register'];
@@ -13,35 +12,34 @@ function getToken(request: NextRequest): string | undefined {
 }
 
 function stripLocale(pathname: string): string {
-  return pathname.replace(/^\/[a-z]{2}(-[A-Z]{2})?/, "") || "/";
+  return pathname.replace(/^\/[a-z]{2}(-[A-Z]{2})?/, '') || '/';
 }
 
 export default function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const path = stripLocale(pathname);
-  
-  const hasSession = !!request.cookies.get("refresh_token")?.value;
 
-  const isPublicOnly = PUBLIC_ROUTES_ONLY.some(r => path.startsWith(r));
-  const isProtected = PROTECTED_ROUTES.some(r => path.startsWith(r));
+  const hasSession = !!request.cookies.get('refresh_token')?.value;
+
+  const isPublicOnly = PUBLIC_ROUTES_ONLY.some((r) => path.startsWith(r));
+  const isProtected = PROTECTED_ROUTES.some((r) => path.startsWith(r));
 
   if (hasSession && isPublicOnly) {
     const url = request.nextUrl.clone();
-    url.pathname = "/dashboard";
+    url.pathname = '/dashboard';
     return NextResponse.redirect(url);
   }
 
   if (!hasSession && isProtected) {
     const url = request.nextUrl.clone();
-    url.pathname = "/login";
+    url.pathname = '/login';
     return NextResponse.redirect(url);
   }
 
   return intlMiddleware(request);
 }
 
- 
 export const config = {
   // Match all pathnames except API routes, static files, and Next.js internals
-  matcher: ["/((?!api|_next|.*\\..*).*)"],
+  matcher: ['/((?!api|_next|.*\\..*).*)'],
 };

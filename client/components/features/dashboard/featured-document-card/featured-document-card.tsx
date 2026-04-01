@@ -1,4 +1,6 @@
-import { useTranslations } from "next-intl";
+'use client';
+
+import { useTranslations } from 'next-intl';
 
 export interface Collaborator {
   src: string;
@@ -39,21 +41,17 @@ export default function FeaturedDocumentCard({
           <span className="px-3 py-1 bg-primary-fixed text-on-primary-fixed text-[10px] font-bold uppercase tracking-widest rounded-full">
             {tag}
           </span>
-          <h3 className="text-2xl font-bold mt-4 text-slate-800">
-            {title}
-          </h3>
+          <h3 className="text-2xl font-bold mt-4 text-slate-800">{title}</h3>
           <p>
             {t('edited')} {lastEditedAt} {t('by')} {lastEditedBy}
           </p>
         </div>
         <button className="text-slate-300 hover:text-primary transition-colors">
-          <span className="material-symbols-outlined">
-            more_vert
-          </span>
+          <span className="material-symbols-outlined">more_vert</span>
         </button>
       </div>
       <div className="aspect-[21/9] w-full bg-slate-100 rounded-2xl overflow-hidden relative">
-        <img 
+        <img
           src={imageSrc}
           alt={imageAlt}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
@@ -68,7 +66,7 @@ export default function FeaturedDocumentCard({
 
 function CollaboratorStack({
   collaborators,
-  extra
+  extra,
 }: {
   collaborators: Collaborator[];
   extra?: number;

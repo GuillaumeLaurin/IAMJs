@@ -1,5 +1,7 @@
-import { useTranslations } from "next-intl";
-import { useState, useEffect } from "react";
+'use client';
+
+import { useTranslations } from 'next-intl';
+import { useState, useEffect } from 'react';
 
 const MIN_MORNING = 5;
 const MAX_MORNING = 12;
@@ -15,8 +17,7 @@ const useGreeting = () => {
 
     if (hour >= MIN_MORNING && hour < MAX_MORNING) {
       return t('morning');
-    }
-    else if (hour >= MAX_MORNING && hour < MAX_AFTERNOON) {
+    } else if (hour >= MAX_MORNING && hour < MAX_AFTERNOON) {
       return t('afternoon');
     } else {
       return t('evening');
@@ -34,6 +35,6 @@ const useGreeting = () => {
   }, []);
 
   return greeting;
-}
+};
 
 export default useGreeting;

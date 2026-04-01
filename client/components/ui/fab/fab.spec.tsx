@@ -30,12 +30,12 @@ describe('FAB', () => {
   });
 
   it('should display the label', () => {
-    render(<FAB onClick={mockFab.onClick}  label={mockFab.label} />);
+    render(<FAB onClick={mockFab.onClick} label={mockFab.label} />);
     expect(screen.getByLabelText(TEST_LABEL)).toBeDefined();
   });
 
   it('should execute onClick function when clicked', async () => {
-    render(<FAB onClick={mockFab.onClick}  label={mockFab.label} />);
+    render(<FAB onClick={mockFab.onClick} label={mockFab.label} />);
     await userEvent.click(screen.getByLabelText(TEST_LABEL));
     await waitFor(() => {
       expect(mockFab.onClick).toHaveBeenCalled();

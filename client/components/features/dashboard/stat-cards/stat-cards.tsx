@@ -1,4 +1,6 @@
-import { useTranslations } from "next-intl";
+'use client';
+
+import { useTranslations } from 'next-intl';
 
 export interface BackupStatCardProps {
   lastSyncedMinutesAgo: number;
@@ -13,9 +15,9 @@ export function BackupStatCard({ lastSyncedMinutesAgo }: BackupStatCardProps) {
   return (
     <div className="flex-1 bg-indigo-900 rounded-[2rem] p-8 text-white relative overflow-hidden group">
       <div className="relative z-10">
-        <span 
+        <span
           className="material-symbols-outlined text-4xl mb-4 text-indigo-300"
-          style={{ fontVariationSettings: "'FILL' 1"}}
+          style={{ fontVariationSettings: "'FILL' 1" }}
         >
           cloud_upload
         </span>
@@ -61,9 +63,7 @@ export function PendingTasksCard({ tasks }: PendingTasksCardProps) {
   return (
     <div className="flex-1 bg-surface-container-low rounded-[2rem] p-8 flex flex-col justify-between">
       <div className="flex justify-between items-center">
-        <h4 className="font-headline font-bold text-slate-800">
-          {t('pendingTask')}
-        </h4>
+        <h4 className="font-headline font-bold text-slate-800">{t('pendingTask')}</h4>
         <span className="w-6 h-6 bg-error text-white text-[10px] font-black flex items-center justify-center rounded-full">
           {tasks.length}
         </span>
@@ -75,9 +75,7 @@ export function PendingTasksCard({ tasks }: PendingTasksCardProps) {
             className="flex items-center gap-3 p-2 hover:bg-white rounded-xl transition-all cursor-pointer"
           >
             <div className={`w-2 h-2 rounded-full ${PRIORITY_COLORS[task.priority]}`} />
-            <span className="text-xs font-medium text-slate-600">
-              {task.label}
-            </span>
+            <span className="text-xs font-medium text-slate-600">{task.label}</span>
           </div>
         ))}
       </div>

@@ -68,7 +68,9 @@ jest.mock('next-intl', () => ({
 
 jest.mock('@/i18n/navigation', () => ({
   Link: ({ href, children, ...props }: { href: string; children: React.ReactNode }) => (
-    <a href={href} {...props}>{children}</a>
+    <a href={href} {...props}>
+      {children}
+    </a>
   ),
 }));
 
@@ -227,7 +229,9 @@ describe('RegisterForm', () => {
 
     it('should default to "m"', () => {
       render(<RegisterForm />);
-      expect((screen.getByLabelText(MOCK_TRANSLATIONS.genderLabel) as HTMLSelectElement).value).toBe('m');
+      expect(
+        (screen.getByLabelText(MOCK_TRANSLATIONS.genderLabel) as HTMLSelectElement).value,
+      ).toBe('m');
     });
   });
 
@@ -244,7 +248,9 @@ describe('RegisterForm', () => {
 
     it('should have autocomplete set to "email"', () => {
       render(<RegisterForm />);
-      expect(screen.getByLabelText(MOCK_TRANSLATIONS.emailLabel).getAttribute('autocomplete')).toBe('email');
+      expect(screen.getByLabelText(MOCK_TRANSLATIONS.emailLabel).getAttribute('autocomplete')).toBe(
+        'email',
+      );
     });
   });
 
@@ -256,7 +262,9 @@ describe('RegisterForm', () => {
 
     it('should have type "password" by default', () => {
       render(<RegisterForm />);
-      expect(screen.getByLabelText(MOCK_TRANSLATIONS.passwordLabel).getAttribute('type')).toBe('password');
+      expect(screen.getByLabelText(MOCK_TRANSLATIONS.passwordLabel).getAttribute('type')).toBe(
+        'password',
+      );
     });
 
     it('should toggle to type "text" when show password is clicked', async () => {
@@ -264,7 +272,9 @@ describe('RegisterForm', () => {
       const [showBtn] = screen.getAllByLabelText(MOCK_TRANSLATIONS.showPassword);
       await userEvent.click(showBtn);
 
-      expect(screen.getByLabelText(MOCK_TRANSLATIONS.passwordLabel).getAttribute('type')).toBe('text');
+      expect(screen.getByLabelText(MOCK_TRANSLATIONS.passwordLabel).getAttribute('type')).toBe(
+        'text',
+      );
     });
 
     it('should toggle back to type "password" when hide password is clicked', async () => {
@@ -275,12 +285,16 @@ describe('RegisterForm', () => {
       const [hideBtn] = screen.getAllByLabelText(MOCK_TRANSLATIONS.hidePassword);
       await userEvent.click(hideBtn);
 
-      expect(screen.getByLabelText(MOCK_TRANSLATIONS.passwordLabel).getAttribute('type')).toBe('password');
+      expect(screen.getByLabelText(MOCK_TRANSLATIONS.passwordLabel).getAttribute('type')).toBe(
+        'password',
+      );
     });
 
     it('should have autocomplete set to "new-password"', () => {
       render(<RegisterForm />);
-      expect(screen.getByLabelText(MOCK_TRANSLATIONS.passwordLabel).getAttribute('autocomplete')).toBe('new-password');
+      expect(
+        screen.getByLabelText(MOCK_TRANSLATIONS.passwordLabel).getAttribute('autocomplete'),
+      ).toBe('new-password');
     });
   });
 
@@ -323,7 +337,9 @@ describe('RegisterForm', () => {
     it('should have autocomplete set to "new-password"', () => {
       render(<RegisterForm />);
       expect(
-        screen.getByLabelText(MOCK_TRANSLATIONS.passwordConfirmationLabel).getAttribute('autocomplete'),
+        screen
+          .getByLabelText(MOCK_TRANSLATIONS.passwordConfirmationLabel)
+          .getAttribute('autocomplete'),
       ).toBe('new-password');
     });
   });
@@ -359,7 +375,13 @@ describe('RegisterForm', () => {
       mockApi.onPost('/auth/signup').reply(200); // 👈
       render(<RegisterForm />);
 
-      await fillAndSubmit(VALID_FIRST_NAME, VALID_LAST_NAME, VALID_EMAIL, VALID_PASSWORD, VALID_PASSWORD);
+      await fillAndSubmit(
+        VALID_FIRST_NAME,
+        VALID_LAST_NAME,
+        VALID_EMAIL,
+        VALID_PASSWORD,
+        VALID_PASSWORD,
+      );
 
       await waitFor(() => {
         expect(mockApi.history.post[0].url).toBe('/auth/signup');
@@ -378,7 +400,13 @@ describe('RegisterForm', () => {
       mockApi.onPost('/auth/signup').reply(200);
       render(<RegisterForm />);
 
-      await fillAndSubmit(VALID_FIRST_NAME, VALID_LAST_NAME, VALID_EMAIL, VALID_PASSWORD, VALID_PASSWORD);
+      await fillAndSubmit(
+        VALID_FIRST_NAME,
+        VALID_LAST_NAME,
+        VALID_EMAIL,
+        VALID_PASSWORD,
+        VALID_PASSWORD,
+      );
 
       await waitFor(() => {
         expect(mockNavigateTo).toHaveBeenCalledWith('/login'); // 👈
@@ -389,7 +417,13 @@ describe('RegisterForm', () => {
       mockApi.onPost('/auth/signup').reply(409, { message: 'Email already exists' });
       render(<RegisterForm />);
 
-      await fillAndSubmit(VALID_FIRST_NAME, VALID_LAST_NAME, VALID_EMAIL, VALID_PASSWORD, VALID_PASSWORD);
+      await fillAndSubmit(
+        VALID_FIRST_NAME,
+        VALID_LAST_NAME,
+        VALID_EMAIL,
+        VALID_PASSWORD,
+        VALID_PASSWORD,
+      );
 
       expect(await screen.findByText('Email already exists')).toBeDefined();
     });
@@ -398,7 +432,13 @@ describe('RegisterForm', () => {
       mockApi.onPost('/auth/signup').reply(409, {});
       render(<RegisterForm />);
 
-      await fillAndSubmit(VALID_FIRST_NAME, VALID_LAST_NAME, VALID_EMAIL, VALID_PASSWORD, VALID_PASSWORD);
+      await fillAndSubmit(
+        VALID_FIRST_NAME,
+        VALID_LAST_NAME,
+        VALID_EMAIL,
+        VALID_PASSWORD,
+        VALID_PASSWORD,
+      );
 
       expect(await screen.findByText(MOCK_TRANSLATIONS.serverError)).toBeDefined();
     });
@@ -407,7 +447,13 @@ describe('RegisterForm', () => {
       mockApi.onPost('/auth/signup').networkError();
       render(<RegisterForm />);
 
-      await fillAndSubmit(VALID_FIRST_NAME, VALID_LAST_NAME, VALID_EMAIL, VALID_PASSWORD, VALID_PASSWORD);
+      await fillAndSubmit(
+        VALID_FIRST_NAME,
+        VALID_LAST_NAME,
+        VALID_EMAIL,
+        VALID_PASSWORD,
+        VALID_PASSWORD,
+      );
 
       expect(await screen.findByText(MOCK_TRANSLATIONS.serverError)).toBeDefined();
     });
@@ -439,7 +485,10 @@ describe('RegisterForm', () => {
 
     it('should show password error for empty password', async () => {
       render(<RegisterForm />);
-      await userEvent.type(screen.getByLabelText(MOCK_TRANSLATIONS.firstNameLabel), VALID_FIRST_NAME);
+      await userEvent.type(
+        screen.getByLabelText(MOCK_TRANSLATIONS.firstNameLabel),
+        VALID_FIRST_NAME,
+      );
       await userEvent.type(screen.getByLabelText(MOCK_TRANSLATIONS.lastNameLabel), VALID_LAST_NAME);
       await userEvent.type(screen.getByLabelText(MOCK_TRANSLATIONS.emailLabel), VALID_EMAIL);
       await userEvent.click(screen.getByText(MOCK_TRANSLATIONS.submit));
@@ -450,7 +499,10 @@ describe('RegisterForm', () => {
 
     it('should show password mismatch error when passwords differ', async () => {
       render(<RegisterForm />);
-      await userEvent.type(screen.getByLabelText(MOCK_TRANSLATIONS.firstNameLabel), VALID_FIRST_NAME);
+      await userEvent.type(
+        screen.getByLabelText(MOCK_TRANSLATIONS.firstNameLabel),
+        VALID_FIRST_NAME,
+      );
       await userEvent.type(screen.getByLabelText(MOCK_TRANSLATIONS.lastNameLabel), VALID_LAST_NAME);
       await userEvent.type(screen.getByLabelText(MOCK_TRANSLATIONS.emailLabel), VALID_EMAIL);
       await userEvent.type(screen.getByLabelText(MOCK_TRANSLATIONS.passwordLabel), VALID_PASSWORD);

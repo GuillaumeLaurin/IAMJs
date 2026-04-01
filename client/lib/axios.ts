@@ -1,3 +1,5 @@
+'use client';
+
 import { AccessTokenDto } from '@/dto/access-token.dto';
 import { useAuthStore } from '@/store/auth.store';
 import axios from 'axios';
@@ -6,7 +8,7 @@ export const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
   withCredentials: true,
   headers: {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   },
 });
 
@@ -35,5 +37,5 @@ api.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  }
+  },
 );

@@ -1,9 +1,18 @@
-import FeaturedDocumentCard from "@/components/features/dashboard/featured-document-card/featured-document-card";
-import { BackupStatCard, PendingTasksCard, PendingTask } from "@/components/features/dashboard/stat-cards/stat-cards";
-import { RecentActivityList, DocumentListItemProps } from "@/components/features/dashboard/document-list-item/document-list-item";
-import FAB from "@/components/ui/fab/fab";
-import { useTranslations } from "next-intl";
-import useGreeting from "@/hooks/use-greeting";
+'use client';
+
+import FeaturedDocumentCard from '@/components/features/dashboard/featured-document-card/featured-document-card';
+import {
+  BackupStatCard,
+  PendingTasksCard,
+  PendingTask,
+} from '@/components/features/dashboard/stat-cards/stat-cards';
+import {
+  RecentActivityList,
+  DocumentListItemProps,
+} from '@/components/features/dashboard/document-list-item/document-list-item';
+import FAB from '@/components/ui/fab/fab';
+import { useTranslations } from 'next-intl';
+import useGreeting from '@/hooks/use-greeting';
 
 // ── Mock data (replace with real API calls / server component fetching) ─────────
 
@@ -43,9 +52,7 @@ const RECENT_DOCUMENTS: DocumentListItemProps[] = [
     updatedLabel: 'Updated Yesterday',
     iconName: 'description',
     iconColor: 'teal',
-    owners: [
-      { initials: 'AR', colorClass: 'bg-indigo-100' },
-    ],
+    owners: [{ initials: 'AR', colorClass: 'bg-indigo-100' }],
   },
   {
     title: 'Legal Agreement - Studio X',
@@ -78,25 +85,22 @@ const DashboardPage = () => {
             {greeting} John.
           </h1>
           <p className="text-on-surface-variant text-lg leading-relaxed">
-            {t('youHave')}{''}
-          <span className="text-primary font-bold">
-            {PENDING_TASKS.length} {t('documents')}
-          </span>{' '}
-          {t('documentAction')}
+            {t('youHave')}
+            {''}
+            <span className="text-primary font-bold">
+              {PENDING_TASKS.length} {t('documents')}
+            </span>{' '}
+            {t('documentAction')}
           </p>
         </div>
-        
+
         {/* View toggle */}
         <div className="flex gap-2">
           <button className="p-3 bg-surface-container-lowest shadow-sm rounded-xl text-on-surface-variant hover:bg-surface-bright transition-all">
-            <span className="material-symbols-outlined">
-              grid_view
-            </span>
+            <span className="material-symbols-outlined">grid_view</span>
           </button>
           <button className="p-3 bg-surface-container-low rounded-xl text-primary font-bold transition-all">
-            <span className="material-symbols-outlined">
-              list
-            </span>
+            <span className="material-symbols-outlined">list</span>
           </button>
         </div>
       </section>
@@ -124,20 +128,18 @@ const DashboardPage = () => {
       {/* Keyboard shortcut hint */}
       <div className="flex justify-center mt-12 pb-12">
         <div className="bg-surface-container-high/50 backdrop-blur-md px-6 py-4 rounded-2xl flex items-center gap-4 text-sm text-slate-500 font-medium">
-          <span className="material-symbols-outlined text-indigo-500">
-            info
-          </span>
-          {t('tip')}{''}{t('use')}
+          <span className="material-symbols-outlined text-indigo-500">info</span>
+          {t('tip')}
+          {''}
+          {t('use')}
           <kbd className="px-2 py-0.5 bg-white border border-slate-200 rounded text-[10px]">
             CMD
-          </kbd>
-          {' '}+{' '}
-          <kbd className="px-2 py-0.5 bg-white border border-slate-200 rounded text-[10px]">
-            K
-          </kbd>
-          {' '}{t('infoCmdK')}
+          </kbd>{' '}
+          +{' '}
+          <kbd className="px-2 py-0.5 bg-white border border-slate-200 rounded text-[10px]">K</kbd>{' '}
+          {t('infoCmdK')}
         </div>
       </div>
     </div>
-  )
+  );
 };

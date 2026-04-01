@@ -21,11 +21,11 @@ const MOCK_TRANSLATIONS: Record<string, string> = {
   submit: 'Se connecter',
   loading: 'Chargement...',
   noAccount: 'Pas de compte ?',
-  requestAccess: "Demander un accès",
+  requestAccess: 'Demander un accès',
   serverError: 'Une erreur est survenue',
   showPassword: 'Afficher le mot de passe',
   hidePassword: 'Masquer le mot de passe',
-  passwordRequired: "Le mot de passe est requis",
+  passwordRequired: 'Le mot de passe est requis',
 };
 
 const VALID_EMAIL = 'user@example.com';
@@ -41,7 +41,9 @@ jest.mock('next-intl', () => ({
 
 jest.mock('@/i18n/navigation', () => ({
   Link: ({ href, children, ...props }: { href: string; children: React.ReactNode }) => (
-    <a href={href} {...props}>{children}</a>
+    <a href={href} {...props}>
+      {children}
+    </a>
   ),
 }));
 
@@ -127,7 +129,9 @@ describe('LoginForm', () => {
 
     it('should have autocomplete set to "email"', () => {
       render(<LoginForm />);
-      expect(screen.getByLabelText(MOCK_TRANSLATIONS.emailLabel).getAttribute('autocomplete')).toBe('email');
+      expect(screen.getByLabelText(MOCK_TRANSLATIONS.emailLabel).getAttribute('autocomplete')).toBe(
+        'email',
+      );
     });
   });
 
@@ -139,14 +143,18 @@ describe('LoginForm', () => {
 
     it('should have type "password" by default', () => {
       render(<LoginForm />);
-      expect(screen.getByLabelText(MOCK_TRANSLATIONS.passwordLabel).getAttribute('type')).toBe('password');
+      expect(screen.getByLabelText(MOCK_TRANSLATIONS.passwordLabel).getAttribute('type')).toBe(
+        'password',
+      );
     });
 
     it('should toggle to type "text" when show password is clicked', async () => {
       render(<LoginForm />);
       await userEvent.click(screen.getByLabelText(MOCK_TRANSLATIONS.showPassword));
 
-      expect(screen.getByLabelText(MOCK_TRANSLATIONS.passwordLabel).getAttribute('type')).toBe('text');
+      expect(screen.getByLabelText(MOCK_TRANSLATIONS.passwordLabel).getAttribute('type')).toBe(
+        'text',
+      );
     });
 
     it('should toggle back to type "password" when hide password is clicked', async () => {
@@ -154,12 +162,16 @@ describe('LoginForm', () => {
       await userEvent.click(screen.getByLabelText(MOCK_TRANSLATIONS.showPassword));
       await userEvent.click(screen.getByLabelText(MOCK_TRANSLATIONS.hidePassword));
 
-      expect(screen.getByLabelText(MOCK_TRANSLATIONS.passwordLabel).getAttribute('type')).toBe('password');
+      expect(screen.getByLabelText(MOCK_TRANSLATIONS.passwordLabel).getAttribute('type')).toBe(
+        'password',
+      );
     });
 
     it('should have autocomplete set to "current-password"', () => {
       render(<LoginForm />);
-      expect(screen.getByLabelText(MOCK_TRANSLATIONS.passwordLabel).getAttribute('autocomplete')).toBe('current-password');
+      expect(
+        screen.getByLabelText(MOCK_TRANSLATIONS.passwordLabel).getAttribute('autocomplete'),
+      ).toBe('current-password');
     });
   });
 
@@ -171,14 +183,18 @@ describe('LoginForm', () => {
 
     it('should be unchecked by default', () => {
       render(<LoginForm />);
-      expect((screen.getByLabelText(MOCK_TRANSLATIONS.rememberMe) as HTMLInputElement).checked).toBe(false);
+      expect(
+        (screen.getByLabelText(MOCK_TRANSLATIONS.rememberMe) as HTMLInputElement).checked,
+      ).toBe(false);
     });
 
     it('should toggle when clicked', async () => {
       render(<LoginForm />);
       await userEvent.click(screen.getByLabelText(MOCK_TRANSLATIONS.rememberMe));
 
-      expect((screen.getByLabelText(MOCK_TRANSLATIONS.rememberMe) as HTMLInputElement).checked).toBe(true);
+      expect(
+        (screen.getByLabelText(MOCK_TRANSLATIONS.rememberMe) as HTMLInputElement).checked,
+      ).toBe(true);
     });
   });
 

@@ -1,4 +1,6 @@
-import { useTranslations } from "use-intl"
+'use client';
+
+import { useTranslations } from 'use-intl';
 
 /**
  * TopBar
@@ -14,11 +16,11 @@ export default function TopBar() {
           <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
             search
           </span>
-          <input 
+          <input
             className="w-full bg-surface-container-low border-none rounded-xl py-2 pl-10 pr-4 text-sm focus:ring-2 focus:ring-primary/20 transition-all font-body"
             placeholder={t('searchPlaceHolder')}
             type="text"
-            />
+          />
         </div>
       </div>
       {/* Actions + user */}
@@ -30,7 +32,10 @@ export default function TopBar() {
           <span className="material-symbols-outlined">settings</span>
         </button>
         <div className="h-8 w-px bg-slate-200 dark:bg-slate-800 mx-2" />
-        <UseChip name="John Doe" avatarSrc="https://lh3.googleusercontent.com/aida-public/AB6AXuCvCpzK5kB8pmZYOeJh0kUQb-XlZcb5Y0oLclD4w4alCEIIdthsua6jpnCupgEQjSS54i42uoBPoHdLqeeNMUwcMF0Iz-yq8F9F44mhLdMjlJENJ1-_RJNxLa771YYBQMfYItrpkxANjiOpZ62yEkqNg0oH96CzlYfV0M7U8rsTUbNEjlh1NSByaeFtlacZ15MYm9WFViKt0PMc7MEPbQrEcqyLBeu0T4tjUDTfJN9ZYsonUi2bSCBRp0a9wtVEXyuJnofvrB--mwCv" />
+        <UseChip
+          name="John Doe"
+          avatarSrc="https://lh3.googleusercontent.com/aida-public/AB6AXuCvCpzK5kB8pmZYOeJh0kUQb-XlZcb5Y0oLclD4w4alCEIIdthsua6jpnCupgEQjSS54i42uoBPoHdLqeeNMUwcMF0Iz-yq8F9F44mhLdMjlJENJ1-_RJNxLa771YYBQMfYItrpkxANjiOpZ62yEkqNg0oH96CzlYfV0M7U8rsTUbNEjlh1NSByaeFtlacZ15MYm9WFViKt0PMc7MEPbQrEcqyLBeu0T4tjUDTfJN9ZYsonUi2bSCBRp0a9wtVEXyuJnofvrB--mwCv"
+        />
       </div>
     </header>
   );
@@ -44,9 +49,7 @@ function UseChip({ name, avatarSrc }: { name: string; avatarSrc: string }) {
         alt={`${name} profile`}
         className="w-8 h-8 rounded-full ring-2 ring-primary/10"
       />
-      <span className="text-sm font-semibold text-slate-700 dark:text-slate-200">
-        {name}
-      </span>
+      <span className="text-sm font-semibold text-slate-700 dark:text-slate-200">{name}</span>
     </div>
   );
 }

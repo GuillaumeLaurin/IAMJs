@@ -1,8 +1,8 @@
 'use client';
 
 interface FABProps {
-    onClick?: () => void;
-    label?: string;
+  onClick?: () => void;
+  label?: string;
 }
 
 /**
@@ -11,7 +11,6 @@ interface FABProps {
  * Icon rotates 90° on hover for a tactile feel.
  */
 export default function FAB({ onClick, label = 'New Document' }: FABProps) {
-
   return (
     <button
       onClick={onClick}

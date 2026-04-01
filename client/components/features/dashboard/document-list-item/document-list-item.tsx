@@ -1,4 +1,6 @@
-import { useTranslations } from "next-intl";
+'use client';
+
+import { useTranslations } from 'next-intl';
 
 export type DocumentIconColor = 'indigo' | 'teal' | 'amber' | 'red' | 'green';
 
@@ -48,7 +50,9 @@ export function DocumentListItem({
     <div className="bg-surface-container-lowest p-5 rounded-2xl flex items-center justify-between hover:bg-surface-bright hover:shadow-lg transition-all duration-300">
       {/* Left: icon + meta */}
       <div className="flex items-center gap-6">
-        <div className={`w-12 h-12 bg-slate-50 rounded-xl flex items-center justify-center ${ICON_COLOR_MAP[iconColor]}`}>
+        <div
+          className={`w-12 h-12 bg-slate-50 rounded-xl flex items-center justify-center ${ICON_COLOR_MAP[iconColor]}`}
+        >
           <span className="material-symbols-outlined">{iconName}</span>
         </div>
       </div>
@@ -66,24 +70,16 @@ export function DocumentListItem({
       {/* Right: owners + action */}
       <div className="flex items-center gap-8">
         <OwnerStack owners={owners} />
-        <button
-          onClick={onShare}
-          className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
-        >
-          <span className="material-symbols-outlined text-slate-400">
-            share
-          </span>
+        <button onClick={onShare} className="p-2 hover:bg-slate-100 rounded-lg transition-colors">
+          <span className="material-symbols-outlined text-slate-400">share</span>
         </button>
-        <button
-          onClick={onMore}
-          className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
-        >
+        <button onClick={onMore} className="p-2 hover:bg-slate-100 rounded-lg transition-colors">
           <span className="material-symbols-outlined text-slate-400">more_horiz</span>
         </button>
       </div>
     </div>
   );
-};
+}
 
 function OwnerStack({ owners }: { owners: DocumentOwner[] }) {
   return (
@@ -109,22 +105,18 @@ export interface RecentActivityListProps {
  * RecentActivityList
  *  Section wrapper with heading, "View All" link, and a list of DocumentListItems.
  */
-export function RecentActivityList({ documents, onViewAll}: RecentActivityListProps) {
+export function RecentActivityList({ documents, onViewAll }: RecentActivityListProps) {
   const t = useTranslations('dashboard');
   return (
     <section className="bg-surface-container-low rounded-[2.5rem] p-8 mb-12">
       <div className="flex justify-between items-center mb-8 px-4">
-        <h2 className="text-2xl font-bold text-slate-900">
-          Recent Activity
-        </h2>
+        <h2 className="text-2xl font-bold text-slate-900">Recent Activity</h2>
         <button
           onClick={onViewAll}
           className="text-primary font-bold text-sm flex items-center gap-1 hover:gap-2 transition-all"
         >
           {t('viewAllArchives')}
-          <span className="material-symbols-outlined text-sm">
-            arrow_forward
-          </span>
+          <span className="material-symbols-outlined text-sm">arrow_forward</span>
         </button>
       </div>
       <div className="space-y-4">
