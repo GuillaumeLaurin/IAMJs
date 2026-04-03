@@ -85,8 +85,7 @@ const DashboardPage = () => {
             {greeting} John.
           </h1>
           <p className="text-on-surface-variant text-lg leading-relaxed">
-            {t('youHave')}
-            {''}
+            {t('youHave')}{' '}
             <span className="text-primary font-bold">
               {PENDING_TASKS.length} {t('documents')}
             </span>{' '}
@@ -129,9 +128,7 @@ const DashboardPage = () => {
       <div className="flex justify-center mt-12 pb-12">
         <div className="bg-surface-container-high/50 backdrop-blur-md px-6 py-4 rounded-2xl flex items-center gap-4 text-sm text-slate-500 font-medium">
           <span className="material-symbols-outlined text-indigo-500">info</span>
-          {t('tip')}
-          {''}
-          {t('use')}
+          {t('tip')} {t('use')}
           <kbd className="px-2 py-0.5 bg-white border border-slate-200 rounded text-[10px]">
             CMD
           </kbd>{' '}
@@ -140,6 +137,8 @@ const DashboardPage = () => {
           {t('infoCmdK')}
         </div>
       </div>
+
+      <FAB />
     </div>
   );
 };

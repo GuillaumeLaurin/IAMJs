@@ -10,19 +10,22 @@ interface NavItem {
   active?: boolean;
 }
 
-const NAV_ITEMS: NavItem[] = [
+/**
+ * Sidebar
+ */
+export default function Sidebar() {
+  const t = useTranslations('dashboard');
+  const c = useTranslations('common');
+
+  const NAV_ITEMS: NavItem[] = [
   { href: '/dashboard', icon: 'dashboard', label: 'Dashboard', active: true },
+  { href: '/dashboard/todo', icon: 'sticky_note', label: 'Todo' },
   { href: '/dashboard/documents', icon: 'description', label: 'All Documents' },
   { href: '/dashboard/shared', icon: 'group', label: 'Shared with Me' },
   { href: '/dashboard/recent', icon: 'schedule', label: 'Recent' },
   { href: '/dashboard/trash', icon: 'delete', label: 'Trash' },
 ];
 
-/**
- * Sidebar
- */
-export default function Sidebar() {
-  const t = useTranslations('dashboard');
   return (
     <aside className="h-screen w-64 fixed left-0 top-0 overflow-y-auto bg-slate-50 dark:bg-slate-950 flex flex-col py-6 px-4 space-y-2 z-50">
       {/* Logo */}
@@ -34,10 +37,10 @@ export default function Sidebar() {
         </div>
         <div>
           <h2 className="text-lg font-black text-indigo-900 dark:text-white leading-tight">
-            The Curator
+            {c('appName')}
           </h2>
           <p className="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold">
-            Workspace
+            {t('workspace')}
           </p>
         </div>
       </div>

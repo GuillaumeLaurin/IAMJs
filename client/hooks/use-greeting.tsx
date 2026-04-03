@@ -12,7 +12,7 @@ const SECONDS = 60;
 
 const useGreeting = () => {
   const t = useTranslations('greeting');
-  
+
   const getGreeting = () => {
     const hour = new Date().getHours();
 

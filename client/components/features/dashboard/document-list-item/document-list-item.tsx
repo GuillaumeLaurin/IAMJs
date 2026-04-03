@@ -110,7 +110,7 @@ export function RecentActivityList({ documents, onViewAll }: RecentActivityListP
   return (
     <section className="bg-surface-container-low rounded-[2.5rem] p-8 mb-12">
       <div className="flex justify-between items-center mb-8 px-4">
-        <h2 className="text-2xl font-bold text-slate-900">Recent Activity</h2>
+        <h2 className="text-2xl font-bold text-slate-900">{t("recentActivity")}</h2>
         <button
           onClick={onViewAll}
           className="text-primary font-bold text-sm flex items-center gap-1 hover:gap-2 transition-all"

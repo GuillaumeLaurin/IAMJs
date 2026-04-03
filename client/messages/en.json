@@ -124,7 +124,17 @@
     "documentAction": "requiring review",
     "tip": "Tip",
     "use": "use",
-    "infoCmdK": "to launch the command palette anywhere."
+    "infoCmdK": "to launch the command palette anywhere.",
+    "workspace": "Workspace",
+    "dashboard": "Dashboard",
+    "todo": "Todo",
+    "allDocuments": "All Documents",
+    "sharedWithMe": "Shared with Me",
+    "recent": "Recent",
+    "trash": "Trash",
+    "pendingTask": "Pending Task",
+    "instantBackup": "Instant Backup",
+    "recentActivity": "Recent Activity"
   },
   "greeting": {
     "morning": "Good morning",
